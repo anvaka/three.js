@@ -2,9 +2,13 @@
  * @author benaadams / https://twitter.com/ben_a_adams
  */
 
-THREE.InterleavedBufferAttribute = function ( interleavedBuffer, itemSize, offset ) {
+module.exports = InterleavedBufferAttribute;
 
-	this.uuid = THREE.Math.generateUUID();
+var THREEMath = require('../math/Math.js');
+
+function InterleavedBufferAttribute( interleavedBuffer, itemSize, offset ) {
+
+	this.uuid = THREEMath.generateUUID();
 
 	this.data = interleavedBuffer;
 	this.itemSize = itemSize;
@@ -13,9 +17,9 @@ THREE.InterleavedBufferAttribute = function ( interleavedBuffer, itemSize, offse
 };
 
 
-THREE.InterleavedBufferAttribute.prototype = {
+InterleavedBufferAttribute.prototype = {
 
-	constructor: THREE.InterleavedBufferAttribute,
+	constructor: InterleavedBufferAttribute,
 
 	get length() {
 

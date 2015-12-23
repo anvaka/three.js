@@ -16,14 +16,18 @@
  *  fog: <bool>
  * }
  */
+module.exports = SpriteMaterial;
 
-THREE.SpriteMaterial = function ( parameters ) {
+var Material = require('./Material.js');
+var Color = require('../math/Color.js');
 
-	THREE.Material.call( this );
+function SpriteMaterial( parameters ) {
+
+	Material.call( this );
 
 	this.type = 'SpriteMaterial';
 
-	this.color = new THREE.Color( 0xffffff );
+	this.color = new Color( 0xffffff );
 	this.map = null;
 
 	this.rotation = 0;
@@ -36,12 +40,12 @@ THREE.SpriteMaterial = function ( parameters ) {
 
 };
 
-THREE.SpriteMaterial.prototype = Object.create( THREE.Material.prototype );
-THREE.SpriteMaterial.prototype.constructor = THREE.SpriteMaterial;
+SpriteMaterial.prototype = Object.create( Material.prototype );
+SpriteMaterial.prototype.constructor = SpriteMaterial;
 
-THREE.SpriteMaterial.prototype.copy = function ( source ) {
+SpriteMaterial.prototype.copy = function ( source ) {
 
-	THREE.Material.prototype.copy.call( this, source );
+	Material.prototype.copy.call( this, source );
 
 	this.color.copy( source.color );
 	this.map = source.map;

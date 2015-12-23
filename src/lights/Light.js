@@ -3,25 +3,30 @@
  * @author alteredq / http://alteredqualia.com/
  */
 
-THREE.Light = function ( color, intensity ) {
+module.exports = Light;
 
-	THREE.Object3D.call( this );
+var Object3D = require('../core/Object3D.js');
+var Color = require('../math/Color.js');
+
+function Light( color, intensity ) {
+
+	Object3D.call( this );
 
 	this.type = 'Light';
 
-	this.color = new THREE.Color( color );
+	this.color = new Color( color );
 	this.intensity = intensity !== undefined ? intensity : 1;
 
 	this.receiveShadow = undefined;
 
 };
 
-THREE.Light.prototype = Object.create( THREE.Object3D.prototype );
-THREE.Light.prototype.constructor = THREE.Light;
+Light.prototype = Object.create( Object3D.prototype );
+Light.prototype.constructor = Light;
 
-THREE.Light.prototype.copy = function ( source ) {
+Light.prototype.copy = function ( source ) {
 
-	THREE.Object3D.prototype.copy.call( this, source );
+	Object3D.prototype.copy.call( this, source );
 
 	this.color.copy( source.color );
 	this.intensity = source.intensity;
@@ -30,9 +35,9 @@ THREE.Light.prototype.copy = function ( source ) {
 
 };
 
-THREE.Light.prototype.toJSON = function ( meta ) {
+Light.prototype.toJSON = function ( meta ) {
 
-	var data = THREE.Object3D.prototype.toJSON.call( this, meta );
+	var data = Object3D.prototype.toJSON.call( this, meta );
 
 	data.object.color = this.color.getHex();
 	data.object.intensity = this.intensity;

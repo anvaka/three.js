@@ -3,30 +3,44 @@
  * @author alteredq / http://alteredqualia.com/
  */
 
-THREE.Material = function () {
+module.exports = Material;
 
-	Object.defineProperty( this, 'id', { value: THREE.MaterialIdCount ++ } );
+var MaterialIdCount = 0; // TODO: should this be exposed?
 
-	this.uuid = THREE.Math.generateUUID();
+var Texture = require('../textures/Texture.js');
+
+var EventDispatcher = require('../core/EventDispatcher.js');
+
+var THREEMath = require('../math/Math.js');
+var Color = require('../math/Color.js');
+var Vector3 = require('../math/Vector3.js');
+
+var Default = require('../defaults.js');
+
+function Material() {
+
+	Object.defineProperty( this, 'id', { value: MaterialIdCount ++ } );
+
+	this.uuid = THREEMath.generateUUID();
 
 	this.name = '';
 	this.type = 'Material';
 
-	this.side = THREE.FrontSide;
+	this.side = Default.FrontSide;
 
 	this.opacity = 1;
 	this.transparent = false;
 
-	this.blending = THREE.NormalBlending;
+	this.blending = Default.NormalBlending;
 
-	this.blendSrc = THREE.SrcAlphaFactor;
-	this.blendDst = THREE.OneMinusSrcAlphaFactor;
-	this.blendEquation = THREE.AddEquation;
+	this.blendSrc = Default.SrcAlphaFactor;
+	this.blendDst = Default.OneMinusSrcAlphaFactor;
+	this.blendEquation = Default.AddEquation;
 	this.blendSrcAlpha = null;
 	this.blendDstAlpha = null;
 	this.blendEquationAlpha = null;
 
-	this.depthFunc = THREE.LessEqualDepth;
+	this.depthFunc = Default.LessEqualDepth;
 	this.depthTest = true;
 	this.depthWrite = true;
 
@@ -51,9 +65,9 @@ THREE.Material = function () {
 
 };
 
-THREE.Material.prototype = {
+Material.prototype = {
 
-	constructor: THREE.Material,
+	constructor: Material,
 
 	get needsUpdate () {
 
@@ -93,11 +107,11 @@ THREE.Material.prototype = {
 
 			}
 
-			if ( currentValue instanceof THREE.Color ) {
+			if ( currentValue instanceof Color ) {
 
 				currentValue.set( newValue );
 
-			} else if ( currentValue instanceof THREE.Vector3 && newValue instanceof THREE.Vector3 ) {
+			} else if ( currentValue instanceof Vector3 && newValue instanceof Vector3 ) {
 
 				currentValue.copy( newValue );
 
@@ -142,44 +156,44 @@ THREE.Material.prototype = {
 		data.type = this.type;
 		if ( this.name !== '' ) data.name = this.name;
 
-		if ( this.color instanceof THREE.Color ) data.color = this.color.getHex();
+		if ( this.color instanceof Color ) data.color = this.color.getHex();
 
 		if ( this.roughness !== 0.5 ) data.roughness = this.roughness;
 		if ( this.metalness > 0 ) data.metalness = this.metalness;
 
-		if ( this.emissive instanceof THREE.Color ) data.emissive = this.emissive.getHex();
-		if ( this.specular instanceof THREE.Color ) data.specular = this.specular.getHex();
+		if ( this.emissive instanceof Color ) data.emissive = this.emissive.getHex();
+		if ( this.specular instanceof Color ) data.specular = this.specular.getHex();
 		if ( this.shininess !== undefined ) data.shininess = this.shininess;
 
-		if ( this.map instanceof THREE.Texture ) data.map = this.map.toJSON( meta ).uuid;
-		if ( this.alphaMap instanceof THREE.Texture ) data.alphaMap = this.alphaMap.toJSON( meta ).uuid;
-		if ( this.lightMap instanceof THREE.Texture ) data.lightMap = this.lightMap.toJSON( meta ).uuid;
-		if ( this.bumpMap instanceof THREE.Texture ) {
+		if ( this.map instanceof Texture ) data.map = this.map.toJSON( meta ).uuid;
+		if ( this.alphaMap instanceof Texture ) data.alphaMap = this.alphaMap.toJSON( meta ).uuid;
+		if ( this.lightMap instanceof Texture ) data.lightMap = this.lightMap.toJSON( meta ).uuid;
+		if ( this.bumpMap instanceof Texture ) {
 
 			data.bumpMap = this.bumpMap.toJSON( meta ).uuid;
 			data.bumpScale = this.bumpScale;
 
 		}
-		if ( this.normalMap instanceof THREE.Texture ) {
+		if ( this.normalMap instanceof Texture ) {
 
 			data.normalMap = this.normalMap.toJSON( meta ).uuid;
 			data.normalScale = this.normalScale.toArray();
 
 		}
-		if ( this.displacementMap instanceof THREE.Texture ) {
+		if ( this.displacementMap instanceof Texture ) {
 
 			data.displacementMap = this.displacementMap.toJSON( meta ).uuid;
 			data.displacementScale = this.displacementScale;
 			data.displacementBias = this.displacementBias;
 
 		}
-		if ( this.roughnessMap instanceof THREE.Texture ) data.roughnessMap = this.roughnessMap.toJSON( meta ).uuid;
-		if ( this.metalnessMap instanceof THREE.Texture ) data.metalnessMap = this.metalnessMap.toJSON( meta ).uuid;
+		if ( this.roughnessMap instanceof Texture ) data.roughnessMap = this.roughnessMap.toJSON( meta ).uuid;
+		if ( this.metalnessMap instanceof Texture ) data.metalnessMap = this.metalnessMap.toJSON( meta ).uuid;
 
-		if ( this.emissiveMap instanceof THREE.Texture ) data.emissiveMap = this.emissiveMap.toJSON( meta ).uuid;
-		if ( this.specularMap instanceof THREE.Texture ) data.specularMap = this.specularMap.toJSON( meta ).uuid;
+		if ( this.emissiveMap instanceof Texture ) data.emissiveMap = this.emissiveMap.toJSON( meta ).uuid;
+		if ( this.specularMap instanceof Texture ) data.specularMap = this.specularMap.toJSON( meta ).uuid;
 
-		if ( this.envMap instanceof THREE.Texture ) {
+		if ( this.envMap instanceof Texture ) {
 
 			data.envMap = this.envMap.toJSON( meta ).uuid;
 			data.reflectivity = this.reflectivity; // Scale behind envMap
@@ -189,10 +203,10 @@ THREE.Material.prototype = {
 		if ( this.size !== undefined ) data.size = this.size;
 		if ( this.sizeAttenuation !== undefined ) data.sizeAttenuation = this.sizeAttenuation;
 
-		if ( this.vertexColors !== undefined && this.vertexColors !== THREE.NoColors ) data.vertexColors = this.vertexColors;
-		if ( this.shading !== undefined && this.shading !== THREE.SmoothShading ) data.shading = this.shading;
-		if ( this.blending !== undefined && this.blending !== THREE.NormalBlending ) data.blending = this.blending;
-		if ( this.side !== undefined && this.side !== THREE.FrontSide ) data.side = this.side;
+		if ( this.vertexColors !== undefined && this.vertexColors !== Default.NoColors ) data.vertexColors = this.vertexColors;
+		if ( this.shading !== undefined && this.shading !== Default.SmoothShading ) data.shading = this.shading;
+		if ( this.blending !== undefined && this.blending !== Default.NormalBlending ) data.blending = this.blending;
+		if ( this.side !== undefined && this.side !== Default.FrontSide ) data.side = this.side;
 
 		if ( this.opacity < 1 ) data.opacity = this.opacity;
 		if ( this.transparent === true ) data.transparent = this.transparent;
@@ -295,6 +309,4 @@ THREE.Material.prototype = {
 
 };
 
-THREE.EventDispatcher.prototype.apply( THREE.Material.prototype );
-
-THREE.MaterialIdCount = 0;
+EventDispatcher.prototype.apply( Material.prototype );

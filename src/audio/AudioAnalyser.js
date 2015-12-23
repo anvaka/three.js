@@ -2,7 +2,9 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-THREE.AudioAnalyser = function ( audio, fftSize ) {
+module.exports = AudioAnalyser;
+
+function AudioAnalyser( audio, fftSize ) {
 
 	this.analyser = audio.context.createAnalyser();
 	this.analyser.fftSize = fftSize !== undefined ? fftSize : 2048;
@@ -13,9 +15,9 @@ THREE.AudioAnalyser = function ( audio, fftSize ) {
 
 };
 
-THREE.AudioAnalyser.prototype = {
+AudioAnalyser.prototype = {
 
-	constructor: THREE.AudioAnalyser,
+	constructor: AudioAnalyser,
 
 	getData: function () {
 

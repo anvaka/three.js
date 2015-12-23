@@ -3,9 +3,16 @@
  * based on http://code.google.com/p/away3d/source/browse/trunk/fp10/Away3D/src/away3d/primitives/TorusKnot.as?spec=svn2473&r=2473
  */
 
-THREE.TorusKnotGeometry = function ( radius, tube, radialSegments, tubularSegments, p, q, heightScale ) {
+module.exports = TorusKnotGeometry;
 
-	THREE.Geometry.call( this );
+var Geometry = require('../../core/Geometry.js');
+var Face3 = require('../../core/Face3.js');
+var Vector3 = require('../../math/Vector3.js');
+var Vector2 = require('../../math/Vector2.js');
+
+function TorusKnotGeometry( radius, tube, radialSegments, tubularSegments, p, q, heightScale ) {
+
+	Geometry.call( this );
 
 	this.type = 'TorusKnotGeometry';
 
@@ -28,9 +35,9 @@ THREE.TorusKnotGeometry = function ( radius, tube, radialSegments, tubularSegmen
 	heightScale = heightScale || 1;
 
 	var grid = new Array( radialSegments );
-	var tang = new THREE.Vector3();
-	var n = new THREE.Vector3();
-	var bitan = new THREE.Vector3();
+	var tang = new Vector3();
+	var n = new Vector3();
+	var bitan = new Vector3();
 
 	for ( var i = 0; i < radialSegments; ++ i ) {
 
@@ -52,7 +59,7 @@ THREE.TorusKnotGeometry = function ( radius, tube, radialSegments, tubularSegmen
 			var cx = - tube * Math.cos( v ); // TODO: Hack: Negating it so it faces outside.
 			var cy = tube * Math.sin( v );
 
-			var pos = new THREE.Vector3();
+			var pos = new Vector3();
 			pos.x = p1.x + cx * n.x + cy * bitan.x;
 			pos.y = p1.y + cx * n.y + cy * bitan.y;
 			pos.z = p1.z + cx * n.z + cy * bitan.z;
@@ -75,15 +82,15 @@ THREE.TorusKnotGeometry = function ( radius, tube, radialSegments, tubularSegmen
 			var c = grid[ ip ][ jp ];
 			var d = grid[ i ][ jp ];
 
-			var uva = new THREE.Vector2( i / radialSegments, j / tubularSegments );
-			var uvb = new THREE.Vector2( ( i + 1 ) / radialSegments, j / tubularSegments );
-			var uvc = new THREE.Vector2( ( i + 1 ) / radialSegments, ( j + 1 ) / tubularSegments );
-			var uvd = new THREE.Vector2( i / radialSegments, ( j + 1 ) / tubularSegments );
+			var uva = new Vector2( i / radialSegments, j / tubularSegments );
+			var uvb = new Vector2( ( i + 1 ) / radialSegments, j / tubularSegments );
+			var uvc = new Vector2( ( i + 1 ) / radialSegments, ( j + 1 ) / tubularSegments );
+			var uvd = new Vector2( i / radialSegments, ( j + 1 ) / tubularSegments );
 
-			this.faces.push( new THREE.Face3( a, b, d ) );
+			this.faces.push( new Face3( a, b, d ) );
 			this.faceVertexUvs[ 0 ].push( [ uva, uvb, uvd ] );
 
-			this.faces.push( new THREE.Face3( b, c, d ) );
+			this.faces.push( new Face3( b, c, d ) );
 			this.faceVertexUvs[ 0 ].push( [ uvb.clone(), uvc, uvd.clone() ] );
 
 		}
@@ -104,11 +111,11 @@ THREE.TorusKnotGeometry = function ( radius, tube, radialSegments, tubularSegmen
 		var ty = radius * ( 2 + cs ) * su * 0.5;
 		var tz = heightScale * radius * Math.sin( quOverP ) * 0.5;
 
-		return new THREE.Vector3( tx, ty, tz );
+		return new Vector3( tx, ty, tz );
 
 	}
 
 };
 
-THREE.TorusKnotGeometry.prototype = Object.create( THREE.Geometry.prototype );
-THREE.TorusKnotGeometry.prototype.constructor = THREE.TorusKnotGeometry;
+TorusKnotGeometry.prototype = Object.create( Geometry.prototype );
+TorusKnotGeometry.prototype.constructor = TorusKnotGeometry;

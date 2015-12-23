@@ -35,14 +35,19 @@
  *  fog: <bool>
  * }
  */
+module.exports = MeshBasicMaterial;
 
-THREE.MeshBasicMaterial = function ( parameters ) {
+var Material = require('./Material.js');
+var Default = require('../defaults.js');
+var Color = require('../math/Color.js');
 
-	THREE.Material.call( this );
+function MeshBasicMaterial( parameters ) {
+
+	Material.call( this );
 
 	this.type = 'MeshBasicMaterial';
 
-	this.color = new THREE.Color( 0xffffff ); // emissive
+	this.color = new Color( 0xffffff ); // emissive
 
 	this.map = null;
 
@@ -54,20 +59,20 @@ THREE.MeshBasicMaterial = function ( parameters ) {
 	this.alphaMap = null;
 
 	this.envMap = null;
-	this.combine = THREE.MultiplyOperation;
+	this.combine = Default.MultiplyOperation;
 	this.reflectivity = 1;
 	this.refractionRatio = 0.98;
 
 	this.fog = true;
 
-	this.shading = THREE.SmoothShading;
+	this.shading = Default.SmoothShading;
 
 	this.wireframe = false;
 	this.wireframeLinewidth = 1;
 	this.wireframeLinecap = 'round';
 	this.wireframeLinejoin = 'round';
 
-	this.vertexColors = THREE.NoColors;
+	this.vertexColors = Default.NoColors;
 
 	this.skinning = false;
 	this.morphTargets = false;
@@ -76,12 +81,12 @@ THREE.MeshBasicMaterial = function ( parameters ) {
 
 };
 
-THREE.MeshBasicMaterial.prototype = Object.create( THREE.Material.prototype );
-THREE.MeshBasicMaterial.prototype.constructor = THREE.MeshBasicMaterial;
+MeshBasicMaterial.prototype = Object.create( Material.prototype );
+MeshBasicMaterial.prototype.constructor = MeshBasicMaterial;
 
-THREE.MeshBasicMaterial.prototype.copy = function ( source ) {
+MeshBasicMaterial.prototype.copy = function ( source ) {
 
-	THREE.Material.prototype.copy.call( this, source );
+	Material.prototype.copy.call( this, source );
 
 	this.color.copy( source.color );
 

@@ -8,16 +8,19 @@
  * @author tschw
  */
 
-THREE.VectorKeyframeTrack = function ( name, times, values, interpolation ) {
+module.exports = VectorKeyframeTrack;
 
-	THREE.KeyframeTrack.call( this, name, times, values, interpolation );
+var KeyframeTrack = require('../KeyframeTrack.js');
+
+function VectorKeyframeTrack( name, times, values, interpolation ) {
+
+	KeyframeTrack.call( this, name, times, values, interpolation );
 
 };
 
-THREE.VectorKeyframeTrack.prototype =
-		Object.assign( Object.create( THREE.KeyframeTrack.prototype ), {
+VectorKeyframeTrack.prototype = Object.assign( Object.create( KeyframeTrack.prototype ), {
 
-	constructor: THREE.VectorKeyframeTrack,
+	constructor: VectorKeyframeTrack,
 
 	ValueTypeName: 'vector'
 

@@ -5,7 +5,7 @@
  * @author bhouston / http://clara.io
  */
 
-THREE.Quaternion = function ( x, y, z, w ) {
+function Quaternion ( x, y, z, w ) {
 
 	this._x = x || 0;
 	this._y = y || 0;
@@ -14,9 +14,9 @@ THREE.Quaternion = function ( x, y, z, w ) {
 
 };
 
-THREE.Quaternion.prototype = {
+Quaternion.prototype = {
 
-	constructor: THREE.Quaternion,
+	constructor: Quaternion,
 
 	get x () {
 
@@ -104,7 +104,8 @@ THREE.Quaternion.prototype = {
 
 	setFromEuler: function ( euler, update ) {
 
-		if ( euler instanceof THREE.Euler === false ) {
+		// if ( euler instanceof Euler === false ) {
+		if ( !euler || euler.order === undefined) {
 
 			throw new Error( 'THREE.Quaternion: .setFromEuler() now expects a Euler rotation rather than a Vector3 and order.' );
 
@@ -263,7 +264,10 @@ THREE.Quaternion.prototype = {
 
 		return function ( vFrom, vTo ) {
 
-			if ( v1 === undefined ) v1 = new THREE.Vector3();
+			if ( v1 === undefined ) {
+				v1 = new Vector3();
+				var Vector3 = require('./Vector3.js');
+			}
 
 			r = vFrom.dot( vTo ) + 1;
 
@@ -448,8 +452,8 @@ THREE.Quaternion.prototype = {
 		}
 
 		var halfTheta = Math.atan2( sinHalfTheta, cosHalfTheta );
-		var ratioA = Math.sin( ( 1 - t ) * halfTheta ) / sinHalfTheta,
-		ratioB = Math.sin( t * halfTheta ) / sinHalfTheta;
+		var ratioA = Math.sin( ( 1 - t ) * halfTheta ) / sinHalfTheta;
+		var ratioB = Math.sin( t * halfTheta ) / sinHalfTheta;
 
 		this._w = ( w * ratioA + this._w * ratioB );
 		this._x = ( x * ratioA + this._x * ratioB );
@@ -509,7 +513,7 @@ THREE.Quaternion.prototype = {
 
 };
 
-Object.assign( THREE.Quaternion, {
+Object.assign( Quaternion, {
 
 	slerp: function( qa, qb, qm, t ) {
 
@@ -581,3 +585,5 @@ Object.assign( THREE.Quaternion, {
 	}
 
 } );
+
+module.exports = Quaternion;

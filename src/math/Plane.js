@@ -1,17 +1,21 @@
 /**
  * @author bhouston / http://clara.io
  */
+module.exports = Plane;
 
-THREE.Plane = function ( normal, constant ) {
+var Vector3 = require('./Vector3.js');
+var Matrix3 = require('./Matrix3.js');
 
-	this.normal = ( normal !== undefined ) ? normal : new THREE.Vector3( 1, 0, 0 );
+function Plane( normal, constant ) {
+
+	this.normal = ( normal !== undefined ) ? normal : new Vector3( 1, 0, 0 );
 	this.constant = ( constant !== undefined ) ? constant : 0;
 
 };
 
-THREE.Plane.prototype = {
+Plane.prototype = {
 
-	constructor: THREE.Plane,
+	constructor: Plane,
 
 	set: function ( normal, constant ) {
 
@@ -42,8 +46,8 @@ THREE.Plane.prototype = {
 
 	setFromCoplanarPoints: function () {
 
-		var v1 = new THREE.Vector3();
-		var v2 = new THREE.Vector3();
+		var v1 = new Vector3();
+		var v2 = new Vector3();
 
 		return function ( a, b, c ) {
 
@@ -117,18 +121,18 @@ THREE.Plane.prototype = {
 
 		var perpendicularMagnitude = this.distanceToPoint( point );
 
-		var result = optionalTarget || new THREE.Vector3();
+		var result = optionalTarget || new Vector3();
 		return result.copy( this.normal ).multiplyScalar( perpendicularMagnitude );
 
 	},
 
 	intersectLine: function () {
 
-		var v1 = new THREE.Vector3();
+		var v1 = new Vector3();
 
 		return function ( line, optionalTarget ) {
 
-			var result = optionalTarget || new THREE.Vector3();
+			var result = optionalTarget || new Vector3();
 
 			var direction = line.delta( v1 );
 
@@ -187,16 +191,16 @@ THREE.Plane.prototype = {
 
 	coplanarPoint: function ( optionalTarget ) {
 
-		var result = optionalTarget || new THREE.Vector3();
+		var result = optionalTarget || new Vector3();
 		return result.copy( this.normal ).multiplyScalar( - this.constant );
 
 	},
 
 	applyMatrix4: function () {
 
-		var v1 = new THREE.Vector3();
-		var v2 = new THREE.Vector3();
-		var m1 = new THREE.Matrix3();
+		var v1 = new Vector3();
+		var v2 = new Vector3();
+		var m1 = new Matrix3();
 
 		return function ( matrix, optionalNormalMatrix ) {
 

@@ -2,7 +2,11 @@
  * @author timothypratley / https://github.com/timothypratley
  */
 
-THREE.OctahedronGeometry = function ( radius, detail ) {
+module.exports = OctahedronGeometry;
+
+var PolyhedronGeometry = require('./PolyhedronGeometry.js');
+
+function OctahedronGeometry( radius, detail ) {
 
 	var vertices = [
 		1, 0, 0,   - 1, 0, 0,    0, 1, 0,    0, - 1, 0,    0, 0, 1,    0, 0, - 1
@@ -12,7 +16,7 @@ THREE.OctahedronGeometry = function ( radius, detail ) {
 		0, 2, 4,    0, 4, 3,    0, 3, 5,    0, 5, 2,    1, 2, 5,    1, 5, 3,    1, 3, 4,    1, 4, 2
 	];
 
-	THREE.PolyhedronGeometry.call( this, vertices, indices, radius, detail );
+	PolyhedronGeometry.call( this, vertices, indices, radius, detail );
 
 	this.type = 'OctahedronGeometry';
 
@@ -23,5 +27,5 @@ THREE.OctahedronGeometry = function ( radius, detail ) {
 
 };
 
-THREE.OctahedronGeometry.prototype = Object.create( THREE.PolyhedronGeometry.prototype );
-THREE.OctahedronGeometry.prototype.constructor = THREE.OctahedronGeometry;
+OctahedronGeometry.prototype = Object.create( PolyhedronGeometry.prototype );
+OctahedronGeometry.prototype.constructor = OctahedronGeometry;

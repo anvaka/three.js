@@ -2,32 +2,39 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-THREE.StereoCamera = function () {
+module.exports = StereoCamera;
+
+var PerspectiveCamera = require('./PerspectiveCamera.js');
+var Matrix4 = require('../math/Matrix4.js');
+var THREEMath = require('../math/Math.js');
+var Object3D = require('../core/Object3D.js');
+
+StereoCamera = function () {
 
 	this.type = 'StereoCamera';
 
 	this.aspect = 1;
 
-	this.cameraL = new THREE.PerspectiveCamera();
+	this.cameraL = new PerspectiveCamera();
 	this.cameraL.layers.enable( 1 );
 	this.cameraL.matrixAutoUpdate = false;
 
-	this.cameraR = new THREE.PerspectiveCamera();
+	this.cameraR = new PerspectiveCamera();
 	this.cameraR.layers.enable( 2 );
 	this.cameraR.matrixAutoUpdate = false;
 
 };
 
-THREE.StereoCamera.prototype = {
+StereoCamera.prototype = {
 
-	constructor: THREE.StereoCamera,
+	constructor: StereoCamera,
 
 	update: ( function () {
 
 		var focalLength, fov, aspect, near, far;
 
-		var eyeRight = new THREE.Matrix4();
-		var eyeLeft = new THREE.Matrix4();
+		var eyeRight = new Matrix4();
+		var eyeLeft = new Matrix4();
 
 		return function update ( camera ) {
 
@@ -49,7 +56,7 @@ THREE.StereoCamera.prototype = {
 				var projectionMatrix = camera.projectionMatrix.clone();
 				var eyeSep = focalLength / 30 * 0.5;
 				var eyeSepOnProjection = eyeSep * near / focalLength;
-				var ymax = near * Math.tan( THREE.Math.degToRad( fov * 0.5 ) );
+				var ymax = near * Math.tan( THREEMath.degToRad( fov * 0.5 ) );
 				var xmin, xmax;
 
 				// translate xOffset

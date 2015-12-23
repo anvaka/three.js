@@ -8,21 +8,25 @@
  * @author tschw
  */
 
-THREE.StringKeyframeTrack = function ( name, times, values, interpolation ) {
+module.exports = StringKeyframeTrack;
 
-	THREE.KeyframeTrack.call( this, name, times, values, interpolation );
+var KeyframeTrack = require('../KeyframeTrack.js');
+var Default = require('../../defaults.js');
+
+function StringKeyframeTrack( name, times, values, interpolation ) {
+
+	KeyframeTrack.call( this, name, times, values, interpolation );
 
 };
 
-THREE.StringKeyframeTrack.prototype =
-		Object.assign( Object.create( THREE.KeyframeTrack.prototype ), {
+StringKeyframeTrack.prototype = Object.assign( Object.create( KeyframeTrack.prototype ), {
 
-	constructor: THREE.StringKeyframeTrack,
+	constructor: StringKeyframeTrack,
 
 	ValueTypeName: 'string',
 	ValueBufferType: Array,
 
-	DefaultInterpolation: THREE.IntepolateDiscrete,
+	DefaultInterpolation: Default.IntepolateDiscrete,
 
 	InterpolantFactoryMethodLinear: undefined,
 

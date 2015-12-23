@@ -11,7 +11,12 @@
  * @author WestLangley / http://github.com/WestLangley
  */
 
-THREE.Matrix4 = function () {
+module.exports = Matrix4;
+
+var Vector3 = require('./Vector3.js');
+var THREEMath = require('./Math.js');
+
+function Matrix4() {
 
 	this.elements = new Float32Array( [
 
@@ -30,9 +35,9 @@ THREE.Matrix4 = function () {
 
 };
 
-THREE.Matrix4.prototype = {
+Matrix4.prototype = {
 
-	constructor: THREE.Matrix4,
+	constructor: Matrix4,
 
 	set: function ( n11, n12, n13, n14, n21, n22, n23, n24, n31, n32, n33, n34, n41, n42, n43, n44 ) {
 
@@ -64,7 +69,7 @@ THREE.Matrix4.prototype = {
 
 	clone: function () {
 
-		return new THREE.Matrix4().fromArray( this.elements );
+		return new Matrix4().fromArray( this.elements );
 
 	},
 
@@ -120,7 +125,7 @@ THREE.Matrix4.prototype = {
 
 		return function ( m ) {
 
-			if ( v1 === undefined ) v1 = new THREE.Vector3();
+			if ( v1 === undefined ) v1 = new Vector3();
 
 			var te = this.elements;
 			var me = m.elements;
@@ -149,7 +154,7 @@ THREE.Matrix4.prototype = {
 
 	makeRotationFromEuler: function ( euler ) {
 
-		if ( euler instanceof THREE.Euler === false ) {
+		if ( !euler || euler.order === undefined ) {
 
 			console.error( 'THREE.Matrix: .makeRotationFromEuler() now expects a Euler rotation rather than a Vector3 and order.' );
 
@@ -318,9 +323,9 @@ THREE.Matrix4.prototype = {
 
 		return function ( eye, target, up ) {
 
-			if ( x === undefined ) x = new THREE.Vector3();
-			if ( y === undefined ) y = new THREE.Vector3();
-			if ( z === undefined ) z = new THREE.Vector3();
+			if ( x === undefined ) x = new Vector3();
+			if ( y === undefined ) y = new Vector3();
+			if ( z === undefined ) z = new Vector3();
 
 			var te = this.elements;
 
@@ -441,7 +446,7 @@ THREE.Matrix4.prototype = {
 
 		return function ( array, offset, length ) {
 
-			if ( v1 === undefined ) v1 = new THREE.Vector3();
+			if ( v1 === undefined ) v1 = new Vector3();
 			if ( offset === undefined ) offset = 0;
 			if ( length === undefined ) length = array.length;
 
@@ -465,7 +470,7 @@ THREE.Matrix4.prototype = {
 
 		return function applyToBuffer( buffer, offset, length ) {
 
-			if ( v1 === undefined ) v1 = new THREE.Vector3();
+			if ( v1 === undefined ) v1 = new Vector3();
 			if ( offset === undefined ) offset = 0;
 			if ( length === undefined ) length = buffer.length / buffer.itemSize;
 
@@ -588,7 +593,7 @@ THREE.Matrix4.prototype = {
 
 		return function () {
 
-			if ( v1 === undefined ) v1 = new THREE.Vector3();
+			if ( v1 === undefined ) v1 = new Vector3();
 			console.warn( 'THREE.Matrix4: .getPosition() has been removed. Use Vector3.setFromMatrixPosition( matrix ) instead.' );
 
 			var te = this.elements;
@@ -812,8 +817,8 @@ THREE.Matrix4.prototype = {
 
 		return function ( position, quaternion, scale ) {
 
-			if ( vector === undefined ) vector = new THREE.Vector3();
-			if ( matrix === undefined ) matrix = new THREE.Matrix4();
+			if ( vector === undefined ) vector = new Vector3();
+			if ( matrix === undefined ) matrix = new Matrix4();
 
 			var te = this.elements;
 
@@ -887,7 +892,7 @@ THREE.Matrix4.prototype = {
 
 	makePerspective: function ( fov, aspect, near, far ) {
 
-		var ymax = near * Math.tan( THREE.Math.degToRad( fov * 0.5 ) );
+		var ymax = near * Math.tan( THREEMath.degToRad( fov * 0.5 ) );
 		var ymin = - ymax;
 		var xmin = ymin * aspect;
 		var xmax = ymax * aspect;

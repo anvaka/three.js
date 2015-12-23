@@ -2,15 +2,20 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-THREE.XHRLoader = function ( manager ) {
+module.exports = XHRLoader;
 
-	this.manager = ( manager !== undefined ) ? manager : THREE.DefaultLoadingManager;
+var DefaultLoadingManager = require('./LoadingManager.js').DefaultLoadingManager;
+var Cache = require('./Cache.js');
+
+function XHRLoader( manager ) {
+
+	this.manager = ( manager !== undefined ) ? manager : DefaultLoadingManager;
 
 };
 
-THREE.XHRLoader.prototype = {
+XHRLoader.prototype = {
 
-	constructor: THREE.XHRLoader,
+	constructor: XHRLoader,
 
 	load: function ( url, onLoad, onProgress, onError ) {
 
@@ -18,7 +23,7 @@ THREE.XHRLoader.prototype = {
 
 		var scope = this;
 
-		var cached = THREE.Cache.get( url );
+		var cached = Cache.get( url );
 
 		if ( cached !== undefined ) {
 
@@ -44,7 +49,7 @@ THREE.XHRLoader.prototype = {
 
 			var response = event.target.response;
 
-			THREE.Cache.add( url, response );
+			Cache.add( url, response );
 
 			if ( this.status === 200 ) {
 

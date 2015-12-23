@@ -1,4 +1,11 @@
-THREE.WebGLPrograms = function ( renderer, capabilities ) {
+module.exports = WebGLPrograms;
+
+var SkinnedMesh = require('../../objects/SkinnedMesh.js');
+var FogExp2 = require('../../scenes/FogExp2.js');
+var Default = require('../../defaults.js');
+var WebGLProgram = require('./WebGLProgram.js');
+
+function WebGLPrograms( renderer, capabilities ) {
 
 	var programs = [];
 
@@ -49,7 +56,7 @@ THREE.WebGLPrograms = function ( renderer, capabilities ) {
 
 			var maxBones = nVertexMatrices;
 
-			if ( object !== undefined && object instanceof THREE.SkinnedMesh ) {
+			if ( object !== undefined && object instanceof SkinnedMesh ) {
 
 				maxBones = Math.min( object.skeleton.bones.length, maxBones );
 
@@ -115,9 +122,9 @@ THREE.WebGLPrograms = function ( renderer, capabilities ) {
 
 			fog: fog,
 			useFog: material.fog,
-			fogExp: fog instanceof THREE.FogExp2,
+			fogExp: fog instanceof FogExp2,
 
-			flatShading: material.shading === THREE.FlatShading,
+			flatShading: material.shading === Default.FlatShading,
 
 			sizeAttenuation: material.sizeAttenuation,
 			logarithmicDepthBuffer: capabilities.logarithmicDepthBuffer,
@@ -144,8 +151,8 @@ THREE.WebGLPrograms = function ( renderer, capabilities ) {
 			shadowMapDebug: renderer.shadowMap.debug,
 
 			alphaTest: material.alphaTest,
-			doubleSided: material.side === THREE.DoubleSide,
-			flipSided: material.side === THREE.BackSide
+			doubleSided: material.side === Default.DoubleSide,
+			flipSided: material.side === Default.BackSide
 
 		};
 
@@ -213,7 +220,7 @@ THREE.WebGLPrograms = function ( renderer, capabilities ) {
 
 		if ( program === undefined ) {
 
-			program = new THREE.WebGLProgram( renderer, code, material, parameters );
+			program = new WebGLProgram( renderer, code, material, parameters );
 			programs.push( program );
 
 		}

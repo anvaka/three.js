@@ -9,10 +9,13 @@
  * curve.tension is used for catmullrom which defaults to 0.5
  */
 
-THREE.CatmullRomCurve3 = ( function() {
+var Vector3 = require('../../math/Vector3.js');
+var Curve = require('../core/Curve.js');
+
+module.exports = ( function() {
 
 	var
-		tmp = new THREE.Vector3(),
+		tmp = new Vector3(),
 		px = new CubicPoly(),
 		py = new CubicPoly(),
 		pz = new CubicPoly();
@@ -79,7 +82,7 @@ THREE.CatmullRomCurve3 = ( function() {
 	};
 
 	// Subclass Three.js curve
-	return THREE.Curve.create(
+	return Curve.create(
 
 		function ( p /* array of Vector3 */ ) {
 
@@ -167,7 +170,7 @@ THREE.CatmullRomCurve3 = ( function() {
 
 			}
 
-			var v = new THREE.Vector3(
+			var v = new Vector3(
 				px.calc( weight ),
 				py.calc( weight ),
 				pz.calc( weight )

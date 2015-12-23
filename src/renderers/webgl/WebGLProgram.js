@@ -1,4 +1,8 @@
-THREE.WebGLProgram = ( function () {
+var Default = require('../../defaults.js');
+var RawShaderMaterial = require('../../materials/RawShaderMaterial.js');
+var WebGLShader = require('./WebGLShader.js');
+
+module.exports = ( function () {
 
 	var programIdCount = 0;
 
@@ -163,11 +167,11 @@ THREE.WebGLProgram = ( function () {
 
 		var shadowMapTypeDefine = 'SHADOWMAP_TYPE_BASIC';
 
-		if ( parameters.shadowMapType === THREE.PCFShadowMap ) {
+		if ( parameters.shadowMapType === Default.PCFShadowMap ) {
 
 			shadowMapTypeDefine = 'SHADOWMAP_TYPE_PCF';
 
-		} else if ( parameters.shadowMapType === THREE.PCFSoftShadowMap ) {
+		} else if ( parameters.shadowMapType === Default.PCFSoftShadowMap ) {
 
 			shadowMapTypeDefine = 'SHADOWMAP_TYPE_PCF_SOFT';
 
@@ -181,17 +185,17 @@ THREE.WebGLProgram = ( function () {
 
 			switch ( material.envMap.mapping ) {
 
-				case THREE.CubeReflectionMapping:
-				case THREE.CubeRefractionMapping:
+				case Default.CubeReflectionMapping:
+				case Default.CubeRefractionMapping:
 					envMapTypeDefine = 'ENVMAP_TYPE_CUBE';
 					break;
 
-				case THREE.EquirectangularReflectionMapping:
-				case THREE.EquirectangularRefractionMapping:
+				case Default.EquirectangularReflectionMapping:
+				case Default.EquirectangularRefractionMapping:
 					envMapTypeDefine = 'ENVMAP_TYPE_EQUIREC';
 					break;
 
-				case THREE.SphericalReflectionMapping:
+				case Default.SphericalReflectionMapping:
 					envMapTypeDefine = 'ENVMAP_TYPE_SPHERE';
 					break;
 
@@ -199,8 +203,8 @@ THREE.WebGLProgram = ( function () {
 
 			switch ( material.envMap.mapping ) {
 
-				case THREE.CubeRefractionMapping:
-				case THREE.EquirectangularRefractionMapping:
+				case Default.CubeRefractionMapping:
+				case Default.EquirectangularRefractionMapping:
 					envMapModeDefine = 'ENVMAP_MODE_REFRACTION';
 					break;
 
@@ -208,15 +212,15 @@ THREE.WebGLProgram = ( function () {
 
 			switch ( material.combine ) {
 
-				case THREE.MultiplyOperation:
+				case Default.MultiplyOperation:
 					envMapBlendingDefine = 'ENVMAP_BLENDING_MULTIPLY';
 					break;
 
-				case THREE.MixOperation:
+				case Default.MixOperation:
 					envMapBlendingDefine = 'ENVMAP_BLENDING_MIX';
 					break;
 
-				case THREE.AddOperation:
+				case Default.AddOperation:
 					envMapBlendingDefine = 'ENVMAP_BLENDING_ADD';
 					break;
 
@@ -240,7 +244,7 @@ THREE.WebGLProgram = ( function () {
 
 		var prefixVertex, prefixFragment;
 
-		if ( material instanceof THREE.RawShaderMaterial ) {
+		if ( material instanceof RawShaderMaterial ) {
 
 			prefixVertex = '';
 			prefixFragment = '';
@@ -431,8 +435,8 @@ THREE.WebGLProgram = ( function () {
 		var vertexGlsl = prefixVertex + vertexShader;
 		var fragmentGlsl = prefixFragment + fragmentShader;
 
-		var glVertexShader = THREE.WebGLShader( gl, gl.VERTEX_SHADER, vertexGlsl );
-		var glFragmentShader = THREE.WebGLShader( gl, gl.FRAGMENT_SHADER, fragmentGlsl );
+		var glVertexShader = WebGLShader( gl, gl.VERTEX_SHADER, vertexGlsl );
+		var glFragmentShader = WebGLShader( gl, gl.FRAGMENT_SHADER, fragmentGlsl );
 
 		gl.attachShader( program, glVertexShader );
 		gl.attachShader( program, glFragmentShader );

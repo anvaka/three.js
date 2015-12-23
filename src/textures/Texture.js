@@ -3,34 +3,45 @@
  * @author alteredq / http://alteredqualia.com/
  * @author szimek / https://github.com/szimek/
  */
+module.exports = Texture;
 
-THREE.Texture = function ( image, mapping, wrapS, wrapT, magFilter, minFilter, format, type, anisotropy ) {
 
-	Object.defineProperty( this, 'id', { value: THREE.TextureIdCount ++ } );
+var THREEMath = require('../math/Math.js');
+var Vector2 = require('../math/Vector2.js');
+var EventDispatcher = require('../core/EventDispatcher.js');
+var Default = require('../defaults.js');
 
-	this.uuid = THREE.Math.generateUUID();
+Texture.DEFAULT_IMAGE = undefined;
+
+var TextureIdCount = 0; // TODO: Should this be exported?
+
+function Texture( image, mapping, wrapS, wrapT, magFilter, minFilter, format, type, anisotropy ) {
+
+	Object.defineProperty( this, 'id', { value: TextureIdCount ++ } );
+
+	this.uuid = THREEMath.generateUUID();
 
 	this.name = '';
 	this.sourceFile = '';
 
-	this.image = image !== undefined ? image : THREE.Texture.DEFAULT_IMAGE;
+	this.image = image !== undefined ? image : Texture.DEFAULT_IMAGE;
 	this.mipmaps = [];
 
-	this.mapping = mapping !== undefined ? mapping : THREE.Texture.DEFAULT_MAPPING;
+	this.mapping = mapping !== undefined ? mapping : Default.UVMapping;
 
-	this.wrapS = wrapS !== undefined ? wrapS : THREE.ClampToEdgeWrapping;
-	this.wrapT = wrapT !== undefined ? wrapT : THREE.ClampToEdgeWrapping;
+	this.wrapS = wrapS !== undefined ? wrapS : Default.ClampToEdgeWrapping;
+	this.wrapT = wrapT !== undefined ? wrapT : Default.ClampToEdgeWrapping;
 
-	this.magFilter = magFilter !== undefined ? magFilter : THREE.LinearFilter;
-	this.minFilter = minFilter !== undefined ? minFilter : THREE.LinearMipMapLinearFilter;
+	this.magFilter = magFilter !== undefined ? magFilter : Default.LinearFilter;
+	this.minFilter = minFilter !== undefined ? minFilter : Default.LinearMipMapLinearFilter;
 
 	this.anisotropy = anisotropy !== undefined ? anisotropy : 1;
 
-	this.format = format !== undefined ? format : THREE.RGBAFormat;
-	this.type = type !== undefined ? type : THREE.UnsignedByteType;
+	this.format = format !== undefined ? format : Default.RGBAFormat;
+	this.type = type !== undefined ? type : Default.UnsignedByteType;
 
-	this.offset = new THREE.Vector2( 0, 0 );
-	this.repeat = new THREE.Vector2( 1, 1 );
+	this.offset = new Vector2( 0, 0 );
+	this.repeat = new Vector2( 1, 1 );
 
 	this.generateMipmaps = true;
 	this.premultiplyAlpha = false;
@@ -42,12 +53,10 @@ THREE.Texture = function ( image, mapping, wrapS, wrapT, magFilter, minFilter, f
 
 };
 
-THREE.Texture.DEFAULT_IMAGE = undefined;
-THREE.Texture.DEFAULT_MAPPING = THREE.UVMapping;
 
-THREE.Texture.prototype = {
+Texture.prototype = {
 
-	constructor: THREE.Texture,
+	constructor: Texture,
 
 	set needsUpdate ( value ) {
 
@@ -158,7 +167,7 @@ THREE.Texture.prototype = {
 
 			if ( image.uuid === undefined ) {
 
-				image.uuid = THREE.Math.generateUUID(); // UGH
+				image.uuid = THREEMath.generateUUID(); // UGH
 
 			}
 
@@ -189,7 +198,7 @@ THREE.Texture.prototype = {
 
 	transformUv: function ( uv ) {
 
-		if ( this.mapping !== THREE.UVMapping )  return;
+		if ( this.mapping !== Default.UVMapping )  return;
 
 		uv.multiply( this.repeat );
 		uv.add( this.offset );
@@ -198,17 +207,17 @@ THREE.Texture.prototype = {
 
 			switch ( this.wrapS ) {
 
-				case THREE.RepeatWrapping:
+				case Default.RepeatWrapping:
 
 					uv.x = uv.x - Math.floor( uv.x );
 					break;
 
-				case THREE.ClampToEdgeWrapping:
+				case Default.ClampToEdgeWrapping:
 
 					uv.x = uv.x < 0 ? 0 : 1;
 					break;
 
-				case THREE.MirroredRepeatWrapping:
+				case Default.MirroredRepeatWrapping:
 
 					if ( Math.abs( Math.floor( uv.x ) % 2 ) === 1 ) {
 
@@ -229,17 +238,17 @@ THREE.Texture.prototype = {
 
 			switch ( this.wrapT ) {
 
-				case THREE.RepeatWrapping:
+				case Default.RepeatWrapping:
 
 					uv.y = uv.y - Math.floor( uv.y );
 					break;
 
-				case THREE.ClampToEdgeWrapping:
+				case Texture.ClampToEdgeWrapping:
 
 					uv.y = uv.y < 0 ? 0 : 1;
 					break;
 
-				case THREE.MirroredRepeatWrapping:
+				case Default.MirroredRepeatWrapping:
 
 					if ( Math.abs( Math.floor( uv.y ) % 2 ) === 1 ) {
 
@@ -266,6 +275,4 @@ THREE.Texture.prototype = {
 
 };
 
-THREE.EventDispatcher.prototype.apply( THREE.Texture.prototype );
-
-THREE.TextureIdCount = 0;
+EventDispatcher.prototype.apply( Texture.prototype );

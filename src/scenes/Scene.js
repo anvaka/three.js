@@ -2,9 +2,13 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-THREE.Scene = function () {
+module.exports = Scene;
 
-	THREE.Object3D.call( this );
+var Object3D = require('../core/Object3D.js');
+
+function Scene() {
+
+	Object3D.call( this );
 
 	this.type = 'Scene';
 
@@ -15,12 +19,12 @@ THREE.Scene = function () {
 
 };
 
-THREE.Scene.prototype = Object.create( THREE.Object3D.prototype );
-THREE.Scene.prototype.constructor = THREE.Scene;
+Scene.prototype = Object.create( Object3D.prototype );
+Scene.prototype.constructor = Scene;
 
-THREE.Scene.prototype.copy = function ( source ) {
+Scene.prototype.copy = function ( source ) {
 
-	THREE.Object3D.prototype.copy.call( this, source );
+	Object3D.prototype.copy.call( this, source );
 
 	if ( source.fog !== null ) this.fog = source.fog.clone();
 	if ( source.overrideMaterial !== null ) this.overrideMaterial = source.overrideMaterial.clone();

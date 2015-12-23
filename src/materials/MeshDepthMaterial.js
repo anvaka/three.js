@@ -14,9 +14,13 @@
  * }
  */
 
-THREE.MeshDepthMaterial = function ( parameters ) {
+module.exports = MeshDepthMaterial;
 
-	THREE.Material.call( this );
+var Material = require('./Material.js');
+
+function MeshDepthMaterial( parameters ) {
+
+	Material.call( this );
 
 	this.type = 'MeshDepthMaterial';
 
@@ -28,12 +32,12 @@ THREE.MeshDepthMaterial = function ( parameters ) {
 
 };
 
-THREE.MeshDepthMaterial.prototype = Object.create( THREE.Material.prototype );
-THREE.MeshDepthMaterial.prototype.constructor = THREE.MeshDepthMaterial;
+MeshDepthMaterial.prototype = Object.create( Material.prototype );
+MeshDepthMaterial.prototype.constructor = MeshDepthMaterial;
 
-THREE.MeshDepthMaterial.prototype.copy = function ( source ) {
+MeshDepthMaterial.prototype.copy = function ( source ) {
 
-	THREE.Material.prototype.copy.call( this, source );
+	Material.prototype.copy.call( this, source );
 
 	this.wireframe = source.wireframe;
 	this.wireframeLinewidth = source.wireframeLinewidth;

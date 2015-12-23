@@ -2,7 +2,10 @@
 * @author mrdoob / http://mrdoob.com/
 */
 
-THREE.WebGLBufferRenderer = function ( _gl, extensions, _infoRender ) {
+module.exports = WebGLBufferRenderer;
+
+var InterleavedBufferAttribute = require('../../core/InterleavedBufferAttribute.js');
+function WebGLBufferRenderer( _gl, extensions, _infoRender ) {
 
 	var mode;
 
@@ -35,7 +38,7 @@ THREE.WebGLBufferRenderer = function ( _gl, extensions, _infoRender ) {
 
 		var position = geometry.attributes.position;
 
-		if ( position instanceof THREE.InterleavedBufferAttribute ) {
+		if ( position instanceof InterleavedBufferAttribute ) {
 
 			extension.drawArraysInstancedANGLE( mode, 0, position.data.count, geometry.maxInstancedCount );
 

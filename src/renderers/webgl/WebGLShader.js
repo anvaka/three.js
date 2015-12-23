@@ -1,4 +1,4 @@
-THREE.WebGLShader = ( function () {
+module.exports = ( function () {
 
 	function addLineNumbers( string ) {
 

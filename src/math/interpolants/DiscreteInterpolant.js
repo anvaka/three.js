@@ -5,19 +5,21 @@
  *
  * @author tschw
  */
+module.exports = DiscreteInterpolant;
 
-THREE.DiscreteInterpolant = function(
+var Interpolant = require('../Interpolant.js');
+
+function DiscreteInterpolant(
 		parameterPositions, sampleValues, sampleSize, resultBuffer ) {
 
-	THREE.Interpolant.call(
+	Interpolant.call(
 			this, parameterPositions, sampleValues, sampleSize, resultBuffer );
 
 };
 
-THREE.DiscreteInterpolant.prototype =
-		Object.assign( Object.create( THREE.Interpolant.prototype ), {
+var DiscreteInterpolantPrototype = {
 
-	constructor: THREE.DiscreteInterpolant,
+	constructor: DiscreteInterpolant,
 
 	interpolate_: function( i1, t0, t, t1 ) {
 
@@ -25,4 +27,7 @@ THREE.DiscreteInterpolant.prototype =
 
 	}
 
-} );
+}
+
+DiscreteInterpolant.prototype =
+		Object.assign( Object.create( Interpolant.prototype ), DiscreteInterpolantPrototype );

@@ -2,11 +2,18 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-THREE.DirectGeometry = function () {
+module.exports = DirectGeometry;
 
-	Object.defineProperty( this, 'id', { value: THREE.GeometryIdCount ++ } );
+var THREEMath = require('../math/Math.js');
+var Geometry = require('./Geometry.js');
+var Vector2 = require('../math/Vector2.js');
+var EventDispatcher = require('./EventDispatcher.js');
 
-	this.uuid = THREE.Math.generateUUID();
+function DirectGeometry() {
+
+	Object.defineProperty( this, 'id', { value: Geometry.GeometryIdCount ++ } );
+
+	this.uuid = THREEMath.generateUUID();
 
 	this.name = '';
 	this.type = 'DirectGeometry';
@@ -40,12 +47,12 @@ THREE.DirectGeometry = function () {
 
 };
 
-THREE.DirectGeometry.prototype = {
+DirectGeometry.prototype = {
 
-	constructor: THREE.DirectGeometry,
+	constructor: DirectGeometry,
 
-	computeBoundingBox: THREE.Geometry.prototype.computeBoundingBox,
-	computeBoundingSphere: THREE.Geometry.prototype.computeBoundingSphere,
+	computeBoundingBox: Geometry.prototype.computeBoundingBox,
+	computeBoundingSphere: Geometry.prototype.computeBoundingSphere,
 
 	computeFaceNormals: function () {
 
@@ -209,7 +216,7 @@ THREE.DirectGeometry.prototype = {
 
 					console.warn( 'THREE.DirectGeometry.fromGeometry(): Undefined vertexUv ', i );
 
-					this.uvs.push( new THREE.Vector2(), new THREE.Vector2(), new THREE.Vector2() );
+					this.uvs.push( new Vector2(), new Vector2(), new Vector2() );
 
 				}
 
@@ -227,7 +234,7 @@ THREE.DirectGeometry.prototype = {
 
 					console.warn( 'THREE.DirectGeometry.fromGeometry(): Undefined vertexUv2 ', i );
 
-					this.uvs2.push( new THREE.Vector2(), new THREE.Vector2(), new THREE.Vector2() );
+					this.uvs2.push( new Vector2(), new Vector2(), new Vector2() );
 
 				}
 
@@ -287,4 +294,4 @@ THREE.DirectGeometry.prototype = {
 
 };
 
-THREE.EventDispatcher.prototype.apply( THREE.DirectGeometry.prototype );
+EventDispatcher.prototype.apply( DirectGeometry.prototype );

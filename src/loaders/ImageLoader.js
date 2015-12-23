@@ -2,15 +2,20 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-THREE.ImageLoader = function ( manager ) {
+module.exports = ImageLoader;
 
-	this.manager = ( manager !== undefined ) ? manager : THREE.DefaultLoadingManager;
+var DefaultLoadingManager = require('./LoadingManager.js').DefaultLoadingManager;
+var Cache = require('./Cache.js');
+
+function ImageLoader( manager ) {
+
+	this.manager = ( manager !== undefined ) ? manager : DefaultLoadingManager;
 
 };
 
-THREE.ImageLoader.prototype = {
+ImageLoader.prototype = {
 
-	constructor: THREE.ImageLoader,
+	constructor: ImageLoader,
 
 	load: function ( url, onLoad, onProgress, onError ) {
 
@@ -18,7 +23,7 @@ THREE.ImageLoader.prototype = {
 
 		var scope = this;
 
-		var cached = THREE.Cache.get( url );
+		var cached = Cache.get( url );
 
 		if ( cached !== undefined ) {
 
@@ -48,7 +53,7 @@ THREE.ImageLoader.prototype = {
 
 		image.addEventListener( 'load', function ( event ) {
 
-			THREE.Cache.add( url, this );
+			Cache.add( url, this );
 
 			if ( onLoad ) onLoad( this );
 

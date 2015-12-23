@@ -3,14 +3,18 @@
  **************************************************************/
 
 
-THREE.ClosedSplineCurve3 = function ( points ) {
+module.exports = ClosedSplineCurve3;
+
+var CatmullRomCurve3 = require('./CatmullRomCurve3');
+
+function ClosedSplineCurve3( points ) {
 
 	console.warn( 'THREE.ClosedSplineCurve3 has been deprecated. Please use THREE.CatmullRomCurve3.' );
 
-	THREE.CatmullRomCurve3.call( this, points );
+	CatmullRomCurve3.call( this, points );
 	this.type = 'catmullrom';
 	this.closed = true;
 
 };
 
-THREE.ClosedSplineCurve3.prototype = Object.create( THREE.CatmullRomCurve3.prototype );
+ClosedSplineCurve3.prototype = Object.create( CatmullRomCurve3.prototype );

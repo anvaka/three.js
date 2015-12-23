@@ -2,7 +2,12 @@
 * @author mrdoob / http://mrdoob.com/
 */
 
-THREE.WebGLLights = function () {
+module.exports = WebGLLights;
+
+var Vector3 = require('../../math/Vector3.js');
+var Color = require('../../math/Color.js');
+
+function WebGLLights () {
 
 	var lights = {};
 
@@ -20,24 +25,24 @@ THREE.WebGLLights = function () {
 
 			case 'HemisphereLight':
 				uniforms = {
-					direction: new THREE.Vector3(),
-					skyColor: new THREE.Color(),
-					groundColor: new THREE.Color()
+					direction: new Vector3(),
+					skyColor: new Color(),
+					groundColor: new Color()
 				};
 				break;
 
 			case 'DirectionalLight':
 				uniforms = {
-					direction: new THREE.Vector3(),
-					color: new THREE.Color(),
+					direction: new Vector3(),
+					color: new Color(),
 					shadow: -1
 				};
 				break;
 
 			case 'PointLight':
 				uniforms = {
-					position: new THREE.Vector3(),
-					color: new THREE.Color(),
+					position: new Vector3(),
+					color: new Color(),
 					distance: 0,
 					decay: 0,
 					shadow: -1
@@ -46,9 +51,9 @@ THREE.WebGLLights = function () {
 
 			case 'SpotLight':
 				uniforms = {
-					position: new THREE.Vector3(),
-					direction: new THREE.Vector3(),
-					color: new THREE.Color(),
+					position: new Vector3(),
+					direction: new Vector3(),
+					color: new Color(),
 					distance: 0,
 					angleCos: 0,
 					exponent: 0,

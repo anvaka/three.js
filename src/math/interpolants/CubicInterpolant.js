@@ -7,11 +7,14 @@
  *
  * @author tschw
  */
+module.exports = CubicInterpolant;
+var Interpolant = require('../Interpolant.js');
+var Default = require('../../defaults.js');
 
-THREE.CubicInterpolant = function(
+function CubicInterpolant (
 		parameterPositions, sampleValues, sampleSize, resultBuffer ) {
 
-	THREE.Interpolant.call(
+	Interpolant.call(
 			this, parameterPositions, sampleValues, sampleSize, resultBuffer );
 
 	this._weightPrev = -0;
@@ -21,15 +24,13 @@ THREE.CubicInterpolant = function(
 
 };
 
-THREE.CubicInterpolant.prototype =
-		Object.assign( Object.create( THREE.Interpolant.prototype ), {
-
-	constructor: THREE.CubicInterpolant,
+var CubicInterpolantPrototype = {
+	constructor: CubicInterpolant,
 
 	DefaultSettings_: {
 
-		endingStart: 	THREE.ZeroCurvatureEnding,
-		endingEnd:		THREE.ZeroCurvatureEnding
+		endingStart: 	Default.ZeroCurvatureEnding,
+		endingEnd:		Default.ZeroCurvatureEnding
 
 	},
 
@@ -46,7 +47,7 @@ THREE.CubicInterpolant.prototype =
 
 			switch ( this.getSettings_().endingStart ) {
 
-				case THREE.ZeroSlopeEnding:
+				case Default.ZeroSlopeEnding:
 
 					// f'(t0) = 0
 					iPrev = i1;
@@ -54,7 +55,7 @@ THREE.CubicInterpolant.prototype =
 
 					break;
 
-				case THREE.WrapAroundEnding:
+				case Default.WrapAroundEnding:
 
 					// use the other end of the curve
 					iPrev = pp.length - 2;
@@ -76,7 +77,7 @@ THREE.CubicInterpolant.prototype =
 
 			switch ( this.getSettings_().endingEnd ) {
 
-				case THREE.ZeroSlopeEnding:
+				case Default.ZeroSlopeEnding:
 
 					// f'(tN) = 0
 					iNext = i1;
@@ -84,7 +85,7 @@ THREE.CubicInterpolant.prototype =
 
 					break;
 
-				case THREE.WrapAroundEnding:
+				case Default.WrapAroundEnding:
 
 					// use the other end of the curve
 					iNext = 1;
@@ -149,4 +150,7 @@ THREE.CubicInterpolant.prototype =
 
 	}
 
-} );
+}
+
+CubicInterpolant.prototype =
+		Object.assign( Object.create( Interpolant.prototype ), CubicInterpolantPrototype);

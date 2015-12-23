@@ -57,15 +57,22 @@
  * }
  */
 
-THREE.MeshPhongMaterial = function ( parameters ) {
+module.exports = MeshPhongMaterial;
 
-	THREE.Material.call( this );
+var Material = require('./Material.js');
+var Color = require('../math/Color.js');
+var Vector2 = require('../math/Vector2.js');
+var Default = require('../defaults.js');
+
+function MeshPhongMaterial( parameters ) {
+
+	Material.call( this );
 
 	this.type = 'MeshPhongMaterial';
 
-	this.color = new THREE.Color( 0xffffff ); // diffuse
-	this.emissive = new THREE.Color( 0x000000 );
-	this.specular = new THREE.Color( 0x111111 );
+	this.color = new Color( 0xffffff ); // diffuse
+	this.emissive = new Color( 0x000000 );
+	this.specular = new Color( 0x111111 );
 	this.shininess = 30;
 
 	this.map = null;
@@ -83,7 +90,7 @@ THREE.MeshPhongMaterial = function ( parameters ) {
 	this.bumpScale = 1;
 
 	this.normalMap = null;
-	this.normalScale = new THREE.Vector2( 1, 1 );
+	this.normalScale = new Vector2( 1, 1 );
 
 	this.displacementMap = null;
 	this.displacementScale = 1;
@@ -94,20 +101,20 @@ THREE.MeshPhongMaterial = function ( parameters ) {
 	this.alphaMap = null;
 
 	this.envMap = null;
-	this.combine = THREE.MultiplyOperation;
+	this.combine = Default.MultiplyOperation;
 	this.reflectivity = 1;
 	this.refractionRatio = 0.98;
 
 	this.fog = true;
 
-	this.shading = THREE.SmoothShading;
+	this.shading = Default.SmoothShading;
 
 	this.wireframe = false;
 	this.wireframeLinewidth = 1;
 	this.wireframeLinecap = 'round';
 	this.wireframeLinejoin = 'round';
 
-	this.vertexColors = THREE.NoColors;
+	this.vertexColors = Default.NoColors;
 
 	this.skinning = false;
 	this.morphTargets = false;
@@ -117,12 +124,12 @@ THREE.MeshPhongMaterial = function ( parameters ) {
 
 };
 
-THREE.MeshPhongMaterial.prototype = Object.create( THREE.Material.prototype );
-THREE.MeshPhongMaterial.prototype.constructor = THREE.MeshPhongMaterial;
+MeshPhongMaterial.prototype = Object.create( Material.prototype );
+MeshPhongMaterial.prototype.constructor = MeshPhongMaterial;
 
-THREE.MeshPhongMaterial.prototype.copy = function ( source ) {
+MeshPhongMaterial.prototype.copy = function ( source ) {
 
-	THREE.Material.prototype.copy.call( this, source );
+	Material.prototype.copy.call( this, source );
 
 	this.color.copy( source.color );
 	this.emissive.copy( source.emissive );

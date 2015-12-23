@@ -2,22 +2,46 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-THREE.MaterialLoader = function ( manager ) {
+module.exports = MaterialLoader;
 
-	this.manager = ( manager !== undefined ) ? manager : THREE.DefaultLoadingManager;
+var DefaultLoadingManager = require('./LoadingManager.js').DefaultLoadingManager;
+var XHRLoader = require('./XHRLoader.js');
+var Default = require('../defaults.js');
+var Vector2 = require('../math/Vector2.js');
+
+var Materials = {
+	LineBasicMaterial: require('../materials/LineBasicMaterial.js'),
+	LineDashedMaterial: require('../materials/LineDashedMaterial.js'),
+	Material: require('../materials/Material.js'),
+	MeshBasicMaterial: require('../materials/MeshBasicMaterial.js'),
+	MeshDepthMaterial: require('../materials/MeshDepthMaterial.js'),
+	MeshLambertMaterial: require('../materials/MeshLambertMaterial.js'),
+	MeshNormalMaterial: require('../materials/MeshNormalMaterial.js'),
+	MeshPhongMaterial: require('../materials/MeshPhongMaterial.js'),
+	MeshStandardMaterial: require('../materials/MeshStandardMaterial.js'),
+	MultiMaterial: require('../materials/MultiMaterial.js'),
+	PointsMaterial: require('../materials/PointsMaterial.js'),
+	RawShaderMaterial: require('../materials/RawShaderMaterial.js'),
+	ShaderMaterial: require('../materials/ShaderMaterial.js'),
+	SpriteMaterial: require('../materials/SpriteMaterial.js')
+}
+
+function MaterialLoader( manager ) {
+
+	this.manager = ( manager !== undefined ) ? manager : DefaultLoadingManager;
 	this.textures = {};
 
 };
 
-THREE.MaterialLoader.prototype = {
+MaterialLoader.prototype = {
 
-	constructor: THREE.MaterialLoader,
+	constructor: MaterialLoader,
 
 	load: function ( url, onLoad, onProgress, onError ) {
 
 		var scope = this;
 
-		var loader = new THREE.XHRLoader( scope.manager );
+		var loader = new XHRLoader( scope.manager );
 		loader.load( url, function ( text ) {
 
 			onLoad( scope.parse( JSON.parse( text ) ) );
@@ -48,7 +72,7 @@ THREE.MaterialLoader.prototype = {
 
 	parse: function ( json ) {
 
-		var material = new THREE[ json.type ];
+		var material = new Materials[ json.type ];
 
 		if ( json.uuid !== undefined ) material.uuid = json.uuid;
 		if ( json.name !== undefined ) material.name = json.name;
@@ -107,7 +131,7 @@ THREE.MaterialLoader.prototype = {
 
 			}
 
-			material.normalScale = new THREE.Vector2().fromArray( normalScale );
+			material.normalScale = new Vector2().fromArray( normalScale );
 
 		}
 
@@ -126,7 +150,7 @@ THREE.MaterialLoader.prototype = {
 		if ( json.envMap !== undefined ) {
 
 			material.envMap = this.getTexture( json.envMap );
-			material.combine = THREE.MultiplyOperation;
+			material.combine = Default.MultiplyOperation;
 
 		}
 

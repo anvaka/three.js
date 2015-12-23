@@ -2,7 +2,9 @@
 * @author mrdoob / http://mrdoob.com/
 */
 
-THREE.WebGLExtensions = function ( gl ) {
+module.exports = WebGLExtensions;
+
+function WebGLExtensions( gl ) {
 
 	var extensions = {};
 

@@ -7,11 +7,30 @@
  * @author bhouston / http://clara.io
  */
 
-THREE.Geometry = function () {
+module.exports = Geometry;
 
-	Object.defineProperty( this, 'id', { value: THREE.GeometryIdCount ++ } );
+var THREEMath = require('../math/Math.js');
+var Color = require('../math/Color.js');
+var Box3 = require('../math/Box3.js');
+var Sphere = require('../math/Sphere.js');
+var Vector2 = require('../math/Vector2.js');
+var Vector3 = require('../math/Vector3.js');
+var Matrix3 = require('../math/Matrix3.js');
+var Matrix4 = require('../math/Matrix4.js');
 
-	this.uuid = THREE.Math.generateUUID();
+var Mesh = require('../objects/Mesh.js');
+
+var Face3 = require('./Face3.js');
+var Object3D = require('./Object3D.js');
+var EventDispatcher = require('./EventDispatcher.js');
+
+Geometry.GeometryIdCount = 0; // TODO: Should it be exposed on THREE?
+
+function Geometry() {
+
+	Object.defineProperty( this, 'id', { value: Geometry.GeometryIdCount ++ } );
+
+	this.uuid = THREEMath.generateUUID();
 
 	this.name = '';
 	this.type = 'Geometry';
@@ -44,13 +63,13 @@ THREE.Geometry = function () {
 
 };
 
-THREE.Geometry.prototype = {
+Geometry.prototype = {
 
-	constructor: THREE.Geometry,
+	constructor: Geometry,
 
 	applyMatrix: function ( matrix ) {
 
-		var normalMatrix = new THREE.Matrix3().getNormalMatrix( matrix );
+		var normalMatrix = new Matrix3().getNormalMatrix( matrix );
 
 		for ( var i = 0, il = this.vertices.length; i < il; i ++ ) {
 
@@ -97,7 +116,7 @@ THREE.Geometry.prototype = {
 
 		return function rotateX( angle ) {
 
-			if ( m1 === undefined ) m1 = new THREE.Matrix4();
+			if ( m1 === undefined ) m1 = new Matrix4();
 
 			m1.makeRotationX( angle );
 
@@ -117,7 +136,7 @@ THREE.Geometry.prototype = {
 
 		return function rotateY( angle ) {
 
-			if ( m1 === undefined ) m1 = new THREE.Matrix4();
+			if ( m1 === undefined ) m1 = new Matrix4();
 
 			m1.makeRotationY( angle );
 
@@ -137,7 +156,7 @@ THREE.Geometry.prototype = {
 
 		return function rotateZ( angle ) {
 
-			if ( m1 === undefined ) m1 = new THREE.Matrix4();
+			if ( m1 === undefined ) m1 = new Matrix4();
 
 			m1.makeRotationZ( angle );
 
@@ -157,7 +176,7 @@ THREE.Geometry.prototype = {
 
 		return function translate( x, y, z ) {
 
-			if ( m1 === undefined ) m1 = new THREE.Matrix4();
+			if ( m1 === undefined ) m1 = new Matrix4();
 
 			m1.makeTranslation( x, y, z );
 
@@ -177,7 +196,7 @@ THREE.Geometry.prototype = {
 
 		return function scale( x, y, z ) {
 
-			if ( m1 === undefined ) m1 = new THREE.Matrix4();
+			if ( m1 === undefined ) m1 = new Matrix4();
 
 			m1.makeScale( x, y, z );
 
@@ -195,7 +214,7 @@ THREE.Geometry.prototype = {
 
 		return function lookAt( vector ) {
 
-			if ( obj === undefined ) obj = new THREE.Object3D();
+			if ( obj === undefined ) obj = new Object3D();
 
 			obj.lookAt( vector );
 
@@ -228,29 +247,29 @@ THREE.Geometry.prototype = {
 
 		for ( var i = 0, j = 0; i < positions.length; i += 3, j += 2 ) {
 
-			scope.vertices.push( new THREE.Vector3( positions[ i ], positions[ i + 1 ], positions[ i + 2 ] ) );
+			scope.vertices.push( new Vector3( positions[ i ], positions[ i + 1 ], positions[ i + 2 ] ) );
 
 			if ( normals !== undefined ) {
 
-				tempNormals.push( new THREE.Vector3( normals[ i ], normals[ i + 1 ], normals[ i + 2 ] ) );
+				tempNormals.push( new Vector3( normals[ i ], normals[ i + 1 ], normals[ i + 2 ] ) );
 
 			}
 
 			if ( colors !== undefined ) {
 
-				scope.colors.push( new THREE.Color( colors[ i ], colors[ i + 1 ], colors[ i + 2 ] ) );
+				scope.colors.push( new Color( colors[ i ], colors[ i + 1 ], colors[ i + 2 ] ) );
 
 			}
 
 			if ( uvs !== undefined ) {
 
-				tempUVs.push( new THREE.Vector2( uvs[ j ], uvs[ j + 1 ] ) );
+				tempUVs.push( new Vector2( uvs[ j ], uvs[ j + 1 ] ) );
 
 			}
 
 			if ( uvs2 !== undefined ) {
 
-				tempUVs2.push( new THREE.Vector2( uvs2[ j ], uvs2[ j + 1 ] ) );
+				tempUVs2.push( new Vector2( uvs2[ j ], uvs2[ j + 1 ] ) );
 
 			}
 
@@ -261,7 +280,7 @@ THREE.Geometry.prototype = {
 			var vertexNormals = normals !== undefined ? [ tempNormals[ a ].clone(), tempNormals[ b ].clone(), tempNormals[ c ].clone() ] : [];
 			var vertexColors = colors !== undefined ? [ scope.colors[ a ].clone(), scope.colors[ b ].clone(), scope.colors[ c ].clone() ] : [];
 
-			var face = new THREE.Face3( a, b, c, vertexNormals, vertexColors );
+			var face = new Face3( a, b, c, vertexNormals, vertexColors );
 
 			scope.faces.push( face );
 
@@ -359,7 +378,7 @@ THREE.Geometry.prototype = {
 
 		var s = radius === 0 ? 1 : 1.0 / radius;
 
-		var matrix = new THREE.Matrix4();
+		var matrix = new Matrix4();
 		matrix.set(
 			s, 0, 0, - s * center.x,
 			0, s, 0, - s * center.y,
@@ -375,7 +394,7 @@ THREE.Geometry.prototype = {
 
 	computeFaceNormals: function () {
 
-		var cb = new THREE.Vector3(), ab = new THREE.Vector3();
+		var cb = new Vector3(), ab = new Vector3();
 
 		for ( var f = 0, fl = this.faces.length; f < fl; f ++ ) {
 
@@ -407,7 +426,7 @@ THREE.Geometry.prototype = {
 
 		for ( v = 0, vl = this.vertices.length; v < vl; v ++ ) {
 
-			vertices[ v ] = new THREE.Vector3();
+			vertices[ v ] = new Vector3();
 
 		}
 
@@ -417,7 +436,7 @@ THREE.Geometry.prototype = {
 			// http://www.iquilezles.org/www/articles/normals/normals.htm
 
 			var vA, vB, vC;
-			var cb = new THREE.Vector3(), ab = new THREE.Vector3();
+			var cb = new Vector3(), ab = new Vector3();
 
 			for ( f = 0, fl = this.faces.length; f < fl; f ++ ) {
 
@@ -529,7 +548,7 @@ THREE.Geometry.prototype = {
 
 		// use temp geometry to compute face and vertex normals for each morph
 
-		var tmpGeo = new THREE.Geometry();
+		var tmpGeo = new Geometry();
 		tmpGeo.faces = this.faces;
 
 		for ( i = 0, il = this.morphTargets.length; i < il; i ++ ) {
@@ -549,8 +568,8 @@ THREE.Geometry.prototype = {
 
 				for ( f = 0, fl = this.faces.length; f < fl; f ++ ) {
 
-					faceNormal = new THREE.Vector3();
-					vertexNormals = { a: new THREE.Vector3(), b: new THREE.Vector3(), c: new THREE.Vector3() };
+					faceNormal = new Vector3();
+					vertexNormals = { a: new Vector3(), b: new Vector3(), c: new Vector3() };
 
 					dstNormalsFace.push( faceNormal );
 					dstNormalsVertex.push( vertexNormals );
@@ -633,7 +652,7 @@ THREE.Geometry.prototype = {
 
 		if ( this.boundingBox === null ) {
 
-			this.boundingBox = new THREE.Box3();
+			this.boundingBox = new Box3();
 
 		}
 
@@ -645,7 +664,7 @@ THREE.Geometry.prototype = {
 
 		if ( this.boundingSphere === null ) {
 
-			this.boundingSphere = new THREE.Sphere();
+			this.boundingSphere = new Sphere();
 
 		}
 
@@ -655,7 +674,7 @@ THREE.Geometry.prototype = {
 
 	merge: function ( geometry, matrix, materialIndexOffset ) {
 
-		if ( geometry instanceof THREE.Geometry === false ) {
+		if ( geometry instanceof Geometry === false ) {
 
 			console.error( 'THREE.Geometry.merge(): geometry not an instance of THREE.Geometry.', geometry );
 			return;
@@ -663,19 +682,19 @@ THREE.Geometry.prototype = {
 		}
 
 		var normalMatrix,
-		vertexOffset = this.vertices.length,
-		vertices1 = this.vertices,
-		vertices2 = geometry.vertices,
-		faces1 = this.faces,
-		faces2 = geometry.faces,
-		uvs1 = this.faceVertexUvs[ 0 ],
-		uvs2 = geometry.faceVertexUvs[ 0 ];
+			vertexOffset = this.vertices.length,
+			vertices1 = this.vertices,
+			vertices2 = geometry.vertices,
+			faces1 = this.faces,
+			faces2 = geometry.faces,
+			uvs1 = this.faceVertexUvs[ 0 ],
+			uvs2 = geometry.faceVertexUvs[ 0 ];
 
 		if ( materialIndexOffset === undefined ) materialIndexOffset = 0;
 
 		if ( matrix !== undefined ) {
 
-			normalMatrix = new THREE.Matrix3().getNormalMatrix( matrix );
+			normalMatrix = new Matrix3().getNormalMatrix( matrix );
 
 		}
 
@@ -698,10 +717,10 @@ THREE.Geometry.prototype = {
 		for ( i = 0, il = faces2.length; i < il; i ++ ) {
 
 			var face = faces2[ i ], faceCopy, normal, color,
-			faceVertexNormals = face.vertexNormals,
-			faceVertexColors = face.vertexColors;
+				faceVertexNormals = face.vertexNormals,
+				faceVertexColors = face.vertexColors;
 
-			faceCopy = new THREE.Face3( face.a + vertexOffset, face.b + vertexOffset, face.c + vertexOffset );
+			faceCopy = new Face3( face.a + vertexOffset, face.b + vertexOffset, face.c + vertexOffset );
 			faceCopy.normal.copy( face.normal );
 
 			if ( normalMatrix !== undefined ) {
@@ -765,7 +784,7 @@ THREE.Geometry.prototype = {
 
 	mergeMesh: function ( mesh ) {
 
-		if ( mesh instanceof THREE.Mesh === false ) {
+		if ( mesh instanceof Mesh === false ) {
 
 			console.error( 'THREE.Geometry.mergeMesh(): mesh not an instance of THREE.Mesh.', mesh );
 			return;
@@ -1136,7 +1155,7 @@ THREE.Geometry.prototype = {
 		return new this.constructor().copy( this );
 		*/
 
-		return new THREE.Geometry().copy( this );
+		return new Geometry().copy( this );
 
 	},
 
@@ -1202,6 +1221,4 @@ THREE.Geometry.prototype = {
 
 };
 
-THREE.EventDispatcher.prototype.apply( THREE.Geometry.prototype );
-
-THREE.GeometryIdCount = 0;
+EventDispatcher.prototype.apply( Geometry.prototype );

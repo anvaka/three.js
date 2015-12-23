@@ -2,9 +2,17 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-THREE.WireframeGeometry = function ( geometry ) {
+module.exports = WireframeGeometry;
 
-	THREE.BufferGeometry.call( this );
+var Geometry = require('../../core/Geometry.js');
+var BufferGeometry = require('../../core/BufferGeometry.js');
+var BufferAttribute = require('../../core/BufferAttribute.js');
+var Sphere = require('../../math/Sphere.js');
+var Vector3 = require('../../math/Vector3.js');
+
+function WireframeGeometry( geometry ) {
+
+	BufferGeometry.call( this );
 
 	var edge = [ 0, 0 ], hash = {};
 
@@ -16,7 +24,7 @@ THREE.WireframeGeometry = function ( geometry ) {
 
 	var keys = [ 'a', 'b', 'c' ];
 
-	if ( geometry instanceof THREE.Geometry ) {
+	if ( geometry instanceof Geometry ) {
 
 		var vertices = geometry.vertices;
 		var faces = geometry.faces;
@@ -67,9 +75,9 @@ THREE.WireframeGeometry = function ( geometry ) {
 
 		}
 
-		this.addAttribute( 'position', new THREE.BufferAttribute( coords, 3 ) );
+		this.addAttribute( 'position', new BufferAttribute( coords, 3 ) );
 
-	} else if ( geometry instanceof THREE.BufferGeometry ) {
+	} else if ( geometry instanceof BufferGeometry ) {
 
 		if ( geometry.index !== null ) {
 
@@ -138,7 +146,7 @@ THREE.WireframeGeometry = function ( geometry ) {
 
 			}
 
-			this.addAttribute( 'position', new THREE.BufferAttribute( coords, 3 ) );
+			this.addAttribute( 'position', new BufferAttribute( coords, 3 ) );
 
 		} else {
 
@@ -170,7 +178,7 @@ THREE.WireframeGeometry = function ( geometry ) {
 
 			}
 
-			this.addAttribute( 'position', new THREE.BufferAttribute( coords, 3 ) );
+			this.addAttribute( 'position', new BufferAttribute( coords, 3 ) );
 
 		}
 
@@ -178,5 +186,5 @@ THREE.WireframeGeometry = function ( geometry ) {
 
 };
 
-THREE.WireframeGeometry.prototype = Object.create( THREE.BufferGeometry.prototype );
-THREE.WireframeGeometry.prototype.constructor = THREE.WireframeGeometry;
+WireframeGeometry.prototype = Object.create( BufferGeometry.prototype );
+WireframeGeometry.prototype.constructor = WireframeGeometry;

@@ -59,17 +59,25 @@
  * }
  */
 
-THREE.MeshStandardMaterial = function ( parameters ) {
+module.exports = MeshStandardMaterial;
 
-	THREE.Material.call( this );
+var Material = require('./Material.js');
+var Color = require('../math/Color.js');
+var Vector2 = require('../math/Vector2.js');
+
+var Default = require('../defaults.js');
+
+function MeshStandardMaterial( parameters ) {
+
+	Material.call( this );
 
 	this.type = 'MeshStandardMaterial';
 
-	this.color = new THREE.Color( 0xffffff ); // diffuse
+	this.color = new Color( 0xffffff ); // diffuse
 	this.roughness = 0.5;
 	this.metalness = 0.5;
 
-	this.emissive = new THREE.Color( 0x000000 );
+	this.emissive = new Color( 0x000000 );
 
 	this.map = null;
 
@@ -86,7 +94,7 @@ THREE.MeshStandardMaterial = function ( parameters ) {
 	this.bumpScale = 1;
 
 	this.normalMap = null;
-	this.normalScale = new THREE.Vector2( 1, 1 );
+	this.normalScale = new Vector2( 1, 1 );
 
 	this.displacementMap = null;
 	this.displacementScale = 1;
@@ -105,14 +113,14 @@ THREE.MeshStandardMaterial = function ( parameters ) {
 
 	this.fog = true;
 
-	this.shading = THREE.SmoothShading;
+	this.shading = Default.SmoothShading;
 
 	this.wireframe = false;
 	this.wireframeLinewidth = 1;
 	this.wireframeLinecap = 'round';
 	this.wireframeLinejoin = 'round';
 
-	this.vertexColors = THREE.NoColors;
+	this.vertexColors = Default.NoColors;
 
 	this.skinning = false;
 	this.morphTargets = false;
@@ -122,12 +130,12 @@ THREE.MeshStandardMaterial = function ( parameters ) {
 
 };
 
-THREE.MeshStandardMaterial.prototype = Object.create( THREE.Material.prototype );
-THREE.MeshStandardMaterial.prototype.constructor = THREE.MeshStandardMaterial;
+MeshStandardMaterial.prototype = Object.create( Material.prototype );
+MeshStandardMaterial.prototype.constructor = MeshStandardMaterial;
 
-THREE.MeshStandardMaterial.prototype.copy = function ( source ) {
+MeshStandardMaterial.prototype.copy = function ( source ) {
 
-	THREE.Material.prototype.copy.call( this, source );
+	Material.prototype.copy.call( this, source );
 
 	this.color.copy( source.color );
 	this.roughness = source.roughness;

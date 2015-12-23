@@ -2,7 +2,9 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-THREE.AudioBuffer = function ( context ) {
+module.exports = AudioBuffer;
+
+function AudioBuffer( context ) {
 
 	this.context = context;
 	this.ready = false;
@@ -10,7 +12,7 @@ THREE.AudioBuffer = function ( context ) {
 
 };
 
-THREE.AudioBuffer.prototype.load = function ( file ) {
+AudioBuffer.prototype.load = function ( file ) {
 
 	var scope = this;
 
@@ -41,7 +43,7 @@ THREE.AudioBuffer.prototype.load = function ( file ) {
 
 };
 
-THREE.AudioBuffer.prototype.onReady = function ( callback ) {
+AudioBuffer.prototype.onReady = function ( callback ) {
 
 	if ( this.ready ) {
 

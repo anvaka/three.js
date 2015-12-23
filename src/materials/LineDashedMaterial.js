@@ -20,14 +20,20 @@
  *  fog: <bool>
  * }
  */
+module.exports = LineDashedMaterial;
 
-THREE.LineDashedMaterial = function ( parameters ) {
+var Material = require('./Material.js');
 
-	THREE.Material.call( this );
+var Color = require('../math/Color.js');
+var Default = require('../defaults.js');
+
+function LineDashedMaterial( parameters ) {
+
+	Material.call( this );
 
 	this.type = 'LineDashedMaterial';
 
-	this.color = new THREE.Color( 0xffffff );
+	this.color = new Color( 0xffffff );
 
 	this.linewidth = 1;
 
@@ -35,7 +41,7 @@ THREE.LineDashedMaterial = function ( parameters ) {
 	this.dashSize = 3;
 	this.gapSize = 1;
 
-	this.vertexColors = THREE.NoColors;
+	this.vertexColors = Default.NoColors;
 
 	this.fog = true;
 
@@ -43,12 +49,12 @@ THREE.LineDashedMaterial = function ( parameters ) {
 
 };
 
-THREE.LineDashedMaterial.prototype = Object.create( THREE.Material.prototype );
-THREE.LineDashedMaterial.prototype.constructor = THREE.LineDashedMaterial;
+LineDashedMaterial.prototype = Object.create( Material.prototype );
+LineDashedMaterial.prototype.constructor = LineDashedMaterial;
 
-THREE.LineDashedMaterial.prototype.copy = function ( source ) {
+LineDashedMaterial.prototype.copy = function ( source ) {
 
-	THREE.Material.prototype.copy.call( this, source );
+	Material.prototype.copy.call( this, source );
 
 	this.color.copy( source.color );
 	

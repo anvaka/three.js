@@ -3,36 +3,45 @@
  * @author alteredq / http://alteredqualia.com/
  */
 
-THREE.Sprite = ( function () {
+var BufferGeometry = require('../core/BufferGeometry.js');
+var BufferAttribute = require('../core/BufferAttribute.js');
+var Object3D = require('../core/Object3D.js');
+
+var SpriteMaterial = require('../materials/SpriteMaterial.js');
+
+var Vector3 = require('../math/Vector3.js');
+
+// TODO: This could extracted, since commonjs is a closure
+var Sprite = ( function () {
 
 	var indices = new Uint16Array( [ 0, 1, 2,  0, 2, 3 ] );
 	var vertices = new Float32Array( [ - 0.5, - 0.5, 0,   0.5, - 0.5, 0,   0.5, 0.5, 0,   - 0.5, 0.5, 0 ] );
 	var uvs = new Float32Array( [ 0, 0,   1, 0,   1, 1,   0, 1 ] );
 
-	var geometry = new THREE.BufferGeometry();
-	geometry.setIndex( new THREE.BufferAttribute( indices, 1 ) );
-	geometry.addAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
-	geometry.addAttribute( 'uv', new THREE.BufferAttribute( uvs, 2 ) );
+	var geometry = new BufferGeometry();
+	geometry.setIndex( new BufferAttribute( indices, 1 ) );
+	geometry.addAttribute( 'position', new BufferAttribute( vertices, 3 ) );
+	geometry.addAttribute( 'uv', new BufferAttribute( uvs, 2 ) );
 
 	return function Sprite( material ) {
 
-		THREE.Object3D.call( this );
+		Object3D.call( this );
 
 		this.type = 'Sprite';
 
 		this.geometry = geometry;
-		this.material = ( material !== undefined ) ? material : new THREE.SpriteMaterial();
+		this.material = ( material !== undefined ) ? material : new SpriteMaterial();
 
 	};
 
 } )();
 
-THREE.Sprite.prototype = Object.create( THREE.Object3D.prototype );
-THREE.Sprite.prototype.constructor = THREE.Sprite;
+Sprite.prototype = Object.create( Object3D.prototype );
+Sprite.prototype.constructor = Sprite;
 
-THREE.Sprite.prototype.raycast = ( function () {
+Sprite.prototype.raycast = ( function () {
 
-	var matrixPosition = new THREE.Vector3();
+	var matrixPosition = new Vector3();
 
 	return function raycast( raycaster, intersects ) {
 
@@ -60,7 +69,7 @@ THREE.Sprite.prototype.raycast = ( function () {
 
 }() );
 
-THREE.Sprite.prototype.clone = function () {
+Sprite.prototype.clone = function () {
 
 	return new this.constructor( this.material ).copy( this );
 
@@ -68,4 +77,6 @@ THREE.Sprite.prototype.clone = function () {
 
 // Backwards compatibility
 
-THREE.Particle = THREE.Sprite;
+Sprite.Particle = Sprite;
+
+module.exports = Sprite;

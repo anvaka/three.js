@@ -1,10 +1,13 @@
 /**
  * @author alteredq / http://alteredqualia.com/
  */
+module.exports = CompressedTexture;
 
-THREE.CompressedTexture = function ( mipmaps, width, height, format, type, mapping, wrapS, wrapT, magFilter, minFilter, anisotropy ) {
+var Texture = require('./Texture.js');
 
-	THREE.Texture.call( this, null, mapping, wrapS, wrapT, magFilter, minFilter, format, type, anisotropy );
+function CompressedTexture( mipmaps, width, height, format, type, mapping, wrapS, wrapT, magFilter, minFilter, anisotropy ) {
+
+	Texture.call( this, null, mapping, wrapS, wrapT, magFilter, minFilter, format, type, anisotropy );
 
 	this.image = { width: width, height: height };
 	this.mipmaps = mipmaps;
@@ -21,5 +24,5 @@ THREE.CompressedTexture = function ( mipmaps, width, height, format, type, mappi
 
 };
 
-THREE.CompressedTexture.prototype = Object.create( THREE.Texture.prototype );
-THREE.CompressedTexture.prototype.constructor = THREE.CompressedTexture;
+CompressedTexture.prototype = Object.create( Texture.prototype );
+CompressedTexture.prototype.constructor = CompressedTexture;

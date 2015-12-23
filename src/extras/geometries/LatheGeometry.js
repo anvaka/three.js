@@ -11,9 +11,16 @@
 // phiLength - the radian (0 to 2*PI) range of the lathed section
 //    2*pi is a closed lathe, less than 2PI is a portion.
 
-THREE.LatheGeometry = function ( points, segments, phiStart, phiLength ) {
+module.exports = LatheGeometry;
 
-	THREE.Geometry.call( this );
+var Face3 = require('../../core/Face3.js');
+var Geometry = require('../../core/Geometry.js');
+var Vector3 = require('../../math/Vector3.js');
+var Vector2 = require('../../math/Vector2.js');
+
+function LatheGeometry( points, segments, phiStart, phiLength ) {
+
+	Geometry.call( this );
 
 	this.type = 'LatheGeometry';
 
@@ -42,7 +49,7 @@ THREE.LatheGeometry = function ( points, segments, phiStart, phiLength ) {
 
 			var pt = points[ j ];
 
-			var vertex = new THREE.Vector3();
+			var vertex = new Vector3();
 
 			vertex.x = c * pt.x - s * pt.y;
 			vertex.y = s * pt.x + c * pt.y;
@@ -71,23 +78,23 @@ THREE.LatheGeometry = function ( points, segments, phiStart, phiLength ) {
 			var u1 = u0 + inverseSegments;
 			var v1 = v0 + inversePointLength;
 
-			this.faces.push( new THREE.Face3( a, b, d ) );
+			this.faces.push( new Face3( a, b, d ) );
 
 			this.faceVertexUvs[ 0 ].push( [
 
-				new THREE.Vector2( u0, v0 ),
-				new THREE.Vector2( u1, v0 ),
-				new THREE.Vector2( u0, v1 )
+				new Vector2( u0, v0 ),
+				new Vector2( u1, v0 ),
+				new Vector2( u0, v1 )
 
 			] );
 
-			this.faces.push( new THREE.Face3( b, c, d ) );
+			this.faces.push( new Face3( b, c, d ) );
 
 			this.faceVertexUvs[ 0 ].push( [
 
-				new THREE.Vector2( u1, v0 ),
-				new THREE.Vector2( u1, v1 ),
-				new THREE.Vector2( u0, v1 )
+				new Vector2( u1, v0 ),
+				new Vector2( u1, v1 ),
+				new Vector2( u0, v1 )
 
 			] );
 
@@ -102,5 +109,5 @@ THREE.LatheGeometry = function ( points, segments, phiStart, phiLength ) {
 
 };
 
-THREE.LatheGeometry.prototype = Object.create( THREE.Geometry.prototype );
-THREE.LatheGeometry.prototype.constructor = THREE.LatheGeometry;
+LatheGeometry.prototype = Object.create( Geometry.prototype );
+LatheGeometry.prototype.constructor = LatheGeometry;

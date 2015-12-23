@@ -2,21 +2,27 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-THREE.CubeTextureLoader = function ( manager ) {
+module.exports = CubeTextureLoader;
 
-	this.manager = ( manager !== undefined ) ? manager : THREE.DefaultLoadingManager;
+var DefaultLoadingManager = require('./LoadingManager.js').DefaultLoadingManager;
+var ImageLoader = require('./ImageLoader.js');
+var CubeTexture = require('../textures/CubeTexture.js');
+
+function CubeTextureLoader( manager ) {
+
+	this.manager = ( manager !== undefined ) ? manager : DefaultLoadingManager;
 
 };
 
-THREE.CubeTextureLoader.prototype = {
+CubeTextureLoader.prototype = {
 
-	constructor: THREE.CubeTextureLoader,
+	constructor: CubeTextureLoader,
 
 	load: function ( urls, onLoad, onProgress, onError ) {
 
-		var texture = new THREE.CubeTexture( [] );
+		var texture = new CubeTexture( [] );
 
-		var loader = new THREE.ImageLoader();
+		var loader = new ImageLoader();
 		loader.setCrossOrigin( this.crossOrigin );
 		loader.setPath( this.path );
 

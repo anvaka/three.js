@@ -3,19 +3,21 @@
  *
  * @author tschw
  */
+module.exports = QuaternionLinearInterpolant;
+var Interpolant = require('../Interpolant.js');
+var Quaternion = require('../Quaternion.js');
 
-THREE.QuaternionLinearInterpolant = function(
+function QuaternionLinearInterpolant(
 		parameterPositions, sampleValues, sampleSize, resultBuffer ) {
 
-	THREE.Interpolant.call(
+	Interpolant.call(
 			this, parameterPositions, sampleValues, sampleSize, resultBuffer );
 
 };
 
-THREE.QuaternionLinearInterpolant.prototype =
-		Object.assign( Object.create( THREE.Interpolant.prototype ), {
+var QuaternionLinearInterpolantPrototype = {
 
-	constructor: THREE.QuaternionLinearInterpolant,
+	constructor: QuaternionLinearInterpolant,
 
 	interpolate_: function( i1, t0, t, t1 ) {
 
@@ -29,7 +31,7 @@ THREE.QuaternionLinearInterpolant.prototype =
 
 		for ( var end = offset + stride; offset !== end; offset += 4 ) {
 
-			THREE.Quaternion.slerpFlat( result, 0,
+			Quaternion.slerpFlat( result, 0,
 					values, offset - stride, values, offset, alpha );
 
 		}
@@ -38,4 +40,7 @@ THREE.QuaternionLinearInterpolant.prototype =
 
 	}
 
-} );
+};
+
+QuaternionLinearInterpolant.prototype =
+		Object.assign( Object.create( Interpolant.prototype ), QuaternionLinearInterpolantPrototype );

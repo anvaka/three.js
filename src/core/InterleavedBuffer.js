@@ -1,10 +1,13 @@
 /**
  * @author benaadams / https://twitter.com/ben_a_adams
  */
+module.exports = InterleavedBuffer;
 
-THREE.InterleavedBuffer = function ( array, stride ) {
+var THREEMath = require('../math/Math.js');
 
-	this.uuid = THREE.Math.generateUUID();
+function InterleavedBuffer( array, stride ) {
+
+	this.uuid = THREEMath.generateUUID();
 
 	this.array = array;
 	this.stride = stride;
@@ -16,9 +19,9 @@ THREE.InterleavedBuffer = function ( array, stride ) {
 
 };
 
-THREE.InterleavedBuffer.prototype = {
+InterleavedBuffer.prototype = {
 
-	constructor: THREE.InterleavedBuffer,
+	constructor: InterleavedBuffer,
 
 	get length () {
 

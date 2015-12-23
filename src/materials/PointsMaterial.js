@@ -20,20 +20,26 @@
  * }
  */
 
-THREE.PointsMaterial = function ( parameters ) {
+module.exports = PointsMaterial;
 
-	THREE.Material.call( this );
+var Material = require('./Material.js');
+var Default = require('../defaults.js');
+var Color = require('../math/Color.js');
+
+function PointsMaterial( parameters ) {
+
+	Material.call( this );
 
 	this.type = 'PointsMaterial';
 
-	this.color = new THREE.Color( 0xffffff );
+	this.color = new Color( 0xffffff );
 
 	this.map = null;
 
 	this.size = 1;
 	this.sizeAttenuation = true;
 
-	this.vertexColors = THREE.NoColors;
+	this.vertexColors = Default.NoColors;
 
 	this.fog = true;
 
@@ -41,12 +47,12 @@ THREE.PointsMaterial = function ( parameters ) {
 
 };
 
-THREE.PointsMaterial.prototype = Object.create( THREE.Material.prototype );
-THREE.PointsMaterial.prototype.constructor = THREE.PointsMaterial;
+PointsMaterial.prototype = Object.create( Material.prototype );
+PointsMaterial.prototype.constructor = PointsMaterial;
 
-THREE.PointsMaterial.prototype.copy = function ( source ) {
+PointsMaterial.prototype.copy = function ( source ) {
 
-	THREE.Material.prototype.copy.call( this, source );
+	Material.prototype.copy.call( this, source );
 
 	this.color.copy( source.color );
 

@@ -34,13 +34,16 @@
  *	Abstract Curve base class
  **************************************************************/
 
-THREE.Curve = function () {
+module.exports = Curve;
+var CurveUtils = require('../CurveUtils.js');
+
+function Curve() {
 
 };
 
-THREE.Curve.prototype = {
+Curve.prototype = {
 
-	constructor: THREE.Curve,
+	constructor: Curve,
 
 	// Virtual base class method to overwrite and implement in subclasses
 	//	- t [0 .. 1]
@@ -266,6 +269,8 @@ THREE.Curve.prototype = {
 
 };
 
+Curve.Utils = CurveUtils; // backwards compatibility
+
 // TODO: Transformation for Curves?
 
 /**************************************************************
@@ -274,9 +279,9 @@ THREE.Curve.prototype = {
 
 // A Factory method for creating new curve subclasses
 
-THREE.Curve.create = function ( constructor, getPointFunc ) {
+Curve.create = function ( constructor, getPointFunc ) {
 
-	constructor.prototype = Object.create( THREE.Curve.prototype );
+	constructor.prototype = Object.create( Curve.prototype );
 	constructor.prototype.constructor = constructor;
 	constructor.prototype.getPoint = getPointFunc;
 

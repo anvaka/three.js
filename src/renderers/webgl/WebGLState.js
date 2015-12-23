@@ -2,7 +2,12 @@
 * @author mrdoob / http://mrdoob.com/
 */
 
-THREE.WebGLState = function ( gl, extensions, paramThreeToGL ) {
+module.exports = WebGLState;
+
+var Vector4 = require('../../math/Vector4.js');
+var Default = require('../../defaults.js');
+
+function WebGLState( gl, extensions, paramThreeToGL ) {
 
 	var _this = this;
 
@@ -49,8 +54,8 @@ THREE.WebGLState = function ( gl, extensions, paramThreeToGL ) {
 	var currentTextureSlot = undefined;
 	var currentBoundTextures = {};
 
-	var currentScissor = new THREE.Vector4();
-	var currentViewport = new THREE.Vector4();
+	var currentScissor = new Vector4();
+	var currentViewport = new Vector4();
 
 	this.init = function () {
 
@@ -187,7 +192,7 @@ THREE.WebGLState = function ( gl, extensions, paramThreeToGL ) {
 
 	this.setBlending = function ( blending, blendEquation, blendSrc, blendDst, blendEquationAlpha, blendSrcAlpha, blendDstAlpha ) {
 
-		if ( blending === THREE.NoBlending ) {
+		if ( blending === Default.NoBlending ) {
 
 			this.disable( gl.BLEND );
 
@@ -199,19 +204,19 @@ THREE.WebGLState = function ( gl, extensions, paramThreeToGL ) {
 
 		if ( blending !== currentBlending ) {
 
-			if ( blending === THREE.AdditiveBlending ) {
+			if ( blending === Default.AdditiveBlending ) {
 
 				gl.blendEquation( gl.FUNC_ADD );
 				gl.blendFunc( gl.SRC_ALPHA, gl.ONE );
 
-			} else if ( blending === THREE.SubtractiveBlending ) {
+			} else if ( blending === Default.SubtractiveBlending ) {
 
 				// TODO: Find blendFuncSeparate() combination
 
 				gl.blendEquation( gl.FUNC_ADD );
 				gl.blendFunc( gl.ZERO, gl.ONE_MINUS_SRC_COLOR );
 
-			} else if ( blending === THREE.MultiplyBlending ) {
+			} else if ( blending === Default.MultiplyBlending ) {
 
 				// TODO: Find blendFuncSeparate() combination
 
@@ -229,7 +234,7 @@ THREE.WebGLState = function ( gl, extensions, paramThreeToGL ) {
 
 		}
 
-		if ( blending === THREE.CustomBlending ) {
+		if ( blending === Default.CustomBlending ) {
 
 			blendEquationAlpha = blendEquationAlpha || blendEquation;
 			blendSrcAlpha = blendSrcAlpha || blendSrc;
@@ -276,42 +281,42 @@ THREE.WebGLState = function ( gl, extensions, paramThreeToGL ) {
 
 				switch ( depthFunc ) {
 
-					case THREE.NeverDepth:
+					case Default.NeverDepth:
 
 						gl.depthFunc( gl.NEVER );
 						break;
 
-					case THREE.AlwaysDepth:
+					case Default.AlwaysDepth:
 
 						gl.depthFunc( gl.ALWAYS );
 						break;
 
-					case THREE.LessDepth:
+					case Default.LessDepth:
 
 						gl.depthFunc( gl.LESS );
 						break;
 
-					case THREE.LessEqualDepth:
+					case Default.LessEqualDepth:
 
 						gl.depthFunc( gl.LEQUAL );
 						break;
 
-					case THREE.EqualDepth:
+					case Default.EqualDepth:
 
 						gl.depthFunc( gl.EQUAL );
 						break;
 
-					case THREE.GreaterEqualDepth:
+					case Default.GreaterEqualDepth:
 
 						gl.depthFunc( gl.GEQUAL );
 						break;
 
-					case THREE.GreaterDepth:
+					case Default.GreaterDepth:
 
 						gl.depthFunc( gl.GREATER );
 						break;
 
-					case THREE.NotEqualDepth:
+					case Default.NotEqualDepth:
 
 						gl.depthFunc( gl.NOTEQUAL );
 						break;

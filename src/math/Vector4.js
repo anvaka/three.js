@@ -5,8 +5,9 @@
  * @author egraether / http://egraether.com/
  * @author WestLangley / http://github.com/WestLangley
  */
+module.exports = Vector4;
 
-THREE.Vector4 = function ( x, y, z, w ) {
+function Vector4( x, y, z, w ) {
 
 	this.x = x || 0;
 	this.y = y || 0;
@@ -15,9 +16,9 @@ THREE.Vector4 = function ( x, y, z, w ) {
 
 };
 
-THREE.Vector4.prototype = {
+Vector4.prototype = {
 
-	constructor: THREE.Vector4,
+	constructor: Vector4,
 
 	set: function ( x, y, z, w ) {
 
@@ -456,8 +457,8 @@ THREE.Vector4.prototype = {
 
 			if ( min === undefined ) {
 
-				min = new THREE.Vector4();
-				max = new THREE.Vector4();
+				min = new Vector4();
+				max = new Vector4();
 
 			}
 

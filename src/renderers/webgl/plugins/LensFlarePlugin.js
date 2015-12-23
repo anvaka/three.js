@@ -1,9 +1,15 @@
+/*eslint indent: 0 */
 /**
  * @author mikael emtinger / http://gomo.se/
  * @author alteredq / http://alteredqualia.com/
  */
 
-THREE.LensFlarePlugin = function ( renderer, flares ) {
+module.exports = LensFlarePlugin;
+
+var Vector2 = require('../../../math/Vector2.js');
+var Vector3 = require('../../../math/Vector3.js');
+
+function LensFlarePlugin( renderer, flares ) {
 
 	var gl = renderer.context;
 	var state = renderer.state;
@@ -276,17 +282,17 @@ THREE.LensFlarePlugin = function ( renderer, flares ) {
 
 		if ( flares.length === 0 ) return;
 
-		var tempPosition = new THREE.Vector3();
+		var tempPosition = new Vector3();
 
 		var invAspect = viewport.w / viewport.z,
 			halfViewportWidth = viewport.z * 0.5,
 			halfViewportHeight = viewport.w * 0.5;
 
 		var size = 16 / viewport.w,
-			scale = new THREE.Vector2( size * invAspect, size );
+			scale = new Vector2( size * invAspect, size );
 
-		var screenPosition = new THREE.Vector3( 1, 1, 0 ),
-			screenPositionPixels = new THREE.Vector2( 1, 1 );
+		var screenPosition = new Vector3( 1, 1, 0 ),
+			screenPositionPixels = new Vector2( 1, 1 );
 
 		if ( program === undefined ) {
 

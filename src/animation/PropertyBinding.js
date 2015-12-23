@@ -8,22 +8,26 @@
  * @author tschw
  */
 
-THREE.PropertyBinding = function ( rootNode, path, parsedPath ) {
+module.exports = PropertyBinding;
+
+var AnimationObjectGroup = require('./AnimationObjectGroup.js');
+
+function PropertyBinding( rootNode, path, parsedPath ) {
 
 	this.path = path;
 	this.parsedPath = parsedPath ||
-			THREE.PropertyBinding.parseTrackName( path );
+			PropertyBinding.parseTrackName( path );
 
-	this.node = THREE.PropertyBinding.findNode(
+	this.node = PropertyBinding.findNode(
 			rootNode, this.parsedPath.nodeName ) || rootNode;
 
 	this.rootNode = rootNode;
 
 };
 
-THREE.PropertyBinding.prototype = {
+PropertyBinding.prototype = {
 
-	constructor: THREE.PropertyBinding,
+	constructor: PropertyBinding,
 
 	getValue: function getValue_unbound( targetArray, offset ) {
 
@@ -57,7 +61,7 @@ THREE.PropertyBinding.prototype = {
 
 		if ( ! targetObject ) {
 
-			targetObject = THREE.PropertyBinding.findNode(
+			targetObject = PropertyBinding.findNode(
 					this.rootNode, parsedPath.nodeName ) || this.rootNode;
 
 			this.node = targetObject;
@@ -268,15 +272,15 @@ THREE.PropertyBinding.prototype = {
 
 };
 
-Object.assign( THREE.PropertyBinding.prototype, { // prototype, continued
+Object.assign( PropertyBinding.prototype, { // prototype, continued
 
 	// these are used to "bind" a nonexistent property
 	_getValue_unavailable: function() {},
 	_setValue_unavailable: function() {},
 
 	// initial state of these methods that calls 'bind'
-	_getValue_unbound: THREE.PropertyBinding.prototype.getValue,
-	_setValue_unbound: THREE.PropertyBinding.prototype.setValue,
+	_getValue_unbound: PropertyBinding.prototype.getValue,
+	_setValue_unbound: PropertyBinding.prototype.setValue,
 
 	BindingType: {
 		Direct: 0,
@@ -448,20 +452,19 @@ Object.assign( THREE.PropertyBinding.prototype, { // prototype, continued
 
 } );
 
-THREE.PropertyBinding.Composite =
-		function( targetGroup, path, optionalParsedPath ) {
+PropertyBinding.Composite = function( targetGroup, path, optionalParsedPath ) {
 
 	var parsedPath = optionalParsedPath ||
-			THREE.PropertyBinding.parseTrackName( path );
+			PropertyBinding.parseTrackName( path );
 
 	this._targetGroup = targetGroup;
 	this._bindings = targetGroup.subscribe_( path, parsedPath );
 
 };
 
-THREE.PropertyBinding.Composite.prototype = {
+PropertyBinding.Composite.prototype = {
 
-	constructor: THREE.PropertyBinding.Composite,
+	constructor: PropertyBinding.Composite,
 
 	getValue: function( array, offset ) {
 
@@ -479,8 +482,7 @@ THREE.PropertyBinding.Composite.prototype = {
 
 		var bindings = this._bindings;
 
-		for ( var i = this._targetGroup.nCachedObjects_,
-				n = bindings.length; i !== n; ++ i ) {
+		for ( var i = this._targetGroup.nCachedObjects_, n = bindings.length; i !== n; ++ i ) {
 
 			bindings[ i ].setValue( array, offset );
 
@@ -492,8 +494,7 @@ THREE.PropertyBinding.Composite.prototype = {
 
 		var bindings = this._bindings;
 
-		for ( var i = this._targetGroup.nCachedObjects_,
-				n = bindings.length; i !== n; ++ i ) {
+		for ( var i = this._targetGroup.nCachedObjects_, n = bindings.length; i !== n; ++ i ) {
 
 			bindings[ i ].bind();
 
@@ -505,8 +506,7 @@ THREE.PropertyBinding.Composite.prototype = {
 
 		var bindings = this._bindings;
 
-		for ( var i = this._targetGroup.nCachedObjects_,
-				n = bindings.length; i !== n; ++ i ) {
+		for ( var i = this._targetGroup.nCachedObjects_, n = bindings.length; i !== n; ++ i ) {
 
 			bindings[ i ].unbind();
 
@@ -516,21 +516,21 @@ THREE.PropertyBinding.Composite.prototype = {
 
 };
 
-THREE.PropertyBinding.create = function( root, path, parsedPath ) {
+PropertyBinding.create = function( root, path, parsedPath ) {
 
-	if ( ! ( root instanceof THREE.AnimationObjectGroup ) ) {
+	if ( ! ( root instanceof AnimationObjectGroup ) ) {
 
-		return new THREE.PropertyBinding( root, path, parsedPath );
+		return new PropertyBinding( root, path, parsedPath );
 
 	} else {
 
-		return new THREE.PropertyBinding.Composite( root, path, parsedPath );
+		return new PropertyBinding.Composite( root, path, parsedPath );
 
 	}
 
 };
 
-THREE.PropertyBinding.parseTrackName = function( trackName ) {
+PropertyBinding.parseTrackName = function( trackName ) {
 
 	// matches strings in the form of:
 	//    nodeName.property
@@ -550,9 +550,9 @@ THREE.PropertyBinding.parseTrackName = function( trackName ) {
 		throw new Error( "cannot parse trackName at all: " + trackName );
 	}
 
-    if (matches.index === re.lastIndex) {
-        re.lastIndex++;
-    }
+	if (matches.index === re.lastIndex) {
+		re.lastIndex++;
+	}
 
 	var results = {
 		// directoryName: matches[1], // (tschw) currently unused
@@ -571,7 +571,7 @@ THREE.PropertyBinding.parseTrackName = function( trackName ) {
 
 };
 
-THREE.PropertyBinding.findNode = function( root, nodeName ) {
+PropertyBinding.findNode = function( root, nodeName ) {
 
 	if( ! nodeName || nodeName === "" || nodeName === "root" || nodeName === "." || nodeName === -1 || nodeName === root.name || nodeName === root.uuid ) {
 

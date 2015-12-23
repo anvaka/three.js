@@ -7,26 +7,31 @@
  * @author tschw
  */
 
-THREE.QuaternionKeyframeTrack = function ( name, times, values, interpolation ) {
+module.exports = QuaternionKeyframeTrack;
 
-	THREE.KeyframeTrack.call( this, name, times, values, interpolation );
+var KeyframeTrack = require('../KeyframeTrack.js');
+var Default = require('../../defaults.js');
+var QuaternionLinearInterpolant = require('../../math/interpolants/QuaternionLinearInterpolant.js');
+
+function QuaternionKeyframeTrack( name, times, values, interpolation ) {
+
+	KeyframeTrack.call( this, name, times, values, interpolation );
 
 };
 
-THREE.QuaternionKeyframeTrack.prototype =
-		Object.assign( Object.create( THREE.KeyframeTrack.prototype ), {
+QuaternionKeyframeTrack.prototype = Object.assign( Object.create( KeyframeTrack.prototype ), {
 
-	constructor: THREE.QuaternionKeyframeTrack,
+	constructor: QuaternionKeyframeTrack,
 
 	ValueTypeName: 'quaternion',
 
 	// ValueBufferType is inherited
 
-	DefaultInterpolation: THREE.InterpolateLinear,
+	DefaultInterpolation: Default.InterpolateLinear,
 
 	InterpolantFactoryMethodLinear: function( result ) {
 
-		return new THREE.QuaternionLinearInterpolant(
+		return new QuaternionLinearInterpolant(
 				this.times, this.values, this.getValueSize(), result );
 
 	},

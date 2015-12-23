@@ -2,15 +2,17 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-THREE.Layers = function () {
+module.exports = Layers;
+
+function Layers() {
 
 	this.mask = 1;
 
 };
 
-THREE.Layers.prototype = {
+Layers.prototype = {
 
-	constructor: THREE.Layers,
+	constructor: Layers,
 
 	set: function ( channel ) {
 

@@ -1,8 +1,9 @@
 /**
  * @author mrdoob / http://mrdoob.com/
  */
+module.exports = Uniform;
 
-THREE.Uniform = function ( type, value ) {
+function Uniform( type, value ) {
 
 	this.type = type;
 	this.value = value;
@@ -11,9 +12,9 @@ THREE.Uniform = function ( type, value ) {
 
 };
 
-THREE.Uniform.prototype = {
+Uniform.prototype = {
 
-	constructor: THREE.Uniform,
+	constructor: Uniform,
 
 	onUpdate: function ( callback ) {
 

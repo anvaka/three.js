@@ -43,15 +43,21 @@
  *	fog: <bool>
  * }
  */
+module.exports = MeshLambertMaterial;
 
-THREE.MeshLambertMaterial = function ( parameters ) {
+var Material = require('./Material.js');
+var Color = require('../math/Color.js');
 
-	THREE.Material.call( this );
+var Default = require('../defaults.js');
+
+function MeshLambertMaterial( parameters ) {
+
+	Material.call( this );
 
 	this.type = 'MeshLambertMaterial';
 
-	this.color = new THREE.Color( 0xffffff ); // diffuse
-	this.emissive = new THREE.Color( 0x000000 );
+	this.color = new Color( 0xffffff ); // diffuse
+	this.emissive = new Color( 0x000000 );
 
 	this.map = null;
 
@@ -69,7 +75,7 @@ THREE.MeshLambertMaterial = function ( parameters ) {
 	this.alphaMap = null;
 
 	this.envMap = null;
-	this.combine = THREE.MultiplyOperation;
+	this.combine = Default.MultiplyOperation;
 	this.reflectivity = 1;
 	this.refractionRatio = 0.98;
 
@@ -80,7 +86,7 @@ THREE.MeshLambertMaterial = function ( parameters ) {
 	this.wireframeLinecap = 'round';
 	this.wireframeLinejoin = 'round';
 
-	this.vertexColors = THREE.NoColors;
+	this.vertexColors = Default.NoColors;
 
 	this.skinning = false;
 	this.morphTargets = false;
@@ -90,12 +96,12 @@ THREE.MeshLambertMaterial = function ( parameters ) {
 
 };
 
-THREE.MeshLambertMaterial.prototype = Object.create( THREE.Material.prototype );
-THREE.MeshLambertMaterial.prototype.constructor = THREE.MeshLambertMaterial;
+MeshLambertMaterial.prototype = Object.create( Material.prototype );
+MeshLambertMaterial.prototype.constructor = MeshLambertMaterial;
 
-THREE.MeshLambertMaterial.prototype.copy = function ( source ) {
+MeshLambertMaterial.prototype.copy = function ( source ) {
 
-	THREE.Material.prototype.copy.call( this, source );
+	Material.prototype.copy.call( this, source );
 
 	this.color.copy( source.color );
 	this.emissive.copy( source.emissive );

@@ -2,7 +2,10 @@
  *	Line3D
  **************************************************************/
 
-THREE.LineCurve3 = THREE.Curve.create(
+var Curve = require('../core/Curve.js');
+var Vector3 = require('../../math/Vector3.js');
+
+module.exports = Curve.create(
 
 	function ( v1, v2 ) {
 
@@ -13,7 +16,7 @@ THREE.LineCurve3 = THREE.Curve.create(
 
 	function ( t ) {
 
-		var vector = new THREE.Vector3();
+		var vector = new Vector3();
 
 		vector.subVectors( this.v2, this.v1 ); // diff
 		vector.multiplyScalar( t );

@@ -4,22 +4,30 @@
 
 // a helper to show the world-axis-aligned bounding box for an object
 
-THREE.BoundingBoxHelper = function ( object, hex ) {
+module.exports = BoundingBoxHelper;
+
+var Box3 = require('../../math/Box3.js');
+var Mesh = require('../../objects/Mesh.js');
+
+var BoxGeometry = require('../geometries/BoxGeometry.js');
+var MeshBasicMaterial = require('../../materials/MeshBasicMaterial.js');
+
+function BoundingBoxHelper( object, hex ) {
 
 	var color = ( hex !== undefined ) ? hex : 0x888888;
 
 	this.object = object;
 
-	this.box = new THREE.Box3();
+	this.box = new Box3();
 
-	THREE.Mesh.call( this, new THREE.BoxGeometry( 1, 1, 1 ), new THREE.MeshBasicMaterial( { color: color, wireframe: true } ) );
+	Mesh.call( this, new BoxGeometry( 1, 1, 1 ), new MeshBasicMaterial( { color: color, wireframe: true } ) );
 
 };
 
-THREE.BoundingBoxHelper.prototype = Object.create( THREE.Mesh.prototype );
-THREE.BoundingBoxHelper.prototype.constructor = THREE.BoundingBoxHelper;
+BoundingBoxHelper.prototype = Object.create( Mesh.prototype );
+BoundingBoxHelper.prototype.constructor = BoundingBoxHelper;
 
-THREE.BoundingBoxHelper.prototype.update = function () {
+BoundingBoxHelper.prototype.update = function () {
 
 	this.box.setFromObject( this.object );
 

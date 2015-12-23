@@ -3,8 +3,11 @@
  * @author WestLangley / http://github.com/WestLangley
  * @author bhouston / http://clara.io
  */
+module.exports = Matrix3;
 
-THREE.Matrix3 = function () {
+var Vector3 = require('./Vector3.js');
+
+function Matrix3() {
 
 	this.elements = new Float32Array( [
 
@@ -22,9 +25,9 @@ THREE.Matrix3 = function () {
 
 };
 
-THREE.Matrix3.prototype = {
+Matrix3.prototype = {
 
-	constructor: THREE.Matrix3,
+	constructor: Matrix3,
 
 	set: function ( n11, n12, n13, n21, n22, n23, n31, n32, n33 ) {
 
@@ -80,7 +83,7 @@ THREE.Matrix3.prototype = {
 
 		return function ( array, offset, length ) {
 
-			if ( v1 === undefined ) v1 = new THREE.Vector3();
+			if ( v1 === undefined ) v1 = new Vector3();
 			if ( offset === undefined ) offset = 0;
 			if ( length === undefined ) length = array.length;
 
@@ -104,7 +107,7 @@ THREE.Matrix3.prototype = {
 
 		return function applyToBuffer( buffer, offset, length ) {
 
-			if ( v1 === undefined ) v1 = new THREE.Vector3();
+			if ( v1 === undefined ) v1 = new Vector3();
 			if ( offset === undefined ) offset = 0;
 			if ( length === undefined ) length = buffer.length / buffer.itemSize;
 

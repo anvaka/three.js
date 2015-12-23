@@ -3,17 +3,21 @@
  * @author alteredq / http://alteredqualia.com/
  */
 
-THREE.FogExp2 = function ( color, density ) {
+module.exports = FogExp2;
+
+var Color = require('../math/Color.js');
+
+function FogExp2( color, density ) {
 
 	this.name = '';
 
-	this.color = new THREE.Color( color );
+	this.color = new Color( color );
 	this.density = ( density !== undefined ) ? density : 0.00025;
 
 };
 
-THREE.FogExp2.prototype.clone = function () {
+FogExp2.prototype.clone = function () {
 
-	return new THREE.FogExp2( this.color.getHex(), this.density );
+	return new FogExp2( this.color.getHex(), this.density );
 
 };

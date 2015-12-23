@@ -2,7 +2,15 @@
  * Uniform Utilities
  */
 
-THREE.UniformsUtils = {
+var Color = require('../../math/Color.js');
+var Vector2 = require('../../math/Vector2.js');
+var Vector3 = require('../../math/Vector3.js');
+var Vector4 = require('../../math/Vector4.js');
+var Matrix3 = require('../../math/Matrix3.js');
+var Matrix4 = require('../../math/Matrix4.js');
+var Texture = require('../../textures/Texture.js');
+
+module.exports = {
 
 	merge: function ( uniforms ) {
 
@@ -36,13 +44,13 @@ THREE.UniformsUtils = {
 
 				var parameter_src = uniforms_src[ u ][ p ];
 
-				if ( parameter_src instanceof THREE.Color ||
-					 parameter_src instanceof THREE.Vector2 ||
-					 parameter_src instanceof THREE.Vector3 ||
-					 parameter_src instanceof THREE.Vector4 ||
-					 parameter_src instanceof THREE.Matrix3 ||
-					 parameter_src instanceof THREE.Matrix4 ||
-					 parameter_src instanceof THREE.Texture ) {
+				if ( parameter_src instanceof Color ||
+					 parameter_src instanceof Vector2 ||
+					 parameter_src instanceof Vector3 ||
+					 parameter_src instanceof Vector4 ||
+					 parameter_src instanceof Matrix3 ||
+					 parameter_src instanceof Matrix4 ||
+					 parameter_src instanceof Texture ) {
 
 					uniforms_dst[ u ][ p ] = parameter_src.clone();
 

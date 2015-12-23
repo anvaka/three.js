@@ -1,7 +1,10 @@
+/*eslint indent: 0 */
 /**
  * @author mrdoob / http://mrdoob.com/
  */
+module.exports = addLegacy;
 
+function addLegacy(THREE) {
 Object.defineProperties( THREE.Box2.prototype, {
 	empty: {
 		value: function () {
@@ -786,3 +789,4 @@ THREE.CanvasRenderer = function () {
 //
 
 THREE.MeshFaceMaterial = THREE.MultiMaterial;
+}

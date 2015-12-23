@@ -2,9 +2,14 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-THREE.Audio = function ( listener ) {
+module.exports = Audio;
 
-	THREE.Object3D.call( this );
+var Object3D = require('../core/Object3D.js');
+var AudioBuffer = require('./AudioBuffer.js');
+
+function Audio( listener ) {
+
+	Object3D.call( this );
 
 	this.type = 'Audio';
 
@@ -27,18 +32,18 @@ THREE.Audio = function ( listener ) {
 
 };
 
-THREE.Audio.prototype = Object.create( THREE.Object3D.prototype );
-THREE.Audio.prototype.constructor = THREE.Audio;
+Audio.prototype = Object.create( Object3D.prototype );
+Audio.prototype.constructor = Audio;
 
-THREE.Audio.prototype.getOutput = function () {
+Audio.prototype.getOutput = function () {
 
 	return this.gain;
 
 };
 
-THREE.Audio.prototype.load = function ( file ) {
+Audio.prototype.load = function ( file ) {
 
-	var buffer = new THREE.AudioBuffer( this.context );
+	var buffer = new AudioBuffer( this.context );
 	buffer.load( file );
 
 	this.setBuffer( buffer );
@@ -47,7 +52,7 @@ THREE.Audio.prototype.load = function ( file ) {
 
 };
 
-THREE.Audio.prototype.setNodeSource = function ( audioNode ) {
+Audio.prototype.setNodeSource = function ( audioNode ) {
 
 	this.hasPlaybackControl = false;
 	this.sourceType = 'audioNode';
@@ -58,7 +63,7 @@ THREE.Audio.prototype.setNodeSource = function ( audioNode ) {
 
 };
 
-THREE.Audio.prototype.setBuffer = function ( audioBuffer ) {
+Audio.prototype.setBuffer = function ( audioBuffer ) {
 
 	var scope = this;
 
@@ -74,7 +79,7 @@ THREE.Audio.prototype.setBuffer = function ( audioBuffer ) {
 
 };
 
-THREE.Audio.prototype.play = function () {
+Audio.prototype.play = function () {
 
 	if ( this.isPlaying === true ) {
 
@@ -106,7 +111,7 @@ THREE.Audio.prototype.play = function () {
 
 };
 
-THREE.Audio.prototype.pause = function () {
+Audio.prototype.pause = function () {
 
 	if ( this.hasPlaybackControl === false ) {
 
@@ -120,7 +125,7 @@ THREE.Audio.prototype.pause = function () {
 
 };
 
-THREE.Audio.prototype.stop = function () {
+Audio.prototype.stop = function () {
 
 	if ( this.hasPlaybackControl === false ) {
 
@@ -134,7 +139,7 @@ THREE.Audio.prototype.stop = function () {
 
 };
 
-THREE.Audio.prototype.connect = function () {
+Audio.prototype.connect = function () {
 
 	if ( this.filter !== null ) {
 
@@ -149,7 +154,7 @@ THREE.Audio.prototype.connect = function () {
 
 };
 
-THREE.Audio.prototype.disconnect = function () {
+Audio.prototype.disconnect = function () {
 
 	if ( this.filter !== null ) {
 
@@ -164,13 +169,13 @@ THREE.Audio.prototype.disconnect = function () {
 
 };
 
-THREE.Audio.prototype.getFilter = function () {
+Audio.prototype.getFilter = function () {
 
 	return this.filter;
 
 };
 
-THREE.Audio.prototype.setFilter = function ( value ) {
+Audio.prototype.setFilter = function ( value ) {
 
 	if ( value === undefined ) value = null;
 
@@ -188,7 +193,7 @@ THREE.Audio.prototype.setFilter = function ( value ) {
 
 };
 
-THREE.Audio.prototype.setPlaybackRate = function ( value ) {
+Audio.prototype.setPlaybackRate = function ( value ) {
 
 	if ( this.hasPlaybackControl === false ) {
 
@@ -207,19 +212,19 @@ THREE.Audio.prototype.setPlaybackRate = function ( value ) {
 
 };
 
-THREE.Audio.prototype.getPlaybackRate = function () {
+Audio.prototype.getPlaybackRate = function () {
 
 	return this.playbackRate;
 
 };
 
-THREE.Audio.prototype.onEnded = function() {
+Audio.prototype.onEnded = function() {
 
 	this.isPlaying = false;
 
 };
 
-THREE.Audio.prototype.setLoop = function ( value ) {
+Audio.prototype.setLoop = function ( value ) {
 
 	if ( this.hasPlaybackControl === false ) {
 
@@ -232,7 +237,7 @@ THREE.Audio.prototype.setLoop = function ( value ) {
 
 };
 
-THREE.Audio.prototype.getLoop = function () {
+Audio.prototype.getLoop = function () {
 
 	if ( this.hasPlaybackControl === false ) {
 
@@ -246,13 +251,13 @@ THREE.Audio.prototype.getLoop = function () {
 };
 
 
-THREE.Audio.prototype.setVolume = function ( value ) {
+Audio.prototype.setVolume = function ( value ) {
 
 	this.gain.gain.value = value;
 
 };
 
-THREE.Audio.prototype.getVolume = function () {
+Audio.prototype.getVolume = function () {
 
 	return this.gain.gain.value;
 

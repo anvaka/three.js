@@ -2,9 +2,15 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-THREE.AudioListener = function () {
+module.exports = AudioListener;
 
-	THREE.Object3D.call( this );
+var Object3D = require('../core/Object3D.js');
+var Vector3 = require('../math/Vector3.js');
+var Quaternion = require('../math/Quaternion.js');
+
+function AudioListener() {
+
+	Object3D.call( this );
 
 	this.type = 'AudioListener';
 
@@ -17,16 +23,16 @@ THREE.AudioListener = function () {
 
 };
 
-THREE.AudioListener.prototype = Object.create( THREE.Object3D.prototype );
-THREE.AudioListener.prototype.constructor = THREE.AudioListener;
+AudioListener.prototype = Object.create( Object3D.prototype );
+AudioListener.prototype.constructor = AudioListener;
 
-THREE.AudioListener.prototype.getInput = function () {
+AudioListener.prototype.getInput = function () {
 
 	return this.gain;
 
 };
 
-THREE.AudioListener.prototype.removeFilter = function ( ) {
+AudioListener.prototype.removeFilter = function ( ) {
 
 	if ( this.filter !== null ) {
 
@@ -39,7 +45,7 @@ THREE.AudioListener.prototype.removeFilter = function ( ) {
 
 };
 
-THREE.AudioListener.prototype.setFilter = function ( value ) {
+AudioListener.prototype.setFilter = function ( value ) {
 
 	if ( this.filter !== null ) {
 
@@ -58,36 +64,36 @@ THREE.AudioListener.prototype.setFilter = function ( value ) {
 
 };
 
-THREE.AudioListener.prototype.getFilter = function () {
+AudioListener.prototype.getFilter = function () {
 
 	return this.filter;
 
 };
 
-THREE.AudioListener.prototype.setMasterVolume = function ( value ) {
+AudioListener.prototype.setMasterVolume = function ( value ) {
 
 	this.gain.gain.value = value;
 
 };
 
-THREE.AudioListener.prototype.getMasterVolume = function () {
+AudioListener.prototype.getMasterVolume = function () {
 
 	return this.gain.gain.value;
 
 };
 
 
-THREE.AudioListener.prototype.updateMatrixWorld = ( function () {
+AudioListener.prototype.updateMatrixWorld = ( function () {
 
-	var position = new THREE.Vector3();
-	var quaternion = new THREE.Quaternion();
-	var scale = new THREE.Vector3();
+	var position = new Vector3();
+	var quaternion = new Quaternion();
+	var scale = new Vector3();
 
-	var orientation = new THREE.Vector3();
+	var orientation = new Vector3();
 
 	return function updateMatrixWorld( force ) {
 
-		THREE.Object3D.prototype.updateMatrixWorld.call( this, force );
+		Object3D.prototype.updateMatrixWorld.call( this, force );
 
 		var listener = this.context.listener;
 		var up = this.up;

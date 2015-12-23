@@ -9,36 +9,43 @@
 // STEP 3a - Extract points from each shape, turn to vertices
 // STEP 3b - Triangulate each shape, add faces.
 
-THREE.Shape = function () {
+module.exports = Shape;
 
-	THREE.Path.apply( this, arguments );
+var ShapeUtils = require('../ShapeUtils.js');
+var Path = require('./Path.js');
+var ExtrudeGeometry = require('../geometries/ExtrudeGeometry.js');
+var ShapeGeometry = require('../geometries/ShapeGeometry.js');
+
+function Shape() {
+
+	Path.apply( this, arguments );
 
 	this.holes = [];
 
 };
 
-THREE.Shape.prototype = Object.create( THREE.Path.prototype );
-THREE.Shape.prototype.constructor = THREE.Shape;
+Shape.prototype = Object.create( Path.prototype );
+Shape.prototype.constructor = Shape;
 
 // Convenience method to return ExtrudeGeometry
 
-THREE.Shape.prototype.extrude = function ( options ) {
+Shape.prototype.extrude = function ( options ) {
 
-	return new THREE.ExtrudeGeometry( this, options );
+	return new ExtrudeGeometry( this, options );
 
 };
 
 // Convenience method to return ShapeGeometry
 
-THREE.Shape.prototype.makeGeometry = function ( options ) {
+Shape.prototype.makeGeometry = function ( options ) {
 
-	return new THREE.ShapeGeometry( this, options );
+	return new ShapeGeometry( this, options );
 
 };
 
 // Get points of holes
 
-THREE.Shape.prototype.getPointsHoles = function ( divisions ) {
+Shape.prototype.getPointsHoles = function ( divisions ) {
 
 	var holesPts = [];
 
@@ -55,7 +62,7 @@ THREE.Shape.prototype.getPointsHoles = function ( divisions ) {
 
 // Get points of shape and holes (keypoints based on segments parameter)
 
-THREE.Shape.prototype.extractAllPoints = function ( divisions ) {
+Shape.prototype.extractAllPoints = function ( divisions ) {
 
 	return {
 
@@ -66,8 +73,10 @@ THREE.Shape.prototype.extractAllPoints = function ( divisions ) {
 
 };
 
-THREE.Shape.prototype.extractPoints = function ( divisions ) {
+Shape.prototype.extractPoints = function ( divisions ) {
 
 	return this.extractAllPoints( divisions );
 
 };
+
+Shape.Utils = ShapeUtils; // backwards compatibility

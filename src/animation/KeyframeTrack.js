@@ -8,7 +8,15 @@
  * @author tschw
  */
 
-THREE.KeyframeTrack = function ( name, times, values, interpolation ) {
+module.exports = KeyframeTrack;
+
+var AnimationUtils = require('./AnimationUtils.js');
+var Default = require('../defaults.js');
+var DiscreteInterpolant = require('../math/interpolants/DiscreteInterpolant.js');
+var LinearInterpolant = require('../math/interpolants/LinearInterpolant.js');
+var CubicInterpolant = require('../math/interpolants/CubicInterpolant.js');
+
+function KeyframeTrack( name, times, values, interpolation ) {
 
 	if( name === undefined ) throw new Error( "track name is undefined" );
 
@@ -20,8 +28,8 @@ THREE.KeyframeTrack = function ( name, times, values, interpolation ) {
 
 	this.name = name;
 
-	this.times = THREE.AnimationUtils.convertArray( times, this.TimeBufferType );
-	this.values = THREE.AnimationUtils.convertArray( values, this.ValueBufferType );
+	this.times = AnimationUtils.convertArray( times, this.TimeBufferType );
+	this.values = AnimationUtils.convertArray( values, this.ValueBufferType );
 
 	this.setInterpolation( interpolation || this.DefaultInterpolation );
 
@@ -30,32 +38,32 @@ THREE.KeyframeTrack = function ( name, times, values, interpolation ) {
 
 };
 
-THREE.KeyframeTrack.prototype = {
+KeyframeTrack.prototype = {
 
-	constructor: THREE.KeyframeTrack,
+	constructor: KeyframeTrack,
 
 	TimeBufferType: Float32Array,
 	ValueBufferType: Float32Array,
 
-	DefaultInterpolation: THREE.InterpolateLinear,
+	DefaultInterpolation: Default.InterpolateLinear,
 
 	InterpolantFactoryMethodDiscrete: function( result ) {
 
-		return new THREE.DiscreteInterpolant(
+		return new DiscreteInterpolant(
 				this.times, this.values, this.getValueSize(), result );
 
 	},
 
 	InterpolantFactoryMethodLinear: function( result ) {
 
-		return new THREE.LinearInterpolant(
+		return new LinearInterpolant(
 				this.times, this.values, this.getValueSize(), result );
 
 	},
 
 	InterpolantFactoryMethodSmooth: function( result ) {
 
-		return new THREE.CubicInterpolant(
+		return new CubicInterpolant(
 				this.times, this.values, this.getValueSize(), result );
 
 	},
@@ -66,19 +74,19 @@ THREE.KeyframeTrack.prototype = {
 
 		switch ( interpolation ) {
 
-			case THREE.InterpolateDiscrete:
+			case Default.InterpolateDiscrete:
 
 				factoryMethod = this.InterpolantFactoryMethodDiscrete;
 
 				break;
 
-			case THREE.InterpolateLinear:
+			case Default.InterpolateLinear:
 
 				factoryMethod = this.InterpolantFactoryMethodLinear;
 
 				break;
 
-			case THREE.InterpolateSmooth:
+			case Default.InterpolateSmooth:
 
 				factoryMethod = this.InterpolantFactoryMethodSmooth;
 
@@ -121,15 +129,15 @@ THREE.KeyframeTrack.prototype = {
 
 			case this.InterpolantFactoryMethodDiscrete:
 
-				return THREE.InterpolateDiscrete;
+				return Default.InterpolateDiscrete;
 
 			case this.InterpolantFactoryMethodLinear:
 
-				return THREE.InterpolateLinear;
+				return Default.InterpolateLinear;
 
 			case this.InterpolantFactoryMethodSmooth:
 
-				return THREE.InterpolateSmooth;
+				return Default.InterpolateSmooth;
 
 		}
 
@@ -207,11 +215,11 @@ THREE.KeyframeTrack.prototype = {
 			var from = firstKeysToRemove;
 			var to = nKeys - lastKeysToRemove - firstKeysToRemove;
 
-			this.times = THREE.AnimationUtils.arraySlice( times, from, to );
+			this.times = AnimationUtils.arraySlice( times, from, to );
 
 			var values = this.values;
 			var stride = this.getValueSize();
-			this.values = THREE.AnimationUtils.arraySlice( values, from * stride, to * stride );
+			this.values = AnimationUtils.arraySlice( values, from * stride, to * stride );
 
 		}
 
@@ -272,7 +280,7 @@ THREE.KeyframeTrack.prototype = {
 
 		if ( values !== undefined ) {
 
-			if ( THREE.AnimationUtils.isTypedArray( values ) ) {
+			if ( AnimationUtils.isTypedArray( values ) ) {
 
 				for ( var i = 0, n = values.length; i !== n; ++ i ) {
 
@@ -366,8 +374,8 @@ THREE.KeyframeTrack.prototype = {
 
 		if ( writeIndex !== times.length ) {
 
-			this.times = THREE.AnimationUtils.arraySlice( times, 0, writeIndex );
-			this.values = THREE.AnimationUtils.arraySlice( values, 0, writeIndex * stride );
+			this.times = AnimationUtils.arraySlice( times, 0, writeIndex );
+			this.values = AnimationUtils.arraySlice( values, 0, writeIndex * stride );
 
 		}
 
@@ -379,7 +387,7 @@ THREE.KeyframeTrack.prototype = {
 
 // Static methods:
 
-Object.assign( THREE.KeyframeTrack, {
+Object.assign( KeyframeTrack, {
 
 	// Serialization (in static context, because of constructor invocation
 	// and automatic invocation of .toJSON):
@@ -392,7 +400,7 @@ Object.assign( THREE.KeyframeTrack, {
 
 		}
 
-		var trackType = THREE.KeyframeTrack._getTrackTypeForValueTypeName( json.type );
+		var trackType = KeyframeTrack._getTrackTypeForValueTypeName( json.type );
 
 		if ( json.times === undefined ) {
 
@@ -400,7 +408,7 @@ Object.assign( THREE.KeyframeTrack, {
 
 			var times = [], values = [];
 
-			THREE.AnimationUtils.flattenJSON( json.keys, times, values, 'value' );
+			AnimationUtils.flattenJSON( json.keys, times, values, 'value' );
 
 			json.times = times;
 			json.values = values;
@@ -439,8 +447,8 @@ Object.assign( THREE.KeyframeTrack, {
 			json = {
 
 				'name': track.name,
-				'times': THREE.AnimationUtils.convertArray( track.times, Array ),
-				'values': THREE.AnimationUtils.convertArray( track.values, Array )
+				'times': AnimationUtils.convertArray( track.times, Array ),
+				'values': AnimationUtils.convertArray( track.values, Array )
 
 			};
 
@@ -470,31 +478,31 @@ Object.assign( THREE.KeyframeTrack, {
 			case "number":
 			case "integer":
 
-				return THREE.NumberKeyframeTrack;
+				return require('./tracks/NumberKeyframeTrack.js');
 
 			case "vector":
 			case "vector2":
 			case "vector3":
 			case "vector4":
 
-				return THREE.VectorKeyframeTrack;
+				return require('./tracks/VectorKeyframeTrack.js');
 
 			case "color":
 
-				return THREE.ColorKeyframeTrack;
+				return require('./tracks/ColorKeyframeTrack.js');
 
 			case "quaternion":
 
-				return THREE.QuaternionKeyframeTrack;
+				return require('./tracks/QuaternionKeyframeTrack.js');
 
 			case "bool":
 			case "boolean":
 
-				return THREE.BooleanKeyframeTrack;
+				return require('./tracks/BooleanKeyframeTrack.js');
 
 			case "string":
 
-				return THREE.StringKeyframeTrack;
+				return require('./tracks/StringKeyframeTrack.js');
 
 		};
 

@@ -5,31 +5,50 @@
  * @author jonobr1 / http://jonobr1.com/
  */
 
-THREE.Mesh = function ( geometry, material ) {
+module.exports = Mesh;
 
-	THREE.Object3D.call( this );
+var Object3D = require('../core/Object3D.js');
+var Face3 = require('../core/Face3.js');
+var Geometry = require('../core/Geometry.js');
+var BufferGeometry = require('../core/BufferGeometry.js');
+
+var Triangle = require('../math/Triangle.js');
+var Vector2 = require('../math/Vector2.js');
+var Vector3 = require('../math/Vector3.js');
+var Matrix4 = require('../math/Matrix4.js');
+var Sphere = require('../math/Sphere.js');
+var Ray = require('../math/Ray.js');
+
+var MeshBasicMaterial = require('../materials/MeshBasicMaterial.js');
+var MultiMaterial = require('../materials/MultiMaterial.js');
+
+var Default = require('../defaults.js');
+
+function Mesh( geometry, material ) {
+
+	Object3D.call( this );
 
 	this.type = 'Mesh';
 
-	this.geometry = geometry !== undefined ? geometry : new THREE.Geometry();
-	this.material = material !== undefined ? material : new THREE.MeshBasicMaterial( { color: Math.random() * 0xffffff } );
+	this.geometry = geometry !== undefined ? geometry : new Geometry();
+	this.material = material !== undefined ? material : new MeshBasicMaterial( { color: Math.random() * 0xffffff } );
 
-	this.drawMode = THREE.TrianglesDrawMode;
+	this.drawMode = Default.TrianglesDrawMode;
 
 	this.updateMorphTargets();
 
 };
 
-THREE.Mesh.prototype = Object.create( THREE.Object3D.prototype );
-THREE.Mesh.prototype.constructor = THREE.Mesh;
+Mesh.prototype = Object.create( Object3D.prototype );
+Mesh.prototype.constructor = Mesh;
 
-THREE.Mesh.prototype.setDrawMode = function ( value ) {
+Mesh.prototype.setDrawMode = function ( value ) {
 
 	this.drawMode = value;
 
 };
 
-THREE.Mesh.prototype.updateMorphTargets = function () {
+Mesh.prototype.updateMorphTargets = function () {
 
 	if ( this.geometry.morphTargets !== undefined && this.geometry.morphTargets.length > 0 ) {
 
@@ -48,7 +67,7 @@ THREE.Mesh.prototype.updateMorphTargets = function () {
 
 };
 
-THREE.Mesh.prototype.getMorphTargetIndexByName = function ( name ) {
+Mesh.prototype.getMorphTargetIndexByName = function ( name ) {
 
 	if ( this.morphTargetDictionary[ name ] !== undefined ) {
 
@@ -63,32 +82,32 @@ THREE.Mesh.prototype.getMorphTargetIndexByName = function ( name ) {
 };
 
 
-THREE.Mesh.prototype.raycast = ( function () {
+Mesh.prototype.raycast = ( function () {
 
-	var inverseMatrix = new THREE.Matrix4();
-	var ray = new THREE.Ray();
-	var sphere = new THREE.Sphere();
+	var inverseMatrix = new Matrix4();
+	var ray = new Ray();
+	var sphere = new Sphere();
 
-	var vA = new THREE.Vector3();
-	var vB = new THREE.Vector3();
-	var vC = new THREE.Vector3();
+	var vA = new Vector3();
+	var vB = new Vector3();
+	var vC = new Vector3();
 
-	var tempA = new THREE.Vector3();
-	var tempB = new THREE.Vector3();
-	var tempC = new THREE.Vector3();
+	var tempA = new Vector3();
+	var tempB = new Vector3();
+	var tempC = new Vector3();
 
-	var uvA = new THREE.Vector2();
-	var uvB = new THREE.Vector2();
-	var uvC = new THREE.Vector2();
+	var uvA = new Vector2();
+	var uvB = new Vector2();
+	var uvC = new Vector2();
 
-	var barycoord = new THREE.Vector3();
+	var barycoord = new Vector3();
 
-	var intersectionPoint = new THREE.Vector3();
-	var intersectionPointWorld = new THREE.Vector3();
+	var intersectionPoint = new Vector3();
+	var intersectionPointWorld = new Vector3();
 
 	function uvIntersection( point, p1, p2, p3, uv1, uv2, uv3 ) {
 
-		THREE.Triangle.barycoordFromPoint( point, p1, p2, p3, barycoord );
+		Triangle.barycoordFromPoint( point, p1, p2, p3, barycoord );
 
 		uv1.multiplyScalar( barycoord.x );
 		uv2.multiplyScalar( barycoord.y );
@@ -105,13 +124,13 @@ THREE.Mesh.prototype.raycast = ( function () {
 		var intersect;
 		var material = object.material;
 
-		if ( material.side === THREE.BackSide ) {
+		if ( material.side === Default.BackSide ) {
 
 			intersect = ray.intersectTriangle( pC, pB, pA, true, point );
 
 		} else {
 
-			intersect = ray.intersectTriangle( pA, pB, pC, material.side !== THREE.DoubleSide, point );
+			intersect = ray.intersectTriangle( pA, pB, pC, material.side !== Default.DoubleSide, point );
 
 		}
 
@@ -152,7 +171,7 @@ THREE.Mesh.prototype.raycast = ( function () {
 
 			}
 
-			intersection.face = new THREE.Face3( a, b, c, THREE.Triangle.normal( vA, vB, vC ) );
+			intersection.face = new Face3( a, b, c, Triangle.normal( vA, vB, vC ) );
 			intersection.faceIndex = a;
 
 		}
@@ -193,7 +212,7 @@ THREE.Mesh.prototype.raycast = ( function () {
 
 		var uvs, intersection;
 
-		if ( geometry instanceof THREE.BufferGeometry ) {
+		if ( geometry instanceof BufferGeometry ) {
 
 			var a, b, c;
 			var index = geometry.index;
@@ -249,10 +268,10 @@ THREE.Mesh.prototype.raycast = ( function () {
 
 			}
 
-		} else if ( geometry instanceof THREE.Geometry ) {
+		} else if ( geometry instanceof Geometry ) {
 
 			var fvA, fvB, fvC;
-			var isFaceMaterial = material instanceof THREE.MeshFaceMaterial;
+			var isFaceMaterial = material instanceof MultiMaterial;
 			var materials = isFaceMaterial === true ? material.materials : null;
 
 			var vertices = geometry.vertices;
@@ -333,7 +352,7 @@ THREE.Mesh.prototype.raycast = ( function () {
 
 }() );
 
-THREE.Mesh.prototype.clone = function () {
+Mesh.prototype.clone = function () {
 
 	return new this.constructor( this.geometry, this.material ).copy( this );
 

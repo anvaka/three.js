@@ -2,21 +2,27 @@
  * @author bhouston / http://clara.io/
  */
 
-THREE.AnimationLoader = function ( manager ) {
+module.exports = AnimationLoader;
 
-	this.manager = ( manager !== undefined ) ? manager : THREE.DefaultLoadingManager;
+var XHRLoader = require('./XHRLoader.js');
+var DefaultLoadingManager = require('./LoadingManager.js').DefaultLoadingManager;
+var AnimationClip = require('../animation/AnimationClip.js');
+
+function AnimationLoader( manager ) {
+
+	this.manager = ( manager !== undefined ) ? manager : DefaultLoadingManager;
 
 };
 
-THREE.AnimationLoader.prototype = {
+AnimationLoader.prototype = {
 
-	constructor: THREE.AnimationLoader,
+	constructor: AnimationLoader,
 
 	load: function ( url, onLoad, onProgress, onError ) {
 
 		var scope = this;
 
-		var loader = new THREE.XHRLoader( scope.manager );
+		var loader = new XHRLoader( scope.manager );
 		loader.load( url, function ( text ) {
 
 			onLoad( scope.parse( JSON.parse( text ) ) );
@@ -31,7 +37,7 @@ THREE.AnimationLoader.prototype = {
 
 		for ( var i = 0; i < json.length; i ++ ) {
 
-			var clip = THREE.AnimationClip.parse( json[ i ] );
+			var clip = AnimationClip.parse( json[ i ] );
 
 			animations.push( clip );
 

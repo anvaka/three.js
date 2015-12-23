@@ -2,9 +2,14 @@
  * @author alteredq / http://alteredqualia.com/
  */
 
-THREE.HemisphereLight = function ( skyColor, groundColor, intensity ) {
+module.exports = HemisphereLight;
 
-	THREE.Light.call( this, skyColor, intensity );
+var Light = require('./Light.js');
+var Color = require('../math/Color.js');
+
+function HemisphereLight( skyColor, groundColor, intensity ) {
+
+	Light.call( this, skyColor, intensity );
 
 	this.type = 'HemisphereLight';
 
@@ -13,16 +18,16 @@ THREE.HemisphereLight = function ( skyColor, groundColor, intensity ) {
 	this.position.set( 0, 1, 0 );
 	this.updateMatrix();
 
-	this.groundColor = new THREE.Color( groundColor );
+	this.groundColor = new Color( groundColor );
 
 };
 
-THREE.HemisphereLight.prototype = Object.create( THREE.Light.prototype );
-THREE.HemisphereLight.prototype.constructor = THREE.HemisphereLight;
+HemisphereLight.prototype = Object.create( Light.prototype );
+HemisphereLight.prototype.constructor = HemisphereLight;
 
-THREE.HemisphereLight.prototype.copy = function ( source ) {
+HemisphereLight.prototype.copy = function ( source ) {
 
-	THREE.Light.prototype.copy.call( this, source );
+	Light.prototype.copy.call( this, source );
 
 	this.groundColor.copy( source.groundColor );
 

@@ -2,9 +2,13 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-THREE.MultiMaterial = function ( materials ) {
+module.exports = MultiMaterial;
 
-	this.uuid = THREE.Math.generateUUID();
+var THREEMath = require('../math/Math.js');
+
+function MultiMaterial( materials ) {
+
+	this.uuid = THREEMath.generateUUID();
 
 	this.type = 'MultiMaterial';
 
@@ -14,9 +18,9 @@ THREE.MultiMaterial = function ( materials ) {
 
 };
 
-THREE.MultiMaterial.prototype = {
+MultiMaterial.prototype = {
 
-	constructor: THREE.MultiMaterial,
+	constructor: MultiMaterial,
 
 	toJSON: function ( meta ) {
 

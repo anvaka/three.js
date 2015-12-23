@@ -2,7 +2,9 @@
  * @author alteredq / http://alteredqualia.com/
  */
 
-THREE.Clock = function ( autoStart ) {
+module.exports = Clock;
+
+function Clock( autoStart ) {
 
 	this.autoStart = ( autoStart !== undefined ) ? autoStart : true;
 
@@ -14,9 +16,9 @@ THREE.Clock = function ( autoStart ) {
 
 };
 
-THREE.Clock.prototype = {
+Clock.prototype = {
 
-	constructor: THREE.Clock,
+	constructor: Clock,
 
 	start: function () {
 

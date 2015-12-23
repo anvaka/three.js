@@ -2,9 +2,13 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-THREE.AmbientLight = function ( color, intensity ) {
+module.exports = AmbientLight;
 
-	THREE.Light.call( this, color, intensity );
+var Light = require('./Light.js');
+
+function AmbientLight( color, intensity ) {
+
+	Light.call( this, color, intensity );
 
 	this.type = 'AmbientLight';
 
@@ -12,5 +16,5 @@ THREE.AmbientLight = function ( color, intensity ) {
 
 };
 
-THREE.AmbientLight.prototype = Object.create( THREE.Light.prototype );
-THREE.AmbientLight.prototype.constructor = THREE.AmbientLight;
+AmbientLight.prototype = Object.create( Light.prototype );
+AmbientLight.prototype.constructor = AmbientLight;

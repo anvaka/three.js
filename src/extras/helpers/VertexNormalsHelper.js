@@ -3,7 +3,17 @@
  * @author WestLangley / http://github.com/WestLangley
 */
 
-THREE.VertexNormalsHelper = function ( object, size, hex, linewidth ) {
+module.exports = VertexNormalsHelper;
+
+var Vector3 = require('../../math/Vector3.js');
+var Matrix3 = require('../../math/Matrix3.js');
+var Geometry = require('../../core/Geometry.js');
+var BufferGeometry = require('../../core/BufferGeometry.js');
+var BufferAttribute = require('../../core/BufferAttribute.js');
+var LineSegments = require('../../objects/LineSegments.js');
+var LineBasicMaterial = require('../../materials/LineBasicMaterial.js');
+
+function VertexNormalsHelper( object, size, hex, linewidth ) {
 
 	this.object = object;
 
@@ -19,11 +29,11 @@ THREE.VertexNormalsHelper = function ( object, size, hex, linewidth ) {
 
 	var objGeometry = this.object.geometry;
 
-	if ( objGeometry instanceof THREE.Geometry ) {
+	if ( objGeometry instanceof Geometry ) {
 
 		nNormals = objGeometry.faces.length * 3;
 
-	} else if ( objGeometry instanceof THREE.BufferGeometry ) {
+	} else if ( objGeometry instanceof BufferGeometry ) {
 
 		nNormals = objGeometry.attributes.normal.count
 
@@ -31,13 +41,13 @@ THREE.VertexNormalsHelper = function ( object, size, hex, linewidth ) {
 
 	//
 
-	var geometry = new THREE.BufferGeometry();
+	var geometry = new BufferGeometry();
 
-	var positions = new THREE.Float32Attribute( nNormals * 2 * 3, 3 );
+	var positions = new BufferAttribute.Float32Attribute( nNormals * 2 * 3, 3 );
 
 	geometry.addAttribute( 'position', positions );
 
-	THREE.LineSegments.call( this, geometry, new THREE.LineBasicMaterial( { color: color, linewidth: width } ) );
+	LineSegments.call( this, geometry, new LineBasicMaterial( { color: color, linewidth: width } ) );
 
 	//
 
@@ -47,14 +57,14 @@ THREE.VertexNormalsHelper = function ( object, size, hex, linewidth ) {
 
 };
 
-THREE.VertexNormalsHelper.prototype = Object.create( THREE.LineSegments.prototype );
-THREE.VertexNormalsHelper.prototype.constructor = THREE.VertexNormalsHelper;
+VertexNormalsHelper.prototype = Object.create( LineSegments.prototype );
+VertexNormalsHelper.prototype.constructor = VertexNormalsHelper;
 
-THREE.VertexNormalsHelper.prototype.update = ( function () {
+VertexNormalsHelper.prototype.update = ( function () {
 
-	var v1 = new THREE.Vector3();
-	var v2 = new THREE.Vector3();
-	var normalMatrix = new THREE.Matrix3();
+	var v1 = new Vector3();
+	var v2 = new Vector3();
+	var normalMatrix = new Matrix3();
 
 	return function update() {
 
@@ -72,7 +82,7 @@ THREE.VertexNormalsHelper.prototype.update = ( function () {
 
 		var objGeometry = this.object.geometry;
 
-		if ( objGeometry instanceof THREE.Geometry ) {
+		if ( objGeometry instanceof Geometry ) {
 
 			var vertices = objGeometry.vertices;
 
@@ -106,7 +116,7 @@ THREE.VertexNormalsHelper.prototype.update = ( function () {
 
 			}
 
-		} else if ( objGeometry instanceof THREE.BufferGeometry ) {
+		} else if ( objGeometry instanceof BufferGeometry ) {
 
 			var objPos = objGeometry.attributes.position;
 

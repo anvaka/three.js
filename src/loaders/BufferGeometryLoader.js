@@ -2,21 +2,30 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-THREE.BufferGeometryLoader = function ( manager ) {
+module.exports = BufferGeometryLoader;
 
-	this.manager = ( manager !== undefined ) ? manager : THREE.DefaultLoadingManager;
+var DefaultLoadingManager = require('./LoadingManager.js').DefaultLoadingManager;
+var XHRLoader = require('./XHRLoader.js');
+var BufferGeometry = require('../core/BufferGeometry.js');
+var BufferAttribute = require('../core/BufferAttribute.js');
+var Vector3 = require('../math/Vector3.js');
+var Sphere = require('../math/Sphere.js');
+
+function BufferGeometryLoader( manager ) {
+
+	this.manager = ( manager !== undefined ) ? manager : DefaultLoadingManager;
 
 };
 
-THREE.BufferGeometryLoader.prototype = {
+BufferGeometryLoader.prototype = {
 
-	constructor: THREE.BufferGeometryLoader,
+	constructor: BufferGeometryLoader,
 
 	load: function ( url, onLoad, onProgress, onError ) {
 
 		var scope = this;
 
-		var loader = new THREE.XHRLoader( scope.manager );
+		var loader = new XHRLoader( scope.manager );
 		loader.load( url, function ( text ) {
 
 			onLoad( scope.parse( JSON.parse( text ) ) );
@@ -27,14 +36,14 @@ THREE.BufferGeometryLoader.prototype = {
 
 	parse: function ( json ) {
 
-		var geometry = new THREE.BufferGeometry();
+		var geometry = new BufferGeometry();
 
 		var index = json.data.index;
 
 		if ( index !== undefined ) {
 
 			var typedArray = new self[ index.type ]( index.array );
-			geometry.setIndex( new THREE.BufferAttribute( typedArray, 1 ) );
+			geometry.setIndex( new BufferAttribute( typedArray, 1 ) );
 
 		}
 
@@ -45,7 +54,7 @@ THREE.BufferGeometryLoader.prototype = {
 			var attribute = attributes[ key ];
 			var typedArray = new self[ attribute.type ]( attribute.array );
 
-			geometry.addAttribute( key, new THREE.BufferAttribute( typedArray, attribute.itemSize ) );
+			geometry.addAttribute( key, new BufferAttribute( typedArray, attribute.itemSize ) );
 
 		}
 
@@ -67,7 +76,7 @@ THREE.BufferGeometryLoader.prototype = {
 
 		if ( boundingSphere !== undefined ) {
 
-			var center = new THREE.Vector3();
+			var center = new Vector3();
 
 			if ( boundingSphere.center !== undefined ) {
 
@@ -75,7 +84,7 @@ THREE.BufferGeometryLoader.prototype = {
 
 			}
 
-			geometry.boundingSphere = new THREE.Sphere( center, boundingSphere.radius );
+			geometry.boundingSphere = new Sphere( center, boundingSphere.radius );
 
 		}
 

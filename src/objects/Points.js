@@ -2,25 +2,38 @@
  * @author alteredq / http://alteredqualia.com/
  */
 
-THREE.Points = function ( geometry, material ) {
+module.exports = Points;
 
-	THREE.Object3D.call( this );
+var Geometry = require('../core/Geometry.js');
+var BufferGeometry = require('../core/BufferGeometry.js');
+var Object3D = require('../core/Object3D.js');
+
+var PointsMaterial = require('../materials/PointsMaterial.js');
+
+var Vector3 = require('../math/Vector3.js');
+var Matrix4 = require('../math/Matrix4.js');
+var Sphere = require('../math/Sphere.js');
+var Ray = require('../math/Ray.js');
+
+function Points( geometry, material ) {
+
+	Object3D.call( this );
 
 	this.type = 'Points';
 
-	this.geometry = geometry !== undefined ? geometry : new THREE.Geometry();
-	this.material = material !== undefined ? material : new THREE.PointsMaterial( { color: Math.random() * 0xffffff } );
+	this.geometry = geometry !== undefined ? geometry : new Geometry();
+	this.material = material !== undefined ? material : new PointsMaterial( { color: Math.random() * 0xffffff } );
 
 };
 
-THREE.Points.prototype = Object.create( THREE.Object3D.prototype );
-THREE.Points.prototype.constructor = THREE.Points;
+Points.prototype = Object.create( Object3D.prototype );
+Points.prototype.constructor = Points;
 
-THREE.Points.prototype.raycast = ( function () {
+Points.prototype.raycast = ( function () {
 
-	var inverseMatrix = new THREE.Matrix4();
-	var ray = new THREE.Ray();
-	var sphere = new THREE.Sphere();
+	var inverseMatrix = new Matrix4();
+	var ray = new Ray();
+	var sphere = new Sphere();
 
 	return function raycast( raycaster, intersects ) {
 
@@ -45,7 +58,7 @@ THREE.Points.prototype.raycast = ( function () {
 
 		var localThreshold = threshold / ( ( this.scale.x + this.scale.y + this.scale.z ) / 3 );
 		var localThresholdSq = localThreshold * localThreshold;
-		var position = new THREE.Vector3();
+		var position = new Vector3();
 
 		function testPoint( point, index ) {
 
@@ -75,7 +88,7 @@ THREE.Points.prototype.raycast = ( function () {
 
 		}
 
-		if ( geometry instanceof THREE.BufferGeometry ) {
+		if ( geometry instanceof BufferGeometry ) {
 
 			var index = geometry.index;
 			var attributes = geometry.attributes;
@@ -123,7 +136,7 @@ THREE.Points.prototype.raycast = ( function () {
 
 }() );
 
-THREE.Points.prototype.clone = function () {
+Points.prototype.clone = function () {
 
 	return new this.constructor( this.geometry, this.material ).copy( this );
 

@@ -4,9 +4,16 @@
  * based on http://code.google.com/p/away3d/source/browse/trunk/fp10/Away3DLite/src/away3dlite/primitives/Torus.as?r=2888
  */
 
-THREE.TorusGeometry = function ( radius, tube, radialSegments, tubularSegments, arc ) {
+module.exports = TorusGeometry;
 
-	THREE.Geometry.call( this );
+var Geometry = require('../../core/Geometry.js');
+var Face3 = require('../../core/Face3.js');
+var Vector3 = require('../../math/Vector3.js');
+var Vector2 = require('../../math/Vector2.js');
+
+function TorusGeometry( radius, tube, radialSegments, tubularSegments, arc ) {
+
+	Geometry.call( this );
 
 	this.type = 'TorusGeometry';
 
@@ -24,7 +31,7 @@ THREE.TorusGeometry = function ( radius, tube, radialSegments, tubularSegments, 
 	tubularSegments = tubularSegments || 6;
 	arc = arc || Math.PI * 2;
 
-	var center = new THREE.Vector3(), uvs = [], normals = [];
+	var center = new Vector3(), uvs = [], normals = [];
 
 	for ( var j = 0; j <= radialSegments; j ++ ) {
 
@@ -36,14 +43,14 @@ THREE.TorusGeometry = function ( radius, tube, radialSegments, tubularSegments, 
 			center.x = radius * Math.cos( u );
 			center.y = radius * Math.sin( u );
 
-			var vertex = new THREE.Vector3();
+			var vertex = new Vector3();
 			vertex.x = ( radius + tube * Math.cos( v ) ) * Math.cos( u );
 			vertex.y = ( radius + tube * Math.cos( v ) ) * Math.sin( u );
 			vertex.z = tube * Math.sin( v );
 
 			this.vertices.push( vertex );
 
-			uvs.push( new THREE.Vector2( i / tubularSegments, j / radialSegments ) );
+			uvs.push( new Vector2( i / tubularSegments, j / radialSegments ) );
 			normals.push( vertex.clone().sub( center ).normalize() );
 
 		}
@@ -59,11 +66,11 @@ THREE.TorusGeometry = function ( radius, tube, radialSegments, tubularSegments, 
 			var c = ( tubularSegments + 1 ) * ( j - 1 ) + i;
 			var d = ( tubularSegments + 1 ) * j + i;
 
-			var face = new THREE.Face3( a, b, d, [ normals[ a ].clone(), normals[ b ].clone(), normals[ d ].clone() ] );
+			var face = new Face3( a, b, d, [ normals[ a ].clone(), normals[ b ].clone(), normals[ d ].clone() ] );
 			this.faces.push( face );
 			this.faceVertexUvs[ 0 ].push( [ uvs[ a ].clone(), uvs[ b ].clone(), uvs[ d ].clone() ] );
 
-			face = new THREE.Face3( b, c, d, [ normals[ b ].clone(), normals[ c ].clone(), normals[ d ].clone() ] );
+			face = new Face3( b, c, d, [ normals[ b ].clone(), normals[ c ].clone(), normals[ d ].clone() ] );
 			this.faces.push( face );
 			this.faceVertexUvs[ 0 ].push( [ uvs[ b ].clone(), uvs[ c ].clone(), uvs[ d ].clone() ] );
 
@@ -75,5 +82,5 @@ THREE.TorusGeometry = function ( radius, tube, radialSegments, tubularSegments, 
 
 };
 
-THREE.TorusGeometry.prototype = Object.create( THREE.Geometry.prototype );
-THREE.TorusGeometry.prototype.constructor = THREE.TorusGeometry;
+TorusGeometry.prototype = Object.create( Geometry.prototype );
+TorusGeometry.prototype.constructor = TorusGeometry;

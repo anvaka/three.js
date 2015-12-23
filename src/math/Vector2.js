@@ -4,17 +4,18 @@
  * @author egraether / http://egraether.com/
  * @author zz85 / http://www.lab4games.net/zz85/blog
  */
+module.exports = Vector2;
 
-THREE.Vector2 = function ( x, y ) {
+function Vector2( x, y ) {
 
 	this.x = x || 0;
 	this.y = y || 0;
 
 };
 
-THREE.Vector2.prototype = {
+Vector2.prototype = {
 
-	constructor: THREE.Vector2,
+	constructor: Vector2,
 
 	get width() {
 
@@ -271,8 +272,8 @@ THREE.Vector2.prototype = {
 
 			if ( min === undefined ) {
 
-				min = new THREE.Vector2();
-				max = new THREE.Vector2();
+				min = new Vector2();
+				max = new Vector2();
 
 			}
 

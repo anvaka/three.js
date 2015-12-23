@@ -20,19 +20,26 @@
  * }
  */
 
-THREE.LineBasicMaterial = function ( parameters ) {
+module.exports = LineBasicMaterial;
 
-	THREE.Material.call( this );
+var Material = require('./Material.js');
+
+var Color = require('../math/Color.js');
+var Default = require('../defaults.js');
+
+function LineBasicMaterial( parameters ) {
+
+	Material.call( this );
 
 	this.type = 'LineBasicMaterial';
 
-	this.color = new THREE.Color( 0xffffff );
+	this.color = new Color( 0xffffff );
 
 	this.linewidth = 1;
 	this.linecap = 'round';
 	this.linejoin = 'round';
 
-	this.vertexColors = THREE.NoColors;
+	this.vertexColors = Default.NoColors;
 
 	this.fog = true;
 
@@ -40,12 +47,12 @@ THREE.LineBasicMaterial = function ( parameters ) {
 
 };
 
-THREE.LineBasicMaterial.prototype = Object.create( THREE.Material.prototype );
-THREE.LineBasicMaterial.prototype.constructor = THREE.LineBasicMaterial;
+LineBasicMaterial.prototype = Object.create( Material.prototype );
+LineBasicMaterial.prototype.constructor = LineBasicMaterial;
 
-THREE.LineBasicMaterial.prototype.copy = function ( source ) {
+LineBasicMaterial.prototype.copy = function ( source ) {
 
-	THREE.Material.prototype.copy.call( this, source );
+	Material.prototype.copy.call( this, source );
 
 	this.color.copy( source.color );
 

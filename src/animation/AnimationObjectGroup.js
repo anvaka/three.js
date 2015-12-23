@@ -29,9 +29,14 @@
  * @author tschw
  */
 
-THREE.AnimationObjectGroup = function( var_args ) {
+module.exports = AnimationObjectGroup;
 
-	this.uuid = THREE.Math.generateUUID();
+var THREEMath = require('../math/Math.js');
+var PropertyBinding = require('./PropertyBinding.js');
+
+function AnimationObjectGroup( var_args ) {
+
+	this.uuid = THREEMath.generateUUID();
 
 	// cached objects followed by the active ones
 	this._objects = Array.prototype.slice.call( arguments );
@@ -68,9 +73,9 @@ THREE.AnimationObjectGroup = function( var_args ) {
 
 };
 
-THREE.AnimationObjectGroup.prototype = {
+AnimationObjectGroup.prototype = {
 
-	constructor: THREE.AnimationObjectGroup,
+	constructor: AnimationObjectGroup,
 
 	add: function( var_args ) {
 
@@ -102,7 +107,7 @@ THREE.AnimationObjectGroup.prototype = {
 				for ( var j = 0, m = nBindings; j !== m; ++ j ) {
 
 					bindings[ j ].push(
-							new THREE.PropertyBinding(
+							new PropertyBinding(
 								object, paths[ j ], parsedPaths[ j ] ) );
 
 				}
@@ -138,7 +143,7 @@ THREE.AnimationObjectGroup.prototype = {
 						// for objects that are cached, the binding may
 						// or may not exist
 
-						binding = new THREE.PropertyBinding(
+						binding = new PropertyBinding(
 								object, paths[ j ], parsedPaths[ j ] );
 
 					}
@@ -322,12 +327,12 @@ THREE.AnimationObjectGroup.prototype = {
 		bindings.push( bindingsForPath );
 
 		for ( var i = nCachedObjects,
-				n = objects.length; i !== n; ++ i ) {
+			n = objects.length; i !== n; ++ i ) {
 
 			var object = objects[ i ];
 
 			bindingsForPath[ i ] =
-					new THREE.PropertyBinding( object, path, parsedPath );
+					new PropertyBinding( object, path, parsedPath );
 
 		}
 

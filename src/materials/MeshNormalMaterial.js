@@ -13,10 +13,13 @@
  *  wireframeLinewidth: <float>
  * }
  */
+module.exports = MeshNormalMaterial;
 
-THREE.MeshNormalMaterial = function ( parameters ) {
+var Material = require('./Material.js');
 
-	THREE.Material.call( this, parameters );
+function MeshNormalMaterial( parameters ) {
+
+	Material.call( this, parameters );
 
 	this.type = 'MeshNormalMaterial';
 
@@ -29,12 +32,12 @@ THREE.MeshNormalMaterial = function ( parameters ) {
 
 };
 
-THREE.MeshNormalMaterial.prototype = Object.create( THREE.Material.prototype );
-THREE.MeshNormalMaterial.prototype.constructor = THREE.MeshNormalMaterial;
+MeshNormalMaterial.prototype = Object.create( Material.prototype );
+MeshNormalMaterial.prototype.constructor = MeshNormalMaterial;
 
-THREE.MeshNormalMaterial.prototype.copy = function ( source ) {
+MeshNormalMaterial.prototype.copy = function ( source ) {
 
-	THREE.Material.prototype.copy.call( this, source );
+	Material.prototype.copy.call( this, source );
 
 	this.wireframe = source.wireframe;
 	this.wireframeLinewidth = source.wireframeLinewidth;

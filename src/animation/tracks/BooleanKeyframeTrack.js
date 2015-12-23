@@ -8,21 +8,25 @@
  * @author tschw
  */
 
-THREE.BooleanKeyframeTrack = function ( name, times, values ) {
+module.exports = BooleanKeyframeTrack;
 
-	THREE.KeyframeTrack.call( this, name, times, values );
+var KeyframeTrack = require('../KeyframeTrack.js');
+var Default = require('../../defaults.js');
+
+function BooleanKeyframeTrack( name, times, values ) {
+
+	KeyframeTrack.call( this, name, times, values );
 
 };
 
-THREE.BooleanKeyframeTrack.prototype =
-		Object.assign( Object.create( THREE.KeyframeTrack.prototype ), {
+BooleanKeyframeTrack.prototype = Object.assign( Object.create( KeyframeTrack.prototype ), {
 
-	constructor: THREE.BooleanKeyframeTrack,
+	constructor: BooleanKeyframeTrack,
 
 	ValueTypeName: 'bool',
 	ValueBufferType: Array,
 
-	DefaultInterpolation: THREE.IntepolateDiscrete,
+	DefaultInterpolation: Default.IntepolateDiscrete,
 
 	InterpolantFactoryMethodLinear: undefined,
 	InterpolantFactoryMethodSmooth: undefined

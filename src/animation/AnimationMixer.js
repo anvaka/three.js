@@ -8,7 +8,15 @@
  * @author tschw
  */
 
-THREE.AnimationMixer = function( root ) {
+module.exports = AnimationMixer;
+
+var EventDispatcher = require('../core/EventDispatcher.js');
+var Default = require('../defaults.js');
+var PropertyMixer = require('./PropertyMixer.js');
+var PropertyBinding = require('./PropertyBinding.js');
+var LinearInterpolant = require('../math/interpolants/LinearInterpolant.js'); 
+
+function AnimationMixer( root ) {
 
 	this._root = root;
 	this._initMemoryManager();
@@ -20,9 +28,9 @@ THREE.AnimationMixer = function( root ) {
 
 };
 
-THREE.AnimationMixer.prototype = {
+AnimationMixer.prototype = {
 
-	constructor: THREE.AnimationMixer,
+	constructor: AnimationMixer,
 
 	// return an action for a clip optionally using a custom root target
 	// object (this method allocates a lot of dynamic memory in case a
@@ -68,8 +76,7 @@ THREE.AnimationMixer.prototype = {
 		if ( clipObject === null ) return null;
 
 		// allocate all resources required to run it
-		var newAction = new THREE.
-				AnimationMixer._Action( this, clipObject, optionalRoot );
+		var newAction = new AnimationMixer._Action( this, clipObject, optionalRoot );
 
 		this._bindAction( newAction, prototypeAction );
 
@@ -269,10 +276,9 @@ THREE.AnimationMixer.prototype = {
 
 };
 
-THREE.EventDispatcher.prototype.apply( THREE.AnimationMixer.prototype );
+EventDispatcher.prototype.apply( AnimationMixer.prototype );
 
-THREE.AnimationMixer._Action =
-		function( mixer, clip, localRoot ) {
+AnimationMixer._Action = function( mixer, clip, localRoot ) {
 
 	this._mixer = mixer;
 	this._clip = clip;
@@ -283,8 +289,8 @@ THREE.AnimationMixer._Action =
 		interpolants = new Array( nTracks );
 
 	var interpolantSettings = {
-			endingStart: 	THREE.ZeroCurvatureEnding,
-			endingEnd:		THREE.ZeroCurvatureEnding
+		endingStart: 	Default.ZeroCurvatureEnding,
+		endingEnd:		Default.ZeroCurvatureEnding
 	};
 
 	for ( var i = 0; i !== nTracks; ++ i ) {
@@ -308,7 +314,7 @@ THREE.AnimationMixer._Action =
 	this._timeScaleInterpolant = null;
 	this._weightInterpolant = null;
 
-	this.loop = THREE.LoopRepeat;
+	this.loop = Default.LoopRepeat;
 	this._loopCount = -1;
 
 	// global mixer time when the action is to be started
@@ -337,9 +343,9 @@ THREE.AnimationMixer._Action =
 
 };
 
-THREE.AnimationMixer._Action.prototype = {
+AnimationMixer._Action.prototype = {
 
-	constructor: THREE.AnimationMixer._Action,
+	constructor: AnimationMixer._Action,
 
 	// State & Scheduling
 
@@ -737,8 +743,8 @@ THREE.AnimationMixer._Action.prototype = {
 
 		switch ( loop ) {
 
-			case THREE.LoopOnce:
-			case THREE.LoopOnceClamp:
+			case Default.LoopOnce:
+			// case THREE.LoopOnceClamp: // AK: I don't know what it is. See https://github.com/mrdoob/three.js/commit/c32f31a5875d9698e52688d293024ee9f88ce0b8
 
 				if ( loopCount === -1 ) {
 
@@ -771,11 +777,11 @@ THREE.AnimationMixer._Action.prototype = {
 
 				break;
 
-			case THREE.LoopPingPong:
+			case Default.LoopPingPong:
 
 				pingPong = true;
 
-			case THREE.LoopRepeat:
+			case Default.LoopRepeat:
 
 				if ( loopCount === -1 ) {
 
@@ -849,7 +855,7 @@ THREE.AnimationMixer._Action.prototype = {
 
 				}
 
-				if ( loop === THREE.LoopPingPong && ( loopCount & 1 ) === 1 ) {
+				if ( loop === Default.LoopPingPong && ( loopCount & 1 ) === 1 ) {
 
 					// invert time for the "pong round"
 
@@ -875,8 +881,8 @@ THREE.AnimationMixer._Action.prototype = {
 
 		if ( pingPong ) {
 
-			settings.endingStart 	= THREE.ZeroSlopeEnding;
-			settings.endingEnd		= THREE.ZeroSlopeEnding;
+			settings.endingStart 	= Default.ZeroSlopeEnding;
+			settings.endingEnd		= Default.ZeroSlopeEnding;
 
 		} else {
 
@@ -885,22 +891,22 @@ THREE.AnimationMixer._Action.prototype = {
 			if ( atStart ) {
 
 				settings.endingStart = this.zeroSlopeAtStart ?
-						THREE.ZeroSlopeEnding : THREE.ZeroCurvatureEnding;
+						Default.ZeroSlopeEnding : Default.ZeroCurvatureEnding;
 
 			} else {
 
-				settings.endingStart = THREE.WrapAroundEnding;
+				settings.endingStart = Default.WrapAroundEnding;
 
 			}
 
 			if ( atEnd ) {
 
 				settings.endingEnd = this.zeroSlopeAtEnd ?
-						THREE.ZeroSlopeEnding : THREE.ZeroCurvatureEnding;
+						Default.ZeroSlopeEnding : Default.ZeroCurvatureEnding;
 
 			} else {
 
-				settings.endingEnd 	 = THREE.WrapAroundEnding;
+				settings.endingEnd 	 = Default.WrapAroundEnding;
 
 			}
 
@@ -934,7 +940,7 @@ THREE.AnimationMixer._Action.prototype = {
 
 // Implementation details:
 
-Object.assign( THREE.AnimationMixer.prototype, {
+Object.assign( AnimationMixer.prototype, {
 
 	_bindAction: function( action, prototypeAction ) {
 
@@ -986,8 +992,8 @@ Object.assign( THREE.AnimationMixer.prototype, {
 				var path = prototypeAction && prototypeAction.
 						_propertyBindings[ i ].binding.parsedPath;
 
-				binding = new THREE.PropertyMixer(
-						THREE.PropertyBinding.create( root, trackName, path ),
+				binding = new PropertyMixer(
+						PropertyBinding.create( root, trackName, path ),
 						track.ValueTypeName, track.getValueSize() );
 
 				++ binding.referenceCount;
@@ -1364,7 +1370,7 @@ Object.assign( THREE.AnimationMixer.prototype, {
 
 		if ( interpolant === undefined ) {
 
-			interpolant = new THREE.LinearInterpolant(
+			interpolant = new LinearInterpolant(
 					new Float32Array( 2 ), new Float32Array( 2 ),
 						1, this._controlInterpolantsResultBuffer );
 

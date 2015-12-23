@@ -7,10 +7,20 @@
  *		http://evanw.github.com/lightgl.js/tests/shadowmap.html
  */
 
-THREE.CameraHelper = function ( camera ) {
+module.exports = CameraHelper;
 
-	var geometry = new THREE.Geometry();
-	var material = new THREE.LineBasicMaterial( { color: 0xffffff, vertexColors: THREE.FaceColors } );
+var Vector3 = require('../../math/Vector3.js');
+var Color = require('../../math/Color.js');
+var Default = require('../../defaults.js');
+var Geometry = require('../../core/Geometry.js');
+var LineBasicMaterial = require('../../materials/LineBasicMaterial.js');
+var LineSegments = require('../../objects/LineSegments.js');
+var Camera = require('../../cameras/Camera.js');
+
+function CameraHelper( camera ) {
+
+	var geometry = new Geometry();
+	var material = new LineBasicMaterial( { color: 0xffffff, vertexColors: Default.FaceColors } );
 
 	var pointMap = {};
 
@@ -78,8 +88,8 @@ THREE.CameraHelper = function ( camera ) {
 
 	function addPoint( id, hex ) {
 
-		geometry.vertices.push( new THREE.Vector3() );
-		geometry.colors.push( new THREE.Color( hex ) );
+		geometry.vertices.push( new Vector3() );
+		geometry.colors.push( new Color( hex ) );
 
 		if ( pointMap[ id ] === undefined ) {
 
@@ -91,7 +101,7 @@ THREE.CameraHelper = function ( camera ) {
 
 	}
 
-	THREE.LineSegments.call( this, geometry, material );
+	LineSegments.call( this, geometry, material );
 
 	this.camera = camera;
 	this.camera.updateProjectionMatrix();
@@ -105,15 +115,15 @@ THREE.CameraHelper = function ( camera ) {
 
 };
 
-THREE.CameraHelper.prototype = Object.create( THREE.LineSegments.prototype );
-THREE.CameraHelper.prototype.constructor = THREE.CameraHelper;
+CameraHelper.prototype = Object.create( LineSegments.prototype );
+CameraHelper.prototype.constructor = CameraHelper;
 
-THREE.CameraHelper.prototype.update = function () {
+CameraHelper.prototype.update = function () {
 
 	var geometry, pointMap;
 
-	var vector = new THREE.Vector3();
-	var camera = new THREE.Camera();
+	var vector = new Vector3();
+	var camera = new Camera();
 
 	function setPoint( point, x, y, z ) {
 

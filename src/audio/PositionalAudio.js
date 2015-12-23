@@ -2,79 +2,85 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-THREE.PositionalAudio = function ( listener ) {
+module.exports = PositionalAudio;
 
-	THREE.Audio.call( this, listener );
+var Audio = require('./Audio.js');
+var Vector3 = require('../math/Vector3.js');
+var Object3D = require('../core/Object3D.js');
+
+function PositionalAudio( listener ) {
+
+	Audio.call( this, listener );
 
 	this.panner = this.context.createPanner();
 	this.panner.connect( this.gain );
 
 };
 
-THREE.PositionalAudio.prototype = Object.create( THREE.Audio.prototype );
-THREE.PositionalAudio.prototype.constructor = THREE.PositionalAudio;
+PositionalAudio.prototype = Object.create( Audio.prototype );
+PositionalAudio.prototype.constructor = PositionalAudio;
 
-THREE.PositionalAudio.prototype.getOutput = function () {
+PositionalAudio.prototype.getOutput = function () {
 
 	return this.panner;
 
 };
 
-THREE.PositionalAudio.prototype.setRefDistance = function ( value ) {
+PositionalAudio.prototype.setRefDistance = function ( value ) {
 
 	this.panner.refDistance = value;
 
 };
 
-THREE.PositionalAudio.prototype.getRefDistance = function () {
+PositionalAudio.prototype.getRefDistance = function () {
 
 	return this.panner.refDistance;
 
 };
 
-THREE.PositionalAudio.prototype.setRolloffFactor = function ( value ) {
+PositionalAudio.prototype.setRolloffFactor = function ( value ) {
 
 	this.panner.rolloffFactor = value;
 
 };
 
-THREE.PositionalAudio.prototype.getRolloffFactor = function () {
+PositionalAudio.prototype.getRolloffFactor = function () {
 
 	return this.panner.rolloffFactor;
 
 };
 
-THREE.PositionalAudio.prototype.setDistanceModel = function ( value ) {
+PositionalAudio.prototype.setDistanceModel = function ( value ) {
 
 	this.panner.distanceModel = value;
 
 };
 
-THREE.PositionalAudio.prototype.getDistanceModel = function () {
+PositionalAudio.prototype.getDistanceModel = function () {
 
 	return this.panner.distanceModel;
 
 };
 
-THREE.PositionalAudio.prototype.setMaxDistance = function ( value ) {
+PositionalAudio.prototype.setMaxDistance = function ( value ) {
 
 	this.panner.maxDistance = value;
 
 };
 
-THREE.PositionalAudio.prototype.getMaxDistance = function () {
+PositionalAudio.prototype.getMaxDistance = function () {
 
 	return this.panner.maxDistance;
 
 };
 
-THREE.PositionalAudio.prototype.updateMatrixWorld = ( function () {
+PositionalAudio.prototype.updateMatrixWorld = ( function () {
 
-	var position = new THREE.Vector3();
+	var position = new Vector3();
 
 	return function updateMatrixWorld( force ) {
 
-		THREE.Object3D.prototype.updateMatrixWorld.call( this, force );
+		Object3D.prototype.updateMatrixWorld.call( this, force );
 
 		position.setFromMatrixPosition( this.matrixWorld );
 

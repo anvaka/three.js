@@ -3,27 +3,35 @@
  *
  * Abstract Base class to load generic binary textures formats (rgbe, hdr, ...)
  */
+module.exports = BinaryTextureLoader;
 
-THREE.DataTextureLoader = THREE.BinaryTextureLoader = function ( manager ) {
+var DefaultLoadingManager = require('./LoadingManager.js').DefaultLoadingManager;
+var DataTexture = require('../textures/DataTexture.js');
+var XHRLoader = require('./XHRLoader.js');
+var Default = require('../defaults.js');
 
-	this.manager = ( manager !== undefined ) ? manager : THREE.DefaultLoadingManager;
+BinaryTextureLoader.DataTextureLoader = BinaryTextureLoader;
+
+function BinaryTextureLoader( manager ) {
+
+	this.manager = ( manager !== undefined ) ? manager : DefaultLoadingManager;
 
 	// override in sub classes
 	this._parser = null;
 
 };
 
-THREE.BinaryTextureLoader.prototype = {
+BinaryTextureLoader.prototype = {
 
-	constructor: THREE.BinaryTextureLoader,
+	constructor: BinaryTextureLoader,
 
 	load: function ( url, onLoad, onProgress, onError ) {
 
 		var scope = this;
 
-		var texture = new THREE.DataTexture();
+		var texture = new DataTexture();
 
-		var loader = new THREE.XHRLoader( this.manager );
+		var loader = new XHRLoader( this.manager );
 		loader.setResponseType( 'arraybuffer' );
 
 		loader.load( url, function ( buffer ) {
@@ -44,11 +52,11 @@ THREE.BinaryTextureLoader.prototype = {
 
 			}
 
-			texture.wrapS = undefined !== texData.wrapS ? texData.wrapS : THREE.ClampToEdgeWrapping;
-			texture.wrapT = undefined !== texData.wrapT ? texData.wrapT : THREE.ClampToEdgeWrapping;
+			texture.wrapS = undefined !== texData.wrapS ? texData.wrapS : Default.ClampToEdgeWrapping;
+			texture.wrapT = undefined !== texData.wrapT ? texData.wrapT : Default.ClampToEdgeWrapping;
 
-			texture.magFilter = undefined !== texData.magFilter ? texData.magFilter : THREE.LinearFilter;
-			texture.minFilter = undefined !== texData.minFilter ? texData.minFilter : THREE.LinearMipMapLinearFilter;
+			texture.magFilter = undefined !== texData.magFilter ? texData.magFilter : Default.LinearFilter;
+			texture.minFilter = undefined !== texData.minFilter ? texData.minFilter : Default.LinearMipMapLinearFilter;
 
 			texture.anisotropy = undefined !== texData.anisotropy ? texData.anisotropy : 1;
 
@@ -71,7 +79,7 @@ THREE.BinaryTextureLoader.prototype = {
 
 			if ( 1 === texData.mipmapCount ) {
 
-				texture.minFilter = THREE.LinearFilter;
+				texture.minFilter = Default.LinearFilter;
 
 			}
 

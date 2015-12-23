@@ -1,10 +1,17 @@
 /**
  * @author mrdoob / http://mrdoob.com/
  */
+module.exports = BufferAttribute;
 
-THREE.BufferAttribute = function ( array, itemSize ) {
+var Color = require('../math/Color.js');
+var THREEMath = require('../math/Math.js');
+var Vector2 = require('../math/Vector2.js');
+var Vector3 = require('../math/Vector3.js');
+var Vector4 = require('../math/Vector4.js');
 
-	this.uuid = THREE.Math.generateUUID();
+function BufferAttribute( array, itemSize ) {
+
+	this.uuid = THREEMath.generateUUID();
 
 	this.array = array;
 	this.itemSize = itemSize;
@@ -16,9 +23,9 @@ THREE.BufferAttribute = function ( array, itemSize ) {
 
 };
 
-THREE.BufferAttribute.prototype = {
+BufferAttribute.prototype = {
 
-	constructor: THREE.BufferAttribute,
+	constructor: BufferAttribute,
 
 	get count() {
 
@@ -85,7 +92,7 @@ THREE.BufferAttribute.prototype = {
 			if ( color === undefined ) {
 
 				console.warn( 'THREE.BufferAttribute.copyColorsArray(): color is undefined', i );
-				color = new THREE.Color();
+				color = new Color();
 
 			}
 
@@ -128,7 +135,7 @@ THREE.BufferAttribute.prototype = {
 			if ( vector === undefined ) {
 
 				console.warn( 'THREE.BufferAttribute.copyVector2sArray(): vector is undefined', i );
-				vector = new THREE.Vector2();
+				vector = new Vector2();
 
 			}
 
@@ -152,7 +159,7 @@ THREE.BufferAttribute.prototype = {
 			if ( vector === undefined ) {
 
 				console.warn( 'THREE.BufferAttribute.copyVector3sArray(): vector is undefined', i );
-				vector = new THREE.Vector3();
+				vector = new Vector3();
 
 			}
 
@@ -177,7 +184,7 @@ THREE.BufferAttribute.prototype = {
 			if ( vector === undefined ) {
 
 				console.warn( 'THREE.BufferAttribute.copyVector4sArray(): vector is undefined', i );
-				vector = new THREE.Vector4();
+				vector = new Vector4();
 
 			}
 
@@ -304,66 +311,66 @@ THREE.BufferAttribute.prototype = {
 
 //
 
-THREE.Int8Attribute = function ( array, itemSize ) {
+BufferAttribute.Int8Attribute = function ( array, itemSize ) {
 
-	return new THREE.BufferAttribute( new Int8Array( array ), itemSize );
-
-};
-
-THREE.Uint8Attribute = function ( array, itemSize ) {
-
-	return new THREE.BufferAttribute( new Uint8Array( array ), itemSize );
+	return new BufferAttribute( new Int8Array( array ), itemSize );
 
 };
 
-THREE.Uint8ClampedAttribute = function ( array, itemSize ) {
+BufferAttribute.Uint8Attribute = function ( array, itemSize ) {
 
-	return new THREE.BufferAttribute( new Uint8ClampedArray( array ), itemSize );
-
-};
-
-THREE.Int16Attribute = function ( array, itemSize ) {
-
-	return new THREE.BufferAttribute( new Int16Array( array ), itemSize );
+	return new BufferAttribute( new Uint8Array( array ), itemSize );
 
 };
 
-THREE.Uint16Attribute = function ( array, itemSize ) {
+BufferAttribute.Uint8ClampedAttribute = function ( array, itemSize ) {
 
-	return new THREE.BufferAttribute( new Uint16Array( array ), itemSize );
-
-};
-
-THREE.Int32Attribute = function ( array, itemSize ) {
-
-	return new THREE.BufferAttribute( new Int32Array( array ), itemSize );
+	return new BufferAttribute( new Uint8ClampedArray( array ), itemSize );
 
 };
 
-THREE.Uint32Attribute = function ( array, itemSize ) {
+BufferAttribute.Int16Attribute = function ( array, itemSize ) {
 
-	return new THREE.BufferAttribute( new Uint32Array( array ), itemSize );
-
-};
-
-THREE.Float32Attribute = function ( array, itemSize ) {
-
-	return new THREE.BufferAttribute( new Float32Array( array ), itemSize );
+	return new BufferAttribute( new Int16Array( array ), itemSize );
 
 };
 
-THREE.Float64Attribute = function ( array, itemSize ) {
+BufferAttribute.Uint16Attribute = function ( array, itemSize ) {
 
-	return new THREE.BufferAttribute( new Float64Array( array ), itemSize );
+	return new BufferAttribute( new Uint16Array( array ), itemSize );
+
+};
+
+BufferAttribute.Int32Attribute = function ( array, itemSize ) {
+
+	return new BufferAttribute( new Int32Array( array ), itemSize );
+
+};
+
+BufferAttribute.Uint32Attribute = function ( array, itemSize ) {
+
+	return new BufferAttribute( new Uint32Array( array ), itemSize );
+
+};
+
+BufferAttribute.Float32Attribute = function ( array, itemSize ) {
+
+	return new BufferAttribute( new Float32Array( array ), itemSize );
+
+};
+
+BufferAttribute.Float64Attribute = function ( array, itemSize ) {
+
+	return new BufferAttribute( new Float64Array( array ), itemSize );
 
 };
 
 
 // Deprecated
 
-THREE.DynamicBufferAttribute = function ( array, itemSize ) {
+BufferAttribute.DynamicBufferAttribute = function ( array, itemSize ) {
 
 	console.warn( 'THREE.DynamicBufferAttribute has been removed. Use new THREE.BufferAttribute().setDynamic( true ) instead.' );
-	return new THREE.BufferAttribute( array, itemSize ).setDynamic( true );
+	return new BufferAttribute( array, itemSize ).setDynamic( true );
 
 };

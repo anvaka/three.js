@@ -4,9 +4,14 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-THREE.LOD = function () {
+module.exports = LOD;
 
-	THREE.Object3D.call( this );
+var Object3D = require('../core/Object3D.js');
+var Vector3 = require('../math/Vector3.js');
+
+function LOD() {
+
+	Object3D.call( this );
 
 	this.type = 'LOD';
 
@@ -28,10 +33,10 @@ THREE.LOD = function () {
 };
 
 
-THREE.LOD.prototype = Object.create( THREE.Object3D.prototype );
-THREE.LOD.prototype.constructor = THREE.LOD;
+LOD.prototype = Object.create( Object3D.prototype );
+LOD.prototype.constructor = LOD;
 
-THREE.LOD.prototype.addLevel = function ( object, distance ) {
+LOD.prototype.addLevel = function ( object, distance ) {
 
 	if ( distance === undefined ) distance = 0;
 
@@ -55,7 +60,7 @@ THREE.LOD.prototype.addLevel = function ( object, distance ) {
 
 };
 
-THREE.LOD.prototype.getObjectForDistance = function ( distance ) {
+LOD.prototype.getObjectForDistance = function ( distance ) {
 
 	var levels = this.levels;
 
@@ -73,9 +78,9 @@ THREE.LOD.prototype.getObjectForDistance = function ( distance ) {
 
 };
 
-THREE.LOD.prototype.raycast = ( function () {
+LOD.prototype.raycast = ( function () {
 
-	var matrixPosition = new THREE.Vector3();
+	var matrixPosition = new Vector3();
 
 	return function raycast( raycaster, intersects ) {
 
@@ -89,10 +94,10 @@ THREE.LOD.prototype.raycast = ( function () {
 
 }() );
 
-THREE.LOD.prototype.update = function () {
+LOD.prototype.update = function () {
 
-	var v1 = new THREE.Vector3();
-	var v2 = new THREE.Vector3();
+	var v1 = new Vector3();
+	var v2 = new Vector3();
 
 	return function update( camera ) {
 
@@ -134,9 +139,9 @@ THREE.LOD.prototype.update = function () {
 
 }();
 
-THREE.LOD.prototype.copy = function ( source ) {
+LOD.prototype.copy = function ( source ) {
 
-	THREE.Object3D.prototype.copy.call( this, source, false );
+	Object3D.prototype.copy.call( this, source, false );
 
 	var levels = source.levels;
 
@@ -152,9 +157,9 @@ THREE.LOD.prototype.copy = function ( source ) {
 
 };
 
-THREE.LOD.prototype.toJSON = function ( meta ) {
+LOD.prototype.toJSON = function ( meta ) {
 
-	var data = THREE.Object3D.prototype.toJSON.call( this, meta );
+	var data = Object3D.prototype.toJSON.call( this, meta );
 
 	data.object.levels = [];
 

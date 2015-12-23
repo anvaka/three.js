@@ -8,16 +8,20 @@
  * @author tschw
  */
 
-THREE.ColorKeyframeTrack = function ( name, times, values, interpolation ) {
+module.exports = ColorKeyframeTrack;
 
-	THREE.KeyframeTrack.call( this, name, keys, interpolation );
+var KeyframeTrack = require('../KeyframeTrack.js');
+
+function ColorKeyframeTrack( name, times, values, interpolation ) {
+
+  // TODO: there is no keys there:https://github.com/mrdoob/three.js/commit/2e5d9ef6b3fd42ca5b5f8074720b11c2ce0519ef#diff-43e1f5fad259d43550007e98e3820309R13
+	KeyframeTrack.call( this, name, keys, interpolation );
 
 };
 
-THREE.ColorKeyframeTrack.prototype =
-		Object.assign( Object.create( THREE.KeyframeTrack.prototype ), {
+ColorKeyframeTrack.prototype = Object.assign( Object.create( KeyframeTrack.prototype ), {
 
-	constructor: THREE.ColorKeyframeTrack,
+	constructor: ColorKeyframeTrack,
 
 	ValueTypeName: 'color'
 

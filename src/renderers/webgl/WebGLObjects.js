@@ -2,9 +2,16 @@
 * @author mrdoob / http://mrdoob.com/
 */
 
-THREE.WebGLObjects = function ( gl, properties, info ) {
+module.exports = WebGLObjects;
 
-	var geometries = new THREE.WebGLGeometries( gl, properties, info );
+var Geometry = require('../../core/Geometry.js');
+var BufferAttribute = require('../../core/BufferAttribute.js');
+var WebGLGeometries = require('./WebGLGeometries.js');
+var InterleavedBufferAttribute = require('../../core/InterleavedBufferAttribute.js');
+
+function WebGLObjects( gl, properties, info ) {
+
+	var geometries = new WebGLGeometries( gl, properties, info );
 
 	//
 
@@ -14,7 +21,7 @@ THREE.WebGLObjects = function ( gl, properties, info ) {
 
 		var geometry = geometries.get( object );
 
-		if ( object.geometry instanceof THREE.Geometry ) {
+		if ( object.geometry instanceof Geometry ) {
 
 			geometry.updateFromObject( object );
 
@@ -57,7 +64,7 @@ THREE.WebGLObjects = function ( gl, properties, info ) {
 
 	function updateAttribute( attribute, bufferType ) {
 
-		var data = ( attribute instanceof THREE.InterleavedBufferAttribute ) ? attribute.data : attribute;
+		var data = ( attribute instanceof InterleavedBufferAttribute ) ? attribute.data : attribute;
 
 		var attributeProperties = properties.get( data );
 
@@ -115,7 +122,7 @@ THREE.WebGLObjects = function ( gl, properties, info ) {
 
 	function getAttributeBuffer( attribute ) {
 
-		if ( attribute instanceof THREE.InterleavedBufferAttribute ) {
+		if ( attribute instanceof InterleavedBufferAttribute ) {
 
 			return properties.get( attribute.data ).__webglBuffer;
 
@@ -179,7 +186,7 @@ THREE.WebGLObjects = function ( gl, properties, info ) {
 		// console.timeEnd( 'wireframe' );
 
 		var TypeArray = position.count > 65535 ? Uint32Array : Uint16Array;
-		var attribute = new THREE.BufferAttribute( new TypeArray( indices ), 1 );
+		var attribute = new BufferAttribute( new TypeArray( indices ), 1 );
 
 		updateAttribute( attribute, gl.ELEMENT_ARRAY_BUFFER );
 

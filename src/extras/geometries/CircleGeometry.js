@@ -2,9 +2,14 @@
  * @author hughes
  */
 
-THREE.CircleGeometry = function ( radius, segments, thetaStart, thetaLength ) {
+module.exports = CircleGeometry;
 
-	THREE.Geometry.call( this );
+var Geometry = require('../../core/Geometry.js');
+var CircleBufferGeometry = require('./CircleBufferGeometry.js');
+
+function CircleGeometry( radius, segments, thetaStart, thetaLength ) {
+
+	Geometry.call( this );
 
 	this.type = 'CircleGeometry';
 
@@ -15,9 +20,9 @@ THREE.CircleGeometry = function ( radius, segments, thetaStart, thetaLength ) {
 		thetaLength: thetaLength
 	};
 
-	this.fromBufferGeometry( new THREE.CircleBufferGeometry( radius, segments, thetaStart, thetaLength ) );
+	this.fromBufferGeometry( new CircleBufferGeometry( radius, segments, thetaStart, thetaLength ) );
 
 };
 
-THREE.CircleGeometry.prototype = Object.create( THREE.Geometry.prototype );
-THREE.CircleGeometry.prototype.constructor = THREE.CircleGeometry;
+CircleGeometry.prototype = Object.create( Geometry.prototype );
+CircleGeometry.prototype.constructor = CircleGeometry;

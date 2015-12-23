@@ -2,9 +2,17 @@
  * @author Kaleb Murphy
  */
 
-THREE.RingGeometry = function ( innerRadius, outerRadius, thetaSegments, phiSegments, thetaStart, thetaLength ) {
+module.exports = RingGeometry;
 
-	THREE.Geometry.call( this );
+var Geometry = require('../../core/Geometry.js');
+var Face3 = require('../../core/Face3.js');
+var Sphere = require('../../math/Sphere.js');
+var Vector3 = require('../../math/Vector3.js');
+var Vector2 = require('../../math/Vector2.js');
+
+function RingGeometry( innerRadius, outerRadius, thetaSegments, phiSegments, thetaStart, thetaLength ) {
+
+	Geometry.call( this );
 
 	this.type = 'RingGeometry';
 
@@ -36,13 +44,13 @@ THREE.RingGeometry = function ( innerRadius, outerRadius, thetaSegments, phiSegm
 
 			// number of segments per circle
 
-			var vertex = new THREE.Vector3();
+			var vertex = new Vector3();
 			var segment = thetaStart + o / thetaSegments * thetaLength;
 			vertex.x = radius * Math.cos( segment );
 			vertex.y = radius * Math.sin( segment );
 
 			this.vertices.push( vertex );
-			uvs.push( new THREE.Vector2( ( vertex.x / outerRadius + 1 ) / 2, ( vertex.y / outerRadius + 1 ) / 2 ) );
+			uvs.push( new Vector2( ( vertex.x / outerRadius + 1 ) / 2, ( vertex.y / outerRadius + 1 ) / 2 ) );
 
 		}
 
@@ -50,7 +58,7 @@ THREE.RingGeometry = function ( innerRadius, outerRadius, thetaSegments, phiSegm
 
 	}
 
-	var n = new THREE.Vector3( 0, 0, 1 );
+	var n = new Vector3( 0, 0, 1 );
 
 	for ( i = 0; i < phiSegments; i ++ ) {
 
@@ -68,14 +76,14 @@ THREE.RingGeometry = function ( innerRadius, outerRadius, thetaSegments, phiSegm
 			var v2 = segment + thetaSegments + 1;
 			var v3 = segment + thetaSegments + 2;
 
-			this.faces.push( new THREE.Face3( v1, v2, v3, [ n.clone(), n.clone(), n.clone() ] ) );
+			this.faces.push( new Face3( v1, v2, v3, [ n.clone(), n.clone(), n.clone() ] ) );
 			this.faceVertexUvs[ 0 ].push( [ uvs[ v1 ].clone(), uvs[ v2 ].clone(), uvs[ v3 ].clone() ] );
 
 			v1 = segment;
 			v2 = segment + thetaSegments + 2;
 			v3 = segment + 1;
 
-			this.faces.push( new THREE.Face3( v1, v2, v3, [ n.clone(), n.clone(), n.clone() ] ) );
+			this.faces.push( new Face3( v1, v2, v3, [ n.clone(), n.clone(), n.clone() ] ) );
 			this.faceVertexUvs[ 0 ].push( [ uvs[ v1 ].clone(), uvs[ v2 ].clone(), uvs[ v3 ].clone() ] );
 
 		}
@@ -84,9 +92,9 @@ THREE.RingGeometry = function ( innerRadius, outerRadius, thetaSegments, phiSegm
 
 	this.computeFaceNormals();
 
-	this.boundingSphere = new THREE.Sphere( new THREE.Vector3(), radius );
+	this.boundingSphere = new Sphere( new Vector3(), radius );
 
 };
 
-THREE.RingGeometry.prototype = Object.create( THREE.Geometry.prototype );
-THREE.RingGeometry.prototype.constructor = THREE.RingGeometry;
+RingGeometry.prototype = Object.create( Geometry.prototype );
+RingGeometry.prototype.constructor = RingGeometry;

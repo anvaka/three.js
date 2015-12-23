@@ -5,12 +5,24 @@
  * @author WestLangley / http://github.com/WestLangley
  * @author elephantatwork / www.elephantatwork.ch
  */
+module.exports = Object3D;
 
-THREE.Object3D = function () {
+var THREEMath = require('../math/Math.js');
+var Vector3 = require('../math/Vector3.js');
+var Euler = require('../math/Euler.js');
+var Quaternion = require('../math/Quaternion.js');
+var Matrix4 = require('../math/Matrix4.js');
+var Matrix3 = require('../math/Matrix3.js');
+var Layers = require('./Layers.js');
+var EventDispatcher = require('./EventDispatcher.js');
 
-	Object.defineProperty( this, 'id', { value: THREE.Object3DIdCount ++ } );
+var Object3DIdCount = 0; // TODO: should this be exported?
 
-	this.uuid = THREE.Math.generateUUID();
+function Object3D() {
+
+	Object.defineProperty( this, 'id', { value: Object3DIdCount ++ } );
+
+	this.uuid = THREEMath.generateUUID();
 
 	this.name = '';
 	this.type = 'Object3D';
@@ -18,12 +30,12 @@ THREE.Object3D = function () {
 	this.parent = null;
 	this.children = [];
 
-	this.up = THREE.Object3D.DefaultUp.clone();
+	this.up = Object3D.DefaultUp.clone();
 
-	var position = new THREE.Vector3();
-	var rotation = new THREE.Euler();
-	var quaternion = new THREE.Quaternion();
-	var scale = new THREE.Vector3( 1, 1, 1 );
+	var position = new Vector3();
+	var rotation = new Euler();
+	var quaternion = new Quaternion();
+	var scale = new Vector3( 1, 1, 1 );
 
 	function onRotationChange() {
 
@@ -58,22 +70,22 @@ THREE.Object3D = function () {
 			value: scale
 		},
 		modelViewMatrix: {
-			value: new THREE.Matrix4()
+			value: new Matrix4()
 		},
 		normalMatrix: {
-			value: new THREE.Matrix3()
+			value: new Matrix3()
 		}
 	} );
 
 	this.rotationAutoUpdate = true;
 
-	this.matrix = new THREE.Matrix4();
-	this.matrixWorld = new THREE.Matrix4();
+	this.matrix = new Matrix4();
+	this.matrixWorld = new Matrix4();
 
-	this.matrixAutoUpdate = THREE.Object3D.DefaultMatrixAutoUpdate;
+	this.matrixAutoUpdate = Object3D.DefaultMatrixAutoUpdate;
 	this.matrixWorldNeedsUpdate = false;
 
-	this.layers = new THREE.Layers();
+	this.layers = new Layers();
 	this.visible = true;
 
 	this.castShadow = false;
@@ -86,12 +98,12 @@ THREE.Object3D = function () {
 
 };
 
-THREE.Object3D.DefaultUp = new THREE.Vector3( 0, 1, 0 );
-THREE.Object3D.DefaultMatrixAutoUpdate = true;
+Object3D.DefaultUp = new Vector3( 0, 1, 0 );
+Object3D.DefaultMatrixAutoUpdate = true;
 
-THREE.Object3D.prototype = {
+Object3D.prototype = {
 
-	constructor: THREE.Object3D,
+	constructor: Object3D,
 
 	applyMatrix: function ( matrix ) {
 
@@ -136,7 +148,7 @@ THREE.Object3D.prototype = {
 		// rotate object on axis in object space
 		// axis is assumed to be normalized
 
-		var q1 = new THREE.Quaternion();
+		var q1 = new Quaternion();
 
 		return function ( axis, angle ) {
 
@@ -152,7 +164,7 @@ THREE.Object3D.prototype = {
 
 	rotateX: function () {
 
-		var v1 = new THREE.Vector3( 1, 0, 0 );
+		var v1 = new Vector3( 1, 0, 0 );
 
 		return function ( angle ) {
 
@@ -164,7 +176,7 @@ THREE.Object3D.prototype = {
 
 	rotateY: function () {
 
-		var v1 = new THREE.Vector3( 0, 1, 0 );
+		var v1 = new Vector3( 0, 1, 0 );
 
 		return function ( angle ) {
 
@@ -176,7 +188,7 @@ THREE.Object3D.prototype = {
 
 	rotateZ: function () {
 
-		var v1 = new THREE.Vector3( 0, 0, 1 );
+		var v1 = new Vector3( 0, 0, 1 );
 
 		return function ( angle ) {
 
@@ -191,7 +203,7 @@ THREE.Object3D.prototype = {
 		// translate object by distance along axis in object space
 		// axis is assumed to be normalized
 
-		var v1 = new THREE.Vector3();
+		var v1 = new Vector3();
 
 		return function ( axis, distance ) {
 
@@ -207,7 +219,7 @@ THREE.Object3D.prototype = {
 
 	translateX: function () {
 
-		var v1 = new THREE.Vector3( 1, 0, 0 );
+		var v1 = new Vector3( 1, 0, 0 );
 
 		return function ( distance ) {
 
@@ -219,7 +231,7 @@ THREE.Object3D.prototype = {
 
 	translateY: function () {
 
-		var v1 = new THREE.Vector3( 0, 1, 0 );
+		var v1 = new Vector3( 0, 1, 0 );
 
 		return function ( distance ) {
 
@@ -231,7 +243,7 @@ THREE.Object3D.prototype = {
 
 	translateZ: function () {
 
-		var v1 = new THREE.Vector3( 0, 0, 1 );
+		var v1 = new Vector3( 0, 0, 1 );
 
 		return function ( distance ) {
 
@@ -249,7 +261,7 @@ THREE.Object3D.prototype = {
 
 	worldToLocal: function () {
 
-		var m1 = new THREE.Matrix4();
+		var m1 = new Matrix4();
 
 		return function ( vector ) {
 
@@ -263,7 +275,7 @@ THREE.Object3D.prototype = {
 
 		// This routine does not support objects with rotated and/or translated parent(s)
 
-		var m1 = new THREE.Matrix4();
+		var m1 = new Matrix4();
 
 		return function ( vector ) {
 
@@ -296,7 +308,7 @@ THREE.Object3D.prototype = {
 
 		}
 
-		if ( object instanceof THREE.Object3D ) {
+		if ( object instanceof Object3D ) {
 
 			if ( object.parent !== null ) {
 
@@ -380,7 +392,7 @@ THREE.Object3D.prototype = {
 
 	getWorldPosition: function ( optionalTarget ) {
 
-		var result = optionalTarget || new THREE.Vector3();
+		var result = optionalTarget || new Vector3();
 
 		this.updateMatrixWorld( true );
 
@@ -390,12 +402,12 @@ THREE.Object3D.prototype = {
 
 	getWorldQuaternion: function () {
 
-		var position = new THREE.Vector3();
-		var scale = new THREE.Vector3();
+		var position = new Vector3();
+		var scale = new Vector3();
 
 		return function ( optionalTarget ) {
 
-			var result = optionalTarget || new THREE.Quaternion();
+			var result = optionalTarget || new Quaternion();
 
 			this.updateMatrixWorld( true );
 
@@ -409,11 +421,11 @@ THREE.Object3D.prototype = {
 
 	getWorldRotation: function () {
 
-		var quaternion = new THREE.Quaternion();
+		var quaternion = new Quaternion();
 
 		return function ( optionalTarget ) {
 
-			var result = optionalTarget || new THREE.Euler();
+			var result = optionalTarget || new Euler();
 
 			this.getWorldQuaternion( quaternion );
 
@@ -425,12 +437,12 @@ THREE.Object3D.prototype = {
 
 	getWorldScale: function () {
 
-		var position = new THREE.Vector3();
-		var quaternion = new THREE.Quaternion();
+		var position = new Vector3();
+		var quaternion = new Quaternion();
 
 		return function ( optionalTarget ) {
 
-			var result = optionalTarget || new THREE.Vector3();
+			var result = optionalTarget || new Vector3();
 
 			this.updateMatrixWorld( true );
 
@@ -444,11 +456,11 @@ THREE.Object3D.prototype = {
 
 	getWorldDirection: function () {
 
-		var quaternion = new THREE.Quaternion();
+		var quaternion = new Quaternion();
 
 		return function ( optionalTarget ) {
 
-			var result = optionalTarget || new THREE.Vector3();
+			var result = optionalTarget || new Vector3();
 
 			this.getWorldQuaternion( quaternion );
 
@@ -716,6 +728,5 @@ THREE.Object3D.prototype = {
 
 };
 
-THREE.EventDispatcher.prototype.apply( THREE.Object3D.prototype );
+EventDispatcher.prototype.apply( Object3D.prototype );
 
-THREE.Object3DIdCount = 0;

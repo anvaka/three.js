@@ -5,14 +5,17 @@
  * @author mrdoob / http://mrdoob.com/
  * @author alteredq / http://alteredqualia.com/
  */
+module.exports = Spline;
 
-THREE.Spline = function ( points ) {
+var Vector3 = require('./Vector3.js');
+
+function Spline( points ) {
 
 	this.points = points;
 
 	var c = [], v3 = { x: 0, y: 0, z: 0 },
-	point, intPoint, weight, w2, w3,
-	pa, pb, pc, pd;
+		point, intPoint, weight, w2, w3,
+		pa, pb, pc, pd;
 
 	this.initFromArray = function ( a ) {
 
@@ -75,8 +78,8 @@ THREE.Spline = function ( points ) {
 
 		var i, index, nSamples, position,
 			point = 0, intPoint = 0, oldIntPoint = 0,
-			oldPosition = new THREE.Vector3(),
-			tmpVec = new THREE.Vector3(),
+			oldPosition = new Vector3(),
+			tmpVec = new Vector3(),
 			chunkLengths = [],
 			totalLength = 0;
 
@@ -128,7 +131,7 @@ THREE.Spline = function ( points ) {
 			realDistance,
 			sampling, position,
 			newpoints = [],
-			tmpVec = new THREE.Vector3(),
+			tmpVec = new Vector3(),
 			sl = this.getLength();
 
 		newpoints.push( tmpVec.copy( this.points[ 0 ] ).clone() );

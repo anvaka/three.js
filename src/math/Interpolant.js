@@ -19,8 +19,9 @@
  *
  * @author tschw
  */
+module.exports = Interpolant;
 
-THREE.Interpolant = function(
+function Interpolant(
 		parameterPositions, sampleValues, sampleSize, resultBuffer ) {
 
 	this.parameterPositions = parameterPositions;
@@ -33,9 +34,9 @@ THREE.Interpolant = function(
 
 };
 
-THREE.Interpolant.prototype = {
+Interpolant.prototype = {
 
-	constructor: THREE.Interpolant,
+	constructor: Interpolant,
 
 	evaluate: function( t ) {
 
@@ -246,12 +247,12 @@ THREE.Interpolant.prototype = {
 
 };
 
-Object.assign( THREE.Interpolant.prototype, {
+Object.assign( Interpolant.prototype, {
 
 	beforeStart_: //( 0, t, t0 ), returns this.resultBuffer
-		THREE.Interpolant.prototype.copySampleValue_,
+		Interpolant.prototype.copySampleValue_,
 
 	afterEnd_: //( N-1, tN-1, t ), returns this.resultBuffer
-		THREE.Interpolant.prototype.copySampleValue_
+		Interpolant.prototype.copySampleValue_
 
 } );

@@ -4,9 +4,16 @@
  * Abstract Base class to block based textures loader (dds, pvr, ...)
  */
 
-THREE.CompressedTextureLoader = function ( manager ) {
+module.exports = CompressedTextureLoader;
 
-	this.manager = ( manager !== undefined ) ? manager : THREE.DefaultLoadingManager;
+var DefaultLoadingManager = require('./LoadingManager.js').DefaultLoadingManager;
+var XHRLoader = require('./XHRLoader.js');
+var CompressedTexture = require('../textures/CompressedTexture.js');
+var Default = require('../defaults.js');
+
+function CompressedTextureLoader( manager ) {
+
+	this.manager = ( manager !== undefined ) ? manager : DefaultLoadingManager;
 
 	// override in sub classes
 	this._parser = null;
@@ -14,9 +21,9 @@ THREE.CompressedTextureLoader = function ( manager ) {
 };
 
 
-THREE.CompressedTextureLoader.prototype = {
+CompressedTextureLoader.prototype = {
 
-	constructor: THREE.CompressedTextureLoader,
+	constructor: CompressedTextureLoader,
 
 	load: function ( url, onLoad, onProgress, onError ) {
 
@@ -24,10 +31,10 @@ THREE.CompressedTextureLoader.prototype = {
 
 		var images = [];
 
-		var texture = new THREE.CompressedTexture();
+		var texture = new CompressedTexture();
 		texture.image = images;
 
-		var loader = new THREE.XHRLoader( this.manager );
+		var loader = new XHRLoader( this.manager );
 		loader.setPath( this.path );
 		loader.setResponseType( 'arraybuffer' );
 
@@ -49,7 +56,7 @@ THREE.CompressedTextureLoader.prototype = {
 				if ( loaded === 6 ) {
 
 					if ( texDatas.mipmapCount === 1 )
-						texture.minFilter = THREE.LinearFilter;
+						texture.minFilter = Default.LinearFilter;
 
 					texture.format = texDatas.format;
 					texture.needsUpdate = true;
@@ -109,7 +116,7 @@ THREE.CompressedTextureLoader.prototype = {
 
 				if ( texDatas.mipmapCount === 1 ) {
 
-					texture.minFilter = THREE.LinearFilter;
+					texture.minFilter = Default.LinearFilter;
 
 				}
 

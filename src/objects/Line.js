@@ -2,32 +2,46 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-THREE.Line = function ( geometry, material, mode ) {
+module.exports = Line;
+
+var Object3D = require('../core/Object3D.js');
+var Geometry = require('../core/Geometry.js');
+var BufferGeometry = require('../core/BufferGeometry.js');
+
+var LineBasicMaterial = require('../materials/LineBasicMaterial.js');
+
+var Vector3 = require('../math/Vector3.js');
+var Matrix4 = require('../math/Matrix4.js');
+var Sphere = require('../math/Sphere.js');
+var Ray = require('../math/Ray.js');
+
+function Line( geometry, material, mode ) {
 
 	if ( mode === 1 ) {
 
+		var LineSegments = require('./LineSegments.js');
 		console.warn( 'THREE.Line: parameter THREE.LinePieces no longer supported. Created THREE.LineSegments instead.' );
-		return new THREE.LineSegments( geometry, material );
+		return new LineSegments( geometry, material );
 
 	}
 
-	THREE.Object3D.call( this );
+	Object3D.call( this );
 
 	this.type = 'Line';
 
-	this.geometry = geometry !== undefined ? geometry : new THREE.Geometry();
-	this.material = material !== undefined ? material : new THREE.LineBasicMaterial( { color: Math.random() * 0xffffff } );
+	this.geometry = geometry !== undefined ? geometry : new Geometry();
+	this.material = material !== undefined ? material : new LineBasicMaterial( { color: Math.random() * 0xffffff } );
 
 };
 
-THREE.Line.prototype = Object.create( THREE.Object3D.prototype );
-THREE.Line.prototype.constructor = THREE.Line;
+Line.prototype = Object.create( Object3D.prototype );
+Line.prototype.constructor = Line;
 
-THREE.Line.prototype.raycast = ( function () {
+Line.prototype.raycast = ( function () {
 
-	var inverseMatrix = new THREE.Matrix4();
-	var ray = new THREE.Ray();
-	var sphere = new THREE.Sphere();
+	var inverseMatrix = new Matrix4();
+	var ray = new Ray();
+	var sphere = new Sphere();
 
 	return function raycast( raycaster, intersects ) {
 
@@ -51,13 +65,13 @@ THREE.Line.prototype.raycast = ( function () {
 		inverseMatrix.getInverse( matrixWorld );
 		ray.copy( raycaster.ray ).applyMatrix4( inverseMatrix );
 
-		var vStart = new THREE.Vector3();
-		var vEnd = new THREE.Vector3();
-		var interSegment = new THREE.Vector3();
-		var interRay = new THREE.Vector3();
-		var step = this instanceof THREE.LineSegments ? 2 : 1;
+		var vStart = new Vector3();
+		var vEnd = new Vector3();
+		var interSegment = new Vector3();
+		var interRay = new Vector3();
+		var step = this.type === 'LineSegments' ? 2 : 1;
 
-		if ( geometry instanceof THREE.BufferGeometry ) {
+		if ( geometry instanceof BufferGeometry ) {
 
 			var index = geometry.index;
 			var attributes = geometry.attributes;
@@ -134,7 +148,7 @@ THREE.Line.prototype.raycast = ( function () {
 
 			}
 
-		} else if ( geometry instanceof THREE.Geometry ) {
+		} else if ( geometry instanceof Geometry ) {
 
 			var vertices = geometry.vertices;
 			var nbVertices = vertices.length;
@@ -172,13 +186,13 @@ THREE.Line.prototype.raycast = ( function () {
 
 }() );
 
-THREE.Line.prototype.clone = function () {
+Line.prototype.clone = function () {
 
 	return new this.constructor( this.geometry, this.material ).copy( this );
 
 };
 
 // DEPRECATED
-
-THREE.LineStrip = 0;
-THREE.LinePieces = 1;
+// TODO: Should I enable this?
+// THREE.LineStrip = 0;
+// THREE.LinePieces = 1;

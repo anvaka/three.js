@@ -27,10 +27,17 @@
  *	fog: <bool>
  * }
  */
+module.exports = ShaderMaterial;
 
-THREE.ShaderMaterial = function ( parameters ) {
+var Material = require('./Material.js');
+var Default = require('../defaults.js');
+var Color = require('../math/Color.js');
 
-	THREE.Material.call( this );
+var UniformsUtils = require('../renderers/shaders/UniformsUtils.js');
+
+function ShaderMaterial( parameters ) {
+
+	Material.call( this );
 
 	this.type = 'ShaderMaterial';
 
@@ -40,7 +47,7 @@ THREE.ShaderMaterial = function ( parameters ) {
 	this.vertexShader = 'void main() {\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n}';
 	this.fragmentShader = 'void main() {\n\tgl_FragColor = vec4( 1.0, 0.0, 0.0, 1.0 );\n}';
 
-	this.shading = THREE.SmoothShading;
+	this.shading = Default.SmoothShading;
 
 	this.linewidth = 1;
 
@@ -51,7 +58,7 @@ THREE.ShaderMaterial = function ( parameters ) {
 
 	this.lights = false; // set to use scene lights
 
-	this.vertexColors = THREE.NoColors; // set to use "color" attribute stream
+	this.vertexColors = Default.NoColors; // set to use "color" attribute stream
 
 	this.skinning = false; // set to use skinning attribute streams
 
@@ -89,17 +96,17 @@ THREE.ShaderMaterial = function ( parameters ) {
 
 };
 
-THREE.ShaderMaterial.prototype = Object.create( THREE.Material.prototype );
-THREE.ShaderMaterial.prototype.constructor = THREE.ShaderMaterial;
+ShaderMaterial.prototype = Object.create( Material.prototype );
+ShaderMaterial.prototype.constructor = ShaderMaterial;
 
-THREE.ShaderMaterial.prototype.copy = function ( source ) {
+ShaderMaterial.prototype.copy = function ( source ) {
 
-	THREE.Material.prototype.copy.call( this, source );
+	Material.prototype.copy.call( this, source );
 
 	this.fragmentShader = source.fragmentShader;
 	this.vertexShader = source.vertexShader;
 
-	this.uniforms = THREE.UniformsUtils.clone( source.uniforms );
+	this.uniforms = UniformsUtils.clone( source.uniforms );
 
 	this.defines = source.defines;
 
@@ -125,9 +132,9 @@ THREE.ShaderMaterial.prototype.copy = function ( source ) {
 
 };
 
-THREE.ShaderMaterial.prototype.toJSON = function ( meta ) {
+ShaderMaterial.prototype.toJSON = function ( meta ) {
 
-	var data = THREE.Material.prototype.toJSON.call( this, meta );
+	var data = Material.prototype.toJSON.call( this, meta );
 
 	data.uniforms = this.uniforms;
 	data.vertexShader = this.vertexShader;

@@ -4,9 +4,17 @@
  * @author WestLangley / http://github.com/WestLangley
 */
 
-THREE.SpotLightHelper = function ( light ) {
+module.exports = SpotLightHelper;
 
-	THREE.Object3D.call( this );
+var CylinderGeometry = require('../geometries/CylinderGeometry.js');
+var Object3D = require('../../core/Object3D.js');
+var MeshBasicMaterial = require('../../materials/MeshBasicMaterial.js');
+var Mesh = require('../../objects/Mesh.js');
+var Vector3 = require('../../math/Vector3.js');
+
+function SpotLightHelper( light ) {
+
+	Object3D.call( this );
 
 	this.light = light;
 	this.light.updateMatrixWorld();
@@ -14,34 +22,34 @@ THREE.SpotLightHelper = function ( light ) {
 	this.matrix = light.matrixWorld;
 	this.matrixAutoUpdate = false;
 
-	var geometry = new THREE.CylinderGeometry( 0, 1, 1, 8, 1, true );
+	var geometry = new CylinderGeometry( 0, 1, 1, 8, 1, true );
 
 	geometry.translate( 0, - 0.5, 0 );
 	geometry.rotateX( - Math.PI / 2 );
 
-	var material = new THREE.MeshBasicMaterial( { wireframe: true, fog: false } );
+	var material = new MeshBasicMaterial( { wireframe: true, fog: false } );
 
-	this.cone = new THREE.Mesh( geometry, material );
+	this.cone = new Mesh( geometry, material );
 	this.add( this.cone );
 
 	this.update();
 
 };
 
-THREE.SpotLightHelper.prototype = Object.create( THREE.Object3D.prototype );
-THREE.SpotLightHelper.prototype.constructor = THREE.SpotLightHelper;
+SpotLightHelper.prototype = Object.create( Object3D.prototype );
+SpotLightHelper.prototype.constructor = SpotLightHelper;
 
-THREE.SpotLightHelper.prototype.dispose = function () {
+SpotLightHelper.prototype.dispose = function () {
 
 	this.cone.geometry.dispose();
 	this.cone.material.dispose();
 
 };
 
-THREE.SpotLightHelper.prototype.update = function () {
+SpotLightHelper.prototype.update = function () {
 
-	var vector = new THREE.Vector3();
-	var vector2 = new THREE.Vector3();
+	var vector = new Vector3();
+	var vector2 = new Vector3();
 
 	return function () {
 

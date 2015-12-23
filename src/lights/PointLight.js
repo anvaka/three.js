@@ -2,26 +2,31 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
+module.exports = PointLight;
 
-THREE.PointLight = function ( color, intensity, distance, decay ) {
+var Light = require('./Light.js');
+var LightShadow = require('./LightShadow.js');
+var PerspectiveCamera = require('../cameras/PerspectiveCamera.js');
 
-	THREE.Light.call( this, color, intensity );
+function PointLight( color, intensity, distance, decay ) {
+
+	Light.call( this, color, intensity );
 
 	this.type = 'PointLight';
 
 	this.distance = ( distance !== undefined ) ? distance : 0;
 	this.decay = ( decay !== undefined ) ? decay : 1;	// for physically correct lights, should be 2.
 
-	this.shadow = new THREE.LightShadow( new THREE.PerspectiveCamera( 90, 1, 0.5, 500 ) );
+	this.shadow = new LightShadow( new PerspectiveCamera( 90, 1, 0.5, 500 ) );
 
 };
 
-THREE.PointLight.prototype = Object.create( THREE.Light.prototype );
-THREE.PointLight.prototype.constructor = THREE.PointLight;
+PointLight.prototype = Object.create( Light.prototype );
+PointLight.prototype.constructor = PointLight;
 
-THREE.PointLight.prototype.copy = function ( source ) {
+PointLight.prototype.copy = function ( source ) {
 
-	THREE.Light.prototype.copy.call( this, source );
+	Light.prototype.copy.call( this, source );
 
 	this.distance = source.distance;
 	this.decay = source.decay;

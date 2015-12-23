@@ -3,9 +3,16 @@
  * based on http://papervision3d.googlecode.com/svn/trunk/as3/trunk/src/org/papervision3d/objects/primitives/Cube.as
  */
 
-THREE.BoxGeometry = function ( width, height, depth, widthSegments, heightSegments, depthSegments ) {
+module.exports = BoxGeometry;
 
-	THREE.Geometry.call( this );
+var Geometry = require('../../core/Geometry.js');
+var Face3 = require('../../core/Face3.js');
+var Vector3 = require('../../math/Vector3.js');
+var Vector2 = require('../../math/Vector2.js');
+
+function BoxGeometry( width, height, depth, widthSegments, heightSegments, depthSegments ) {
+
+	Geometry.call( this );
 
 	this.type = 'BoxGeometry';
 
@@ -38,11 +45,11 @@ THREE.BoxGeometry = function ( width, height, depth, widthSegments, heightSegmen
 	function buildPlane( u, v, udir, vdir, width, height, depth, materialIndex ) {
 
 		var w, ix, iy,
-		gridX = scope.widthSegments,
-		gridY = scope.heightSegments,
-		width_half = width / 2,
-		height_half = height / 2,
-		offset = scope.vertices.length;
+			gridX = scope.widthSegments,
+			gridY = scope.heightSegments,
+			width_half = width / 2,
+			height_half = height / 2,
+			offset = scope.vertices.length;
 
 		if ( ( u === 'x' && v === 'y' ) || ( u === 'y' && v === 'x' ) ) {
 
@@ -61,10 +68,10 @@ THREE.BoxGeometry = function ( width, height, depth, widthSegments, heightSegmen
 		}
 
 		var gridX1 = gridX + 1,
-		gridY1 = gridY + 1,
-		segment_width = width / gridX,
-		segment_height = height / gridY,
-		normal = new THREE.Vector3();
+			gridY1 = gridY + 1,
+			segment_width = width / gridX,
+			segment_height = height / gridY,
+			normal = new Vector3();
 
 		normal[ w ] = depth > 0 ? 1 : - 1;
 
@@ -72,7 +79,7 @@ THREE.BoxGeometry = function ( width, height, depth, widthSegments, heightSegmen
 
 			for ( ix = 0; ix < gridX1; ix ++ ) {
 
-				var vector = new THREE.Vector3();
+				var vector = new Vector3();
 				vector[ u ] = ( ix * segment_width - width_half ) * udir;
 				vector[ v ] = ( iy * segment_height - height_half ) * vdir;
 				vector[ w ] = depth;
@@ -92,12 +99,12 @@ THREE.BoxGeometry = function ( width, height, depth, widthSegments, heightSegmen
 				var c = ( ix + 1 ) + gridX1 * ( iy + 1 );
 				var d = ( ix + 1 ) + gridX1 * iy;
 
-				var uva = new THREE.Vector2( ix / gridX, 1 - iy / gridY );
-				var uvb = new THREE.Vector2( ix / gridX, 1 - ( iy + 1 ) / gridY );
-				var uvc = new THREE.Vector2( ( ix + 1 ) / gridX, 1 - ( iy + 1 ) / gridY );
-				var uvd = new THREE.Vector2( ( ix + 1 ) / gridX, 1 - iy / gridY );
+				var uva = new Vector2( ix / gridX, 1 - iy / gridY );
+				var uvb = new Vector2( ix / gridX, 1 - ( iy + 1 ) / gridY );
+				var uvc = new Vector2( ( ix + 1 ) / gridX, 1 - ( iy + 1 ) / gridY );
+				var uvd = new Vector2( ( ix + 1 ) / gridX, 1 - iy / gridY );
 
-				var face = new THREE.Face3( a + offset, b + offset, d + offset );
+				var face = new Face3( a + offset, b + offset, d + offset );
 				face.normal.copy( normal );
 				face.vertexNormals.push( normal.clone(), normal.clone(), normal.clone() );
 				face.materialIndex = materialIndex;
@@ -105,7 +112,7 @@ THREE.BoxGeometry = function ( width, height, depth, widthSegments, heightSegmen
 				scope.faces.push( face );
 				scope.faceVertexUvs[ 0 ].push( [ uva, uvb, uvd ] );
 
-				face = new THREE.Face3( b + offset, c + offset, d + offset );
+				face = new Face3( b + offset, c + offset, d + offset );
 				face.normal.copy( normal );
 				face.vertexNormals.push( normal.clone(), normal.clone(), normal.clone() );
 				face.materialIndex = materialIndex;
@@ -123,7 +130,7 @@ THREE.BoxGeometry = function ( width, height, depth, widthSegments, heightSegmen
 
 };
 
-THREE.BoxGeometry.prototype = Object.create( THREE.Geometry.prototype );
-THREE.BoxGeometry.prototype.constructor = THREE.BoxGeometry;
+BoxGeometry.prototype = Object.create( Geometry.prototype );
+BoxGeometry.prototype.constructor = BoxGeometry;
 
-THREE.CubeGeometry = THREE.BoxGeometry;
+BoxGeometry.CubeGeometry = BoxGeometry; // backwards compatibility

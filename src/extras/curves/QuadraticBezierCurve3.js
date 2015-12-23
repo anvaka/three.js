@@ -2,7 +2,11 @@
  *	Quadratic Bezier 3D curve
  **************************************************************/
 
-THREE.QuadraticBezierCurve3 = THREE.Curve.create(
+var ShapeUtils = require('../ShapeUtils.js');
+var Curve = require('../core/Curve.js');
+var Vector3 = require('../../math/Vector3.js');
+
+module.exports = Curve.create(
 
 	function ( v0, v1, v2 ) {
 
@@ -14,9 +18,9 @@ THREE.QuadraticBezierCurve3 = THREE.Curve.create(
 
 	function ( t ) {
 
-		var b2 = THREE.ShapeUtils.b2;		
+		var b2 = ShapeUtils.b2;		
 
-		return new THREE.Vector3(
+		return new Vector3(
 			b2( t, this.v0.x, this.v1.x, this.v2.x ),
 			b2( t, this.v0.y, this.v1.y, this.v2.y ),
 			b2( t, this.v0.z, this.v1.z, this.v2.z )

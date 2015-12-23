@@ -7,16 +7,19 @@
  * @author tschw
  */
 
-THREE.NumberKeyframeTrack = function ( name, times, values, interpolation ) {
+module.exports = NumberKeyframeTrack;
 
-	THREE.KeyframeTrack.call( this, name, times, values, interpolation );
+var KeyframeTrack = require('../KeyframeTrack.js');
+
+function NumberKeyframeTrack( name, times, values, interpolation ) {
+
+	KeyframeTrack.call( this, name, times, values, interpolation );
 
 };
 
-THREE.NumberKeyframeTrack.prototype =
-		Object.assign( Object.create( THREE.KeyframeTrack.prototype ), {
+NumberKeyframeTrack.prototype = Object.assign( Object.create( KeyframeTrack.prototype ), {
 
-	constructor: THREE.NumberKeyframeTrack,
+	constructor: NumberKeyframeTrack,
 
 	ValueTypeName: 'number',
 

@@ -3,7 +3,20 @@
  * @author alteredq / http://alteredqualia.com/
  */
 
-THREE.JSONLoader = function ( manager ) {
+module.exports = JSONLoader;
+
+var Loader = require('./Loader.js');
+var XHRLoader = require('./XHRLoader.js');
+var DefaultLoadingManager = require('./LoadingManager.js').DefaultLoadingManager;
+var Geometry = require('../core/Geometry.js');
+var Face3 = require('../core/Face3.js');
+var Vector4 = require('../math/Vector4.js');
+var Vector3 = require('../math/Vector3.js');
+var Vector2 = require('../math/Vector2.js');
+var Color = require('../math/Color.js');
+var AnimationClip = require('../animation/AnimationClip.js');
+
+function JSONLoader( manager ) {
 
 	if ( typeof manager === 'boolean' ) {
 
@@ -12,15 +25,15 @@ THREE.JSONLoader = function ( manager ) {
 
 	}
 
-	this.manager = ( manager !== undefined ) ? manager : THREE.DefaultLoadingManager;
+	this.manager = ( manager !== undefined ) ? manager : DefaultLoadingManager;
 
 	this.withCredentials = false;
 
 };
 
-THREE.JSONLoader.prototype = {
+JSONLoader.prototype = {
 
-	constructor: THREE.JSONLoader,
+	constructor: JSONLoader,
 
 	// Deprecated
 
@@ -41,9 +54,9 @@ THREE.JSONLoader.prototype = {
 
 		var scope = this;
 
-		var texturePath = this.texturePath && ( typeof this.texturePath === "string" ) ? this.texturePath : THREE.Loader.prototype.extractUrlBase( url );
+		var texturePath = this.texturePath && ( typeof this.texturePath === "string" ) ? this.texturePath : Loader.prototype.extractUrlBase( url );
 
-		var loader = new THREE.XHRLoader( this.manager );
+		var loader = new XHRLoader( this.manager );
 		loader.setWithCredentials( this.withCredentials );
 		loader.load( url, function ( text ) {
 
@@ -89,8 +102,8 @@ THREE.JSONLoader.prototype = {
 
 	parse: function ( json, texturePath ) {
 
-		var geometry = new THREE.Geometry(),
-		scale = ( json.scale !== undefined ) ? 1.0 / json.scale : 1.0;
+		var geometry = new Geometry(),
+			scale = ( json.scale !== undefined ) ? 1.0 / json.scale : 1.0;
 
 		parseModel( scale );
 
@@ -111,27 +124,27 @@ THREE.JSONLoader.prototype = {
 
 			var i, j, fi,
 
-			offset, zLength,
+				offset, zLength,
 
-		colorIndex, normalIndex, uvIndex, materialIndex,
+				colorIndex, normalIndex, uvIndex, materialIndex,
 
-			type,
-			isQuad,
-			hasMaterial,
-			hasFaceVertexUv,
-			hasFaceNormal, hasFaceVertexNormal,
-			hasFaceColor, hasFaceVertexColor,
+				type,
+				isQuad,
+				hasMaterial,
+				hasFaceVertexUv,
+				hasFaceNormal, hasFaceVertexNormal,
+				hasFaceColor, hasFaceVertexColor,
 
-		vertex, face, faceA, faceB, hex, normal,
+				vertex, face, faceA, faceB, hex, normal,
 
-			uvLayer, uv, u, v,
+				uvLayer, uv, u, v,
 
-			faces = json.faces,
-			vertices = json.vertices,
-			normals = json.normals,
-			colors = json.colors,
+				faces = json.faces,
+				vertices = json.vertices,
+				normals = json.normals,
+				colors = json.colors,
 
-			nUvLayers = 0;
+				nUvLayers = 0;
 
 			if ( json.uvs !== undefined ) {
 
@@ -156,7 +169,7 @@ THREE.JSONLoader.prototype = {
 
 			while ( offset < zLength ) {
 
-				vertex = new THREE.Vector3();
+				vertex = new Vector3();
 
 				vertex.x = vertices[ offset ++ ] * scale;
 				vertex.y = vertices[ offset ++ ] * scale;
@@ -186,12 +199,12 @@ THREE.JSONLoader.prototype = {
 
 				if ( isQuad ) {
 
-					faceA = new THREE.Face3();
+					faceA = new Face3();
 					faceA.a = faces[ offset ];
 					faceA.b = faces[ offset + 1 ];
 					faceA.c = faces[ offset + 3 ];
 
-					faceB = new THREE.Face3();
+					faceB = new Face3();
 					faceB.a = faces[ offset + 1 ];
 					faceB.b = faces[ offset + 2 ];
 					faceB.c = faces[ offset + 3 ];
@@ -226,7 +239,7 @@ THREE.JSONLoader.prototype = {
 								u = uvLayer[ uvIndex * 2 ];
 								v = uvLayer[ uvIndex * 2 + 1 ];
 
-								uv = new THREE.Vector2( u, v );
+								uv = new Vector2( u, v );
 
 								if ( j !== 2 ) geometry.faceVertexUvs[ i ][ fi ].push( uv );
 								if ( j !== 0 ) geometry.faceVertexUvs[ i ][ fi + 1 ].push( uv );
@@ -257,7 +270,7 @@ THREE.JSONLoader.prototype = {
 
 							normalIndex = faces[ offset ++ ] * 3;
 
-							normal = new THREE.Vector3(
+							normal = new Vector3(
 								normals[ normalIndex ++ ],
 								normals[ normalIndex ++ ],
 								normals[ normalIndex ]
@@ -290,8 +303,8 @@ THREE.JSONLoader.prototype = {
 							colorIndex = faces[ offset ++ ];
 							hex = colors[ colorIndex ];
 
-							if ( i !== 2 ) faceA.vertexColors.push( new THREE.Color( hex ) );
-							if ( i !== 0 ) faceB.vertexColors.push( new THREE.Color( hex ) );
+							if ( i !== 2 ) faceA.vertexColors.push( new Color( hex ) );
+							if ( i !== 0 ) faceB.vertexColors.push( new Color( hex ) );
 
 						}
 
@@ -302,7 +315,7 @@ THREE.JSONLoader.prototype = {
 
 				} else {
 
-					face = new THREE.Face3();
+					face = new Face3();
 					face.a = faces[ offset ++ ];
 					face.b = faces[ offset ++ ];
 					face.c = faces[ offset ++ ];
@@ -333,7 +346,7 @@ THREE.JSONLoader.prototype = {
 								u = uvLayer[ uvIndex * 2 ];
 								v = uvLayer[ uvIndex * 2 + 1 ];
 
-								uv = new THREE.Vector2( u, v );
+								uv = new Vector2( u, v );
 
 								geometry.faceVertexUvs[ i ][ fi ].push( uv );
 
@@ -361,7 +374,7 @@ THREE.JSONLoader.prototype = {
 
 							normalIndex = faces[ offset ++ ] * 3;
 
-							normal = new THREE.Vector3(
+							normal = new Vector3(
 								normals[ normalIndex ++ ],
 								normals[ normalIndex ++ ],
 								normals[ normalIndex ]
@@ -387,7 +400,7 @@ THREE.JSONLoader.prototype = {
 						for ( i = 0; i < 3; i ++ ) {
 
 							colorIndex = faces[ offset ++ ];
-							face.vertexColors.push( new THREE.Color( colors[ colorIndex ] ) );
+							face.vertexColors.push( new Color( colors[ colorIndex ] ) );
 
 						}
 
@@ -414,7 +427,7 @@ THREE.JSONLoader.prototype = {
 					var z = ( influencesPerVertex > 2 ) ? json.skinWeights[ i + 2 ] : 0;
 					var w = ( influencesPerVertex > 3 ) ? json.skinWeights[ i + 3 ] : 0;
 
-					geometry.skinWeights.push( new THREE.Vector4( x, y, z, w ) );
+					geometry.skinWeights.push( new Vector4( x, y, z, w ) );
 
 				}
 
@@ -429,7 +442,7 @@ THREE.JSONLoader.prototype = {
 					var c = ( influencesPerVertex > 2 ) ? json.skinIndices[ i + 2 ] : 0;
 					var d = ( influencesPerVertex > 3 ) ? json.skinIndices[ i + 3 ] : 0;
 
-					geometry.skinIndices.push( new THREE.Vector4( a, b, c, d ) );
+					geometry.skinIndices.push( new Vector4( a, b, c, d ) );
 
 				}
 
@@ -461,7 +474,7 @@ THREE.JSONLoader.prototype = {
 
 					for ( var v = 0, vl = srcVertices.length; v < vl; v += 3 ) {
 
-						var vertex = new THREE.Vector3();
+						var vertex = new Vector3();
 						vertex.x = srcVertices[ v ] * scale;
 						vertex.y = srcVertices[ v + 1 ] * scale;
 						vertex.z = srcVertices[ v + 2 ] * scale;
@@ -520,7 +533,7 @@ THREE.JSONLoader.prototype = {
 
 			for ( var i = 0; i < animations.length; i ++ ) {
 
-				var clip = THREE.AnimationClip.parseAnimation( animations[ i ], geometry.bones );
+				var clip = AnimationClip.parseAnimation( animations[ i ], geometry.bones );
 				if ( clip ) outputAnimations.push( clip );
 
 			}
@@ -529,7 +542,7 @@ THREE.JSONLoader.prototype = {
 			if ( geometry.morphTargets ) {
 
 				// TODO: Figure out what an appropraite FPS is for morph target animations -- defaulting to 10, but really it is completely arbitrary.
-				var morphAnimationClips = THREE.AnimationClip.CreateClipsFromMorphTargetSequences( geometry.morphTargets, 10 );
+				var morphAnimationClips = AnimationClip.CreateClipsFromMorphTargetSequences( geometry.morphTargets, 10 );
 				outputAnimations = outputAnimations.concat( morphAnimationClips );
 
 			}
@@ -544,7 +557,7 @@ THREE.JSONLoader.prototype = {
 
 		} else {
 
-			var materials = THREE.Loader.prototype.initMaterials( json.materials, texturePath, this.crossOrigin );
+			var materials = Loader.prototype.initMaterials( json.materials, texturePath, this.crossOrigin );
 
 			return { geometry: geometry, materials: materials };
 

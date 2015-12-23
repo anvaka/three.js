@@ -2,23 +2,27 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-THREE.LightShadow = function ( camera ) {
+module.exports = LightShadow;
+
+var Vector2 = require('../math/Vector2.js');
+
+function LightShadow( camera ) {
 
 	this.camera = camera;
 
 	this.bias = 0;
 	this.darkness = 1;
 
-	this.mapSize = new THREE.Vector2( 512, 512 );
+	this.mapSize = new Vector2( 512, 512 );
 
 	this.map = null;
 	this.matrix = null;
 
 };
 
-THREE.LightShadow.prototype = {
+LightShadow.prototype = {
 
-	constructor: THREE.LightShadow,
+	constructor: LightShadow,
 
 	copy: function ( source ) {
 

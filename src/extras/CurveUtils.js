@@ -2,7 +2,7 @@
  * @author zz85 / http://www.lab4games.net/zz85/blog
  */
 
-THREE.CurveUtils = {
+module.exports = {
 
 	tangentQuadraticBezier: function ( t, p0, p1, p2 ) {
 
