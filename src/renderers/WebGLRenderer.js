@@ -100,7 +100,7 @@ function WebGLRenderer( parameters ) {
 		_clearColor = new Color( 0x000000 ),
 		_clearAlpha = 0,
 
-		pixelRatio = 1;
+		_pixelRatio = 1;
 
 	var lights = [];
 
@@ -152,7 +152,6 @@ function WebGLRenderer( parameters ) {
 
 	// internal state cache
 
-<<<<<<< 6dec4014393a94b223c2b66046536c0b702d2bd8
 	_currentProgram = null,
 	_currentRenderTarget = null,
 	_currentFramebuffer = null,
@@ -160,25 +159,14 @@ function WebGLRenderer( parameters ) {
 	_currentGeometryProgram = '',
 	_currentCamera = null,
 
-	_currentScissor = new THREE.Vector4(),
+	_currentScissor = new Vector4(),
 	_currentScissorTest = null,
 
-	_currentViewport = new THREE.Vector4(),
+	_currentViewport = new Vector4(),
 
 	//
 
 	_usedTextureUnits = 0,
-=======
-		_currentViewport = null,
-		_currentProgram = null,
-		_currentRenderTarget = null,
-		_currentFramebuffer = null,
-		_currentMaterialId = - 1,
-		_currentGeometryProgram = '',
-		_currentCamera = null,
-
-		_usedTextureUnits = 0,
->>>>>>> Moved math modules to commonjs
 
 		_scissor = new Vector4( 0, 0, _canvas.width, _canvas.height ),
 		_scissorTest = false,
@@ -3480,13 +3468,8 @@ function WebGLRenderer( parameters ) {
 
 		}
 
-<<<<<<< 6dec4014393a94b223c2b66046536c0b702d2bd8
-		var isCube = ( renderTarget instanceof THREE.WebGLRenderTargetCube );
-		var framebuffer;
-=======
 		var isCube = ( renderTarget instanceof WebGLRenderTargetCube );
-		var framebuffer, scissor, scissorTest, viewport;
->>>>>>> Moved math modules to commonjs
+		var framebuffer;
 
 		if ( renderTarget ) {
 
