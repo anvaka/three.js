@@ -2,22 +2,28 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-THREE.FontLoader = function ( manager ) {
+module.exports = FontLoader;
 
-	this.manager = ( manager !== undefined ) ? manager : THREE.DefaultLoadingManager;
+var DefaultLoadingManager = require('./LoadingManager.js').DefaultLoadingManager;
+var XHRLoader = require('./XHRLoader.js');
+var Font = require('../extras/core/Font.js');
+
+function FontLoader( manager ) {
+
+	this.manager = ( manager !== undefined ) ? manager : DefaultLoadingManager;
 
 };
 
-THREE.FontLoader.prototype = {
+FontLoader.prototype = {
 
-	constructor: THREE.FontLoader,
+	constructor: FontLoader,
 
 	load: function ( url, onLoad, onProgress, onError ) {
 
-		var loader = new THREE.XHRLoader( this.manager );
+		var loader = new XHRLoader( this.manager );
 		loader.load( url, function ( text ) {
 
-			onLoad( new THREE.Font( JSON.parse( text.substring( 65, text.length - 2 ) ) ) );
+			onLoad( new Font( JSON.parse( text.substring( 65, text.length - 2 ) ) ) );
 
 		}, onProgress, onError );
 

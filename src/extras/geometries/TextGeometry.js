@@ -17,16 +17,22 @@
  * }
  */
 
-THREE.TextGeometry = function ( text, parameters ) {
+module.exports = TextGeometry;
+
+var Font = require('../core/Font.js');
+var Geometry = require('../../core/Geometry.js');
+var ExtrudeGeometry = require('../geometries/ExtrudeGeometry.js');
+
+function TextGeometry( text, parameters ) {
 
 	parameters = parameters || {};
 
 	var font = parameters.font;
 
-	if ( font instanceof THREE.Font === false ) {
+	if ( font instanceof Font === false ) {
 
 		console.error( 'THREE.TextGeometry: font parameter is not an instance of THREE.Font.' );
-		return new THREE.Geometry();
+		return new Geometry();
 
 	}
 
@@ -42,11 +48,11 @@ THREE.TextGeometry = function ( text, parameters ) {
 	if ( parameters.bevelSize === undefined ) parameters.bevelSize = 8;
 	if ( parameters.bevelEnabled === undefined ) parameters.bevelEnabled = false;
 
-	THREE.ExtrudeGeometry.call( this, shapes, parameters );
+	ExtrudeGeometry.call( this, shapes, parameters );
 
 	this.type = 'TextGeometry';
 
 };
 
-THREE.TextGeometry.prototype = Object.create( THREE.ExtrudeGeometry.prototype );
-THREE.TextGeometry.prototype.constructor = THREE.TextGeometry;
+TextGeometry.prototype = Object.create( ExtrudeGeometry.prototype );
+TextGeometry.prototype.constructor = TextGeometry;

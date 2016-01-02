@@ -209,6 +209,7 @@ THREE.VideoTexture = require('./textures/VideoTexture.js');
 THREE.CurveUtils = require('./extras/CurveUtils.js');
 THREE.SceneUtils = require('./extras/SceneUtils.js');
 THREE.ShapeUtils = require('./extras/ShapeUtils.js');
+THREE.Font = require('./extras/core/Font.js');
 
 // extras - core
 
@@ -253,6 +254,7 @@ THREE.ShapeGeometry = require('./extras/geometries/ShapeGeometry.js');
 THREE.SphereBufferGeometry = require('./extras/geometries/SphereBufferGeometry.js');
 THREE.SphereGeometry = require('./extras/geometries/SphereGeometry.js');
 THREE.TetrahedronGeometry = require('./extras/geometries/TetrahedronGeometry.js');
+THREE.TextGeometry = require('./extras/geometries/TextGeometry.js');
 THREE.TorusGeometry = require('./extras/geometries/TorusGeometry.js');
 THREE.TorusKnotGeometry = require('./extras/geometries/TorusKnotGeometry.js');
 THREE.TubeGeometry = require('./extras/geometries/TubeGeometry.js');

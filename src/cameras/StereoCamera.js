@@ -9,7 +9,7 @@ var Matrix4 = require('../math/Matrix4.js');
 var THREEMath = require('../math/Math.js');
 var Object3D = require('../core/Object3D.js');
 
-StereoCamera = function () {
+function StereoCamera() {
 
 	this.type = 'StereoCamera';
 
