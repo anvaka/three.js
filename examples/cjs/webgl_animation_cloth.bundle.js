@@ -775,6 +775,7 @@ function PerspectiveCamera( fov, aspect, near, far ) {
 
 	this.type = 'PerspectiveCamera';
 
+	this.focalLength = 100;
 	this.zoom = 1;
 
 	this.fov = fov !== undefined ? fov : 50;
@@ -891,12 +892,13 @@ PerspectiveCamera.prototype.copy = function ( source ) {
 
 	Camera.prototype.copy.call( this, source );
 
+	this.focalLength = source.focalLength;
+	this.zoom = source.zoom;
+
 	this.fov = source.fov;
 	this.aspect = source.aspect;
 	this.near = source.near;
 	this.far = source.far;
-
-	this.zoom = source.zoom;
 
 	return this;
 
@@ -906,7 +908,9 @@ PerspectiveCamera.prototype.toJSON = function ( meta ) {
 
 	var data = Object3D.prototype.toJSON.call( this, meta );
 
+	data.object.focalLength = this.focalLength;
 	data.object.zoom = this.zoom;
+
 	data.object.fov = this.fov;
 	data.object.aspect = this.aspect;
 	data.object.near = this.near;
@@ -5151,6 +5155,9 @@ EventDispatcher.prototype.apply( Object3D.prototype );
 module.exports = {
 	REVISION: '74dev-commonjs',
 
+// https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent.button
+	MOUSE: { LEFT: 0, MIDDLE: 1, RIGHT: 2 },
+
 // GL STATE CONSTANTS
 
 	CullFaceNone: 0,
@@ -6417,7 +6424,7 @@ TextureLoader.prototype = {
 
 };
 
-},{"../textures/Texture.js":101,"./ImageLoader.js":33,"./LoadingManager.js":34}],36:[function(require,module,exports){
+},{"../textures/Texture.js":102,"./ImageLoader.js":33,"./LoadingManager.js":34}],36:[function(require,module,exports){
 /**
  * @author mrdoob / http://mrdoob.com/
  * @author alteredq / http://alteredqualia.com/
@@ -6877,7 +6884,7 @@ Material.prototype = {
 
 EventDispatcher.prototype.apply( Material.prototype );
 
-},{"../core/EventDispatcher.js":8,"../defaults.js":18,"../math/Color.js":51,"../math/Math.js":54,"../math/Vector3.js":63,"../textures/Texture.js":101}],39:[function(require,module,exports){
+},{"../core/EventDispatcher.js":8,"../defaults.js":18,"../math/Color.js":51,"../math/Math.js":54,"../math/Vector3.js":63,"../textures/Texture.js":102}],39:[function(require,module,exports){
 /**
  * @author mrdoob / http://mrdoob.com/
  * @author alteredq / http://alteredqualia.com/
@@ -8930,9 +8937,6 @@ function createColroKeywords() {
 module.exports = Euler;
 
 var THREEMath = require('./Math.js');
-var Quaternion = require('./Quaternion.js');
-var Vector3 = require('./Vector3.js');
-var Matrix4 = require('./Matrix4.js');
 
 function Euler( x, y, z, order ) {
 
@@ -9161,6 +9165,7 @@ Euler.prototype = {
 	setFromQuaternion: function () {
 
 		var matrix;
+		var Matrix4 = require('./Matrix4.js');
 
 		return function ( q, order, update ) {
 
@@ -9184,6 +9189,7 @@ Euler.prototype = {
 
 		// WARNING: this discards revolution information -bhouston
 
+		var Quaternion = require('./Quaternion.js');
 		var q = new Quaternion();
 
 		return function ( newOrder ) {
@@ -9236,6 +9242,7 @@ Euler.prototype = {
 
 		} else {
 
+			var Vector3 = require('./Vector3.js');
 			return new Vector3( this._x, this._y, this._z );
 
 		}
@@ -9919,7 +9926,6 @@ Matrix3.prototype = {
 module.exports = Matrix4;
 
 var Vector3 = require('./Vector3.js');
-var Euler = require('./Euler.js');
 var THREEMath = require('./Math.js');
 
 function Matrix4() {
@@ -10060,7 +10066,7 @@ Matrix4.prototype = {
 
 	makeRotationFromEuler: function ( euler ) {
 
-		if ( euler instanceof Euler === false ) {
+		if ( !euler || euler.order === undefined ) {
 
 			console.error( 'THREE.Matrix: .makeRotationFromEuler() now expects a Euler rotation rather than a Vector3 and order.' );
 
@@ -10865,7 +10871,7 @@ Matrix4.prototype = {
 
 };
 
-},{"./Euler.js":52,"./Math.js":54,"./Vector3.js":63}],57:[function(require,module,exports){
+},{"./Math.js":54,"./Vector3.js":63}],57:[function(require,module,exports){
 /**
  * @author bhouston / http://clara.io
  */
@@ -11111,10 +11117,6 @@ Plane.prototype = {
  * @author WestLangley / http://github.com/WestLangley
  * @author bhouston / http://clara.io
  */
-module.exports = Quaternion;
-
-var Vector3 = require('./Vector3.js');
-var Euler = require('./Euler.js');
 
 function Quaternion ( x, y, z, w ) {
 
@@ -11215,7 +11217,8 @@ Quaternion.prototype = {
 
 	setFromEuler: function ( euler, update ) {
 
-		if ( euler instanceof Euler === false ) {
+		// if ( euler instanceof Euler === false ) {
+		if ( !euler || euler.order === undefined) {
 
 			throw new Error( 'THREE.Quaternion: .setFromEuler() now expects a Euler rotation rather than a Vector3 and order.' );
 
@@ -11374,7 +11377,10 @@ Quaternion.prototype = {
 
 		return function ( vFrom, vTo ) {
 
-			if ( v1 === undefined ) v1 = new Vector3();
+			if ( v1 === undefined ) {
+				v1 = new Vector3();
+				var Vector3 = require('./Vector3.js');
+			}
 
 			r = vFrom.dot( vTo ) + 1;
 
@@ -11693,7 +11699,9 @@ Object.assign( Quaternion, {
 
 } );
 
-},{"./Euler.js":52,"./Vector3.js":63}],59:[function(require,module,exports){
+module.exports = Quaternion;
+
+},{"./Vector3.js":63}],59:[function(require,module,exports){
 /**
  * @author bhouston / http://clara.io
  */
@@ -13086,9 +13094,6 @@ Vector2.prototype = {
 module.exports = Vector3;
 
 var THREEMath = require('./Math.js');
-var Euler = require('./Euler.js');
-var Quaternion = require('./Quaternion.js');
-var Matrix4 = require('./Matrix4.js');
 
 function Vector3( x, y, z ) {
 
@@ -13321,6 +13326,8 @@ Vector3.prototype = {
 
 	applyEuler: function () {
 
+		var Euler = require('./Euler.js');
+		var Quaternion = require('./Quaternion.js');
 		var quaternion;
 
 		return function applyEuler( euler ) {
@@ -13343,6 +13350,7 @@ Vector3.prototype = {
 
 	applyAxisAngle: function () {
 
+		var Quaternion = require('./Quaternion.js');
 		var quaternion;
 
 		return function applyAxisAngle( axis, angle ) {
@@ -13436,6 +13444,7 @@ Vector3.prototype = {
 
 	project: function () {
 
+		var Matrix4 = require('./Matrix4.js');
 		var matrix;
 
 		return function project( camera ) {
@@ -13455,6 +13464,7 @@ Vector3.prototype = {
 
 		return function unproject( camera ) {
 
+			var Matrix4 = require('./Matrix4.js');
 			if ( matrix === undefined ) matrix = new Matrix4();
 
 			matrix.multiplyMatrices( camera.matrixWorld, matrix.getInverse( camera.projectionMatrix ) );
@@ -15545,7 +15555,7 @@ Skeleton.prototype.clone = function () {
 
 };
 
-},{"../defaults.js":18,"../math/Math.js":54,"../math/Matrix4.js":56,"../textures/DataTexture.js":100}],72:[function(require,module,exports){
+},{"../defaults.js":18,"../math/Math.js":54,"../math/Matrix4.js":56,"../textures/DataTexture.js":101}],72:[function(require,module,exports){
 /**
  * @author mikael emtinger / http://gomo.se/
  * @author alteredq / http://alteredqualia.com/
@@ -15915,7 +15925,7 @@ WebGLRenderTarget.prototype = {
 
 EventDispatcher.prototype.apply( WebGLRenderTarget.prototype );
 
-},{"../core/EventDispatcher.js":8,"../defaults.js":18,"../math/Math.js":54,"../math/Vector4.js":64,"../textures/Texture.js":101}],75:[function(require,module,exports){
+},{"../core/EventDispatcher.js":8,"../defaults.js":18,"../math/Math.js":54,"../math/Vector4.js":64,"../textures/Texture.js":102}],75:[function(require,module,exports){
 /**
  * @author alteredq / http://alteredqualia.com
  */
@@ -16014,7 +16024,7 @@ var DirectionalLight = require('../lights/DirectionalLight.js');
 
 var CubeTexture = require('../textures/CubeTexture.js');
 var DataTexture = require('../textures/DataTexture.js');
-var CompressedTexture = require('../textures/CubeTexture.js');
+var CompressedTexture = require('../textures/CompressedTexture.js');
 
 function WebGLRenderer( parameters ) {
 
@@ -16024,11 +16034,9 @@ function WebGLRenderer( parameters ) {
 
 	var _canvas = parameters.canvas !== undefined ? parameters.canvas : document.createElement( 'canvas' ),
 		_context = parameters.context !== undefined ? parameters.context : null,
-
 		_width = _canvas.width,
 		_height = _canvas.height,
 
-		pixelRatio = 1,
 
 		_alpha = parameters.alpha !== undefined ? parameters.alpha : false,
 		_depth = parameters.depth !== undefined ? parameters.depth : true,
@@ -16038,7 +16046,9 @@ function WebGLRenderer( parameters ) {
 		_preserveDrawingBuffer = parameters.preserveDrawingBuffer !== undefined ? parameters.preserveDrawingBuffer : false,
 
 		_clearColor = new Color( 0x000000 ),
-		_clearAlpha = 0;
+		_clearAlpha = 0,
+
+		_pixelRatio = 1;
 
 	var lights = [];
 
@@ -16090,15 +16100,21 @@ function WebGLRenderer( parameters ) {
 
 	// internal state cache
 
-		_currentViewport = null,
-		_currentProgram = null,
-		_currentRenderTarget = null,
-		_currentFramebuffer = null,
-		_currentMaterialId = - 1,
-		_currentGeometryProgram = '',
-		_currentCamera = null,
+	_currentProgram = null,
+	_currentRenderTarget = null,
+	_currentFramebuffer = null,
+	_currentMaterialId = - 1,
+	_currentGeometryProgram = '',
+	_currentCamera = null,
 
-		_usedTextureUnits = 0,
+	_currentScissor = new Vector4(),
+	_currentScissorTest = null,
+
+	_currentViewport = new Vector4(),
+
+	//
+
+	_usedTextureUnits = 0,
 
 		_scissor = new Vector4( 0, 0, _canvas.width, _canvas.height ),
 		_scissorTest = false,
@@ -16230,7 +16246,7 @@ function WebGLRenderer( parameters ) {
 
 	function getTargetPixelRatio() {
 
-		return _currentRenderTarget === null ? pixelRatio : 1;
+		return _currentRenderTarget === null ? _pixelRatio : 1;
 
 	}
 
@@ -16250,8 +16266,8 @@ function WebGLRenderer( parameters ) {
 
 		state.init();
 
-		state.scissor( _scissor );
-		state.viewport( _viewport );
+		state.scissor( _currentScissor.copy( _scissor ).multiplyScalar( _pixelRatio ) );
+		state.viewport( _currentViewport.copy( _viewport ).multiplyScalar( _pixelRatio ) );
 
 		glClearColor( _clearColor.r, _clearColor.g, _clearColor.b, _clearAlpha );
 
@@ -16343,32 +16359,33 @@ function WebGLRenderer( parameters ) {
 
 	this.getPixelRatio = function () {
 
-		return pixelRatio;
+		return _pixelRatio;
 
 	};
 
 	this.setPixelRatio = function ( value ) {
 
-		if ( value !== undefined ) pixelRatio = value;
+		if ( value === undefined ) return;
+
+		_pixelRatio = value;
+
+		this.setSize( _viewport.z, _viewport.w, false );
 
 	};
 
 	this.getSize = function () {
 
 		return {
-			width: _width,
-			height: _height
+			width: _canvas.width / _pixelRatio,
+			height: _canvas.height / _pixelRatio
 		};
 
 	};
 
 	this.setSize = function ( width, height, updateStyle ) {
 
-		_width = width;
-		_height = height;
-
-		_canvas.width = width * pixelRatio;
-		_canvas.height = height * pixelRatio;
+		_canvas.width = width * _pixelRatio;
+		_canvas.height = height * _pixelRatio;
 
 		if ( updateStyle !== false ) {
 
@@ -16383,25 +16400,19 @@ function WebGLRenderer( parameters ) {
 
 	this.setViewport = function ( x, y, width, height ) {
 
-		_viewport.set( x, y, width, height ).multiplyScalar( pixelRatio );
-
-		state.viewport( _viewport );
+		_viewport.set( x, y, width, height );
 
 	};
 
 	this.setScissor = function ( x, y, width, height ) {
 
-		_scissor.set( x, y, width, height ).multiplyScalar( pixelRatio );
-
-		state.scissor( _scissor );
+		_scissor.set( x, y, width, height );
 
 	};
 
 	this.setScissorTest = function ( boolean ) {
 
 		_scissorTest = boolean;
-
-		state.setScissorTest( boolean );
 
 	};
 
@@ -19406,7 +19417,7 @@ function WebGLRenderer( parameters ) {
 		}
 
 		var isCube = ( renderTarget instanceof WebGLRenderTargetCube );
-		var framebuffer, scissor, scissorTest, viewport;
+		var framebuffer;
 
 		if ( renderTarget ) {
 
@@ -19422,19 +19433,19 @@ function WebGLRenderer( parameters ) {
 
 			}
 
-			scissor = renderTarget.scissor;
-			scissorTest = renderTarget.scissorTest;
+			_currentScissor.copy( renderTarget.scissor );
+			_currentScissorTest = renderTarget.scissorTest;
 
-			viewport = renderTarget.viewport;
+			_currentViewport.copy( renderTarget.viewport );
 
 		} else {
 
 			framebuffer = null;
 
-			scissor = _scissor;
-			scissorTest = _scissorTest;
+			_currentScissor.copy( _scissor ).multiplyScalar( _pixelRatio );
+			_currentScissorTest = _scissorTest;
 
-			viewport = _viewport;
+			_currentViewport.copy( _viewport ).multiplyScalar( _pixelRatio );
 
 		}
 
@@ -19446,10 +19457,10 @@ function WebGLRenderer( parameters ) {
 
 		}
 
-		state.scissor( scissor );
-		state.setScissorTest( scissorTest );
+		state.scissor( _currentScissor );
+		state.setScissorTest( _currentScissorTest );
 
-		state.viewport( viewport );
+		state.viewport( _currentViewport );
 
 		if ( isCube ) {
 
@@ -19457,8 +19468,6 @@ function WebGLRenderer( parameters ) {
 			_gl.framebufferTexture2D( _gl.FRAMEBUFFER, _gl.COLOR_ATTACHMENT0, _gl.TEXTURE_CUBE_MAP_POSITIVE_X + renderTarget.activeCubeFace, textureProperties.__webglTexture, 0 );
 
 		}
-
-		_currentViewport = viewport;
 
 	};
 
@@ -19654,7 +19663,7 @@ function WebGLRenderer( parameters ) {
 
 };
 
-},{"../cameras/Camera.js":2,"../core/BufferGeometry.js":6,"../core/InstancedBufferAttribute.js":11,"../core/InstancedBufferGeometry.js":12,"../core/InstancedInterleavedBuffer.js":13,"../core/InterleavedBufferAttribute.js":15,"../defaults.js":18,"../extras/objects/ImmediateRenderObject.js":24,"../lights/AmbientLight.js":25,"../lights/DirectionalLight.js":26,"../lights/HemisphereLight.js":27,"../lights/Light.js":28,"../lights/PointLight.js":30,"../lights/SpotLight.js":31,"../materials/LineBasicMaterial.js":36,"../materials/LineDashedMaterial.js":37,"../materials/MeshBasicMaterial.js":39,"../materials/MeshDepthMaterial.js":40,"../materials/MeshLambertMaterial.js":41,"../materials/MeshNormalMaterial.js":42,"../materials/MeshPhongMaterial.js":43,"../materials/MeshStandardMaterial.js":44,"../materials/MultiMaterial.js":45,"../materials/PointsMaterial.js":46,"../materials/ShaderMaterial.js":48,"../math/Color.js":51,"../math/Frustum.js":53,"../math/Math.js":54,"../math/Matrix4.js":56,"../math/Vector3.js":63,"../math/Vector4.js":64,"../objects/LensFlare.js":66,"../objects/Line.js":67,"../objects/LineSegments.js":68,"../objects/Mesh.js":69,"../objects/Points.js":70,"../objects/SkinnedMesh.js":72,"../objects/Sprite.js":73,"../scenes/Fog.js":96,"../scenes/FogExp2.js":97,"../textures/CubeTexture.js":99,"../textures/DataTexture.js":100,"./WebGLRenderTarget.js":74,"./WebGLRenderTargetCube.js":75,"./shaders/ShaderLib.js":78,"./shaders/UniformsUtils.js":80,"./webgl/WebGLBufferRenderer.js":81,"./webgl/WebGLCapabilities.js":82,"./webgl/WebGLExtensions.js":83,"./webgl/WebGLIndexedBufferRenderer.js":85,"./webgl/WebGLLights.js":86,"./webgl/WebGLObjects.js":87,"./webgl/WebGLPrograms.js":89,"./webgl/WebGLProperties.js":90,"./webgl/WebGLShadowMap.js":92,"./webgl/WebGLState.js":93,"./webgl/plugins/LensFlarePlugin.js":94,"./webgl/plugins/SpritePlugin.js":95}],77:[function(require,module,exports){
+},{"../cameras/Camera.js":2,"../core/BufferGeometry.js":6,"../core/InstancedBufferAttribute.js":11,"../core/InstancedBufferGeometry.js":12,"../core/InstancedInterleavedBuffer.js":13,"../core/InterleavedBufferAttribute.js":15,"../defaults.js":18,"../extras/objects/ImmediateRenderObject.js":24,"../lights/AmbientLight.js":25,"../lights/DirectionalLight.js":26,"../lights/HemisphereLight.js":27,"../lights/Light.js":28,"../lights/PointLight.js":30,"../lights/SpotLight.js":31,"../materials/LineBasicMaterial.js":36,"../materials/LineDashedMaterial.js":37,"../materials/MeshBasicMaterial.js":39,"../materials/MeshDepthMaterial.js":40,"../materials/MeshLambertMaterial.js":41,"../materials/MeshNormalMaterial.js":42,"../materials/MeshPhongMaterial.js":43,"../materials/MeshStandardMaterial.js":44,"../materials/MultiMaterial.js":45,"../materials/PointsMaterial.js":46,"../materials/ShaderMaterial.js":48,"../math/Color.js":51,"../math/Frustum.js":53,"../math/Math.js":54,"../math/Matrix4.js":56,"../math/Vector3.js":63,"../math/Vector4.js":64,"../objects/LensFlare.js":66,"../objects/Line.js":67,"../objects/LineSegments.js":68,"../objects/Mesh.js":69,"../objects/Points.js":70,"../objects/SkinnedMesh.js":72,"../objects/Sprite.js":73,"../scenes/Fog.js":96,"../scenes/FogExp2.js":97,"../textures/CompressedTexture.js":99,"../textures/CubeTexture.js":100,"../textures/DataTexture.js":101,"./WebGLRenderTarget.js":74,"./WebGLRenderTargetCube.js":75,"./shaders/ShaderLib.js":78,"./shaders/UniformsUtils.js":80,"./webgl/WebGLBufferRenderer.js":81,"./webgl/WebGLCapabilities.js":82,"./webgl/WebGLExtensions.js":83,"./webgl/WebGLIndexedBufferRenderer.js":85,"./webgl/WebGLLights.js":86,"./webgl/WebGLObjects.js":87,"./webgl/WebGLPrograms.js":89,"./webgl/WebGLProperties.js":90,"./webgl/WebGLShadowMap.js":92,"./webgl/WebGLState.js":93,"./webgl/plugins/LensFlarePlugin.js":94,"./webgl/plugins/SpritePlugin.js":95}],77:[function(require,module,exports){
 // TODO: glslify all shaders from the ShaderChunk folder
 
 
@@ -21097,7 +21106,7 @@ module.exports = {
 
 };
 
-},{"../../math/Color.js":51,"../../math/Matrix3.js":55,"../../math/Matrix4.js":56,"../../math/Vector2.js":62,"../../math/Vector3.js":63,"../../math/Vector4.js":64,"../../textures/Texture.js":101}],81:[function(require,module,exports){
+},{"../../math/Color.js":51,"../../math/Matrix3.js":55,"../../math/Matrix4.js":56,"../../math/Vector2.js":62,"../../math/Vector3.js":63,"../../math/Vector4.js":64,"../../textures/Texture.js":102}],81:[function(require,module,exports){
 /**
 * @author mrdoob / http://mrdoob.com/
 */
@@ -24662,7 +24671,7 @@ function SpritePlugin( renderer, sprites ) {
 
 };
 
-},{"../../../math/Quaternion.js":58,"../../../math/Vector3.js":63,"../../../scenes/Fog.js":96,"../../../scenes/FogExp2.js":97,"../../../textures/Texture.js":101}],96:[function(require,module,exports){
+},{"../../../math/Quaternion.js":58,"../../../math/Vector3.js":63,"../../../scenes/Fog.js":96,"../../../scenes/FogExp2.js":97,"../../../textures/Texture.js":102}],96:[function(require,module,exports){
 /**
  * @author mrdoob / http://mrdoob.com/
  * @author alteredq / http://alteredqualia.com/
@@ -24755,6 +24764,36 @@ Scene.prototype.copy = function ( source ) {
 
 },{"../core/Object3D.js":17}],99:[function(require,module,exports){
 /**
+ * @author alteredq / http://alteredqualia.com/
+ */
+module.exports = CompressedTexture;
+
+var Texture = require('./Texture.js');
+
+function CompressedTexture( mipmaps, width, height, format, type, mapping, wrapS, wrapT, magFilter, minFilter, anisotropy ) {
+
+	Texture.call( this, null, mapping, wrapS, wrapT, magFilter, minFilter, format, type, anisotropy );
+
+	this.image = { width: width, height: height };
+	this.mipmaps = mipmaps;
+
+	// no flipping for cube textures
+	// (also flipping doesn't work for compressed textures )
+
+	this.flipY = false;
+
+	// can't generate mipmaps for compressed textures
+	// mips must be embedded in DDS files
+
+	this.generateMipmaps = false;
+
+};
+
+CompressedTexture.prototype = Object.create( Texture.prototype );
+CompressedTexture.prototype.constructor = CompressedTexture;
+
+},{"./Texture.js":102}],100:[function(require,module,exports){
+/**
  * @author mrdoob / http://mrdoob.com/
  */
 
@@ -24787,7 +24826,7 @@ CubeTexture.prototype.copy = function ( source ) {
 
 };
 
-},{"../defaults.js":18,"./Texture.js":101}],100:[function(require,module,exports){
+},{"../defaults.js":18,"./Texture.js":102}],101:[function(require,module,exports){
 /**
  * @author alteredq / http://alteredqualia.com/
  */
@@ -24814,7 +24853,7 @@ function DataTexture( data, width, height, format, type, mapping, wrapS, wrapT, 
 DataTexture.prototype = Object.create( Texture.prototype );
 DataTexture.prototype.constructor = DataTexture;
 
-},{"../defaults.js":18,"./Texture.js":101}],101:[function(require,module,exports){
+},{"../defaults.js":18,"./Texture.js":102}],102:[function(require,module,exports){
 /**
  * @author mrdoob / http://mrdoob.com/
  * @author alteredq / http://alteredqualia.com/

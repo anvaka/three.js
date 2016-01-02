@@ -463,9 +463,6 @@ if ( Object.assign === undefined ) {
 
 }
 
-// https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent.button
-
-THREE.MOUSE = { LEFT: 0, MIDDLE: 1, RIGHT: 2 };
 // For backward compatibility plop all defaults onto THREE:
 var Default = require('./defaults.js');
 copyPropertiesFromTo(Default, THREE);

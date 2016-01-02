@@ -1,6 +1,9 @@
 module.exports = {
 	REVISION: '74dev-commonjs',
 
+// https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent.button
+	MOUSE: { LEFT: 0, MIDDLE: 1, RIGHT: 2 },
+
 // GL STATE CONSTANTS
 
 	CullFaceNone: 0,
